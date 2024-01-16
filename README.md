@@ -1,20 +1,8 @@
-# 낭만고양이
+# 🐈‍⬛ 낭만고양이
 <br>
 
-## 💻 프로젝트 소개
-
-<br>
-
-## ⏳ 개발 기간
+## 👀 개발 기간
 > **2024. 01 ~ 2024. 02**
-<br>
-
-## 🛠 기술 스택
-> <a href="https://www.java.com/ko/"><img src="https://img.shields.io/badge/Java-F58219?style=flat-square&logo=Java&logoColor=white"/></a>
-<a href="https://spring.io/projects/spring-boot"><img src="https://img.shields.io/badge/SpringBoot-6AAE3D?style=flat-square&logo=SpringBoot&logoColor=white"/></a>
-<a href="https://spring.io/projects/spring-data-jpa"><img src="https://img.shields.io/badge/Spring Data JPA-6AAE3D?style=flat-square&logo=&logoColor=white"/></a>
-<a href="https://www.mysql.com/"><img src="https://img.shields.io/badge/MySQL-4479A1?style=flat-square&logo=MySQL&logoColor=white"/></a>
-<a href="https://aws.amazon.com/ko/?nc2=h_lg"><img src="https://img.shields.io/badge/AWS-F89501?style=flat-square&logo=Amazon AWS&logoColor=white"/></a>  
 <br>
 
 ## 📃 Commit Message Convention
