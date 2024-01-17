@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: ${aws.db.url}
-    username: ${aws.db.username}
-    password: ${aws.db.password}
+    url: jdbc:mysql://umc-db.clum6u48wd0b.ap-northeast-2.rds.amazonaws.com/umc
+    username: root
+    password: umcteame
     driver-class-name: com.mysql.cj.jdbc.Driver
   sql:
     init:
@@ -17,9 +17,3 @@ spring:
         hbm2ddl:
           auto: update
         default_batch_fetch_size: 1000
-#spring:
-#  datasource:
-##    url: jdbc:mysql://umc-db.clum6u48wd0b.ap-northeast-2.rds.amazonaws.com/umc
-##    username: root
-##    password: umcteame
-##    driver-class-name: com.mysql.cj.jdbc.Driver
