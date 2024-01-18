@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:mysql://umc-db.clum6u48wd0b.ap-northeast-2.rds.amazonaws.com/umc
+    url: jdbc:mysql://umc-db.clum6u48wd0b.ap-northeast-2.rds.amazonaws.com/nangman
     username: root
     password: umcteame
     driver-class-name: com.mysql.cj.jdbc.Driver
