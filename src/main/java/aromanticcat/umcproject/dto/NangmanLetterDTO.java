@@ -1,6 +1,5 @@
 package aromanticcat.umcproject.dto;
 
-import aromanticcat.umcproject.entity.Member;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,6 +13,7 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 public class NangmanLetterDTO {
 
+    @NotNull
     private Long id;
 
     @NotNull(message = "sender_nickname은 null일 수 없습니다.")
@@ -41,6 +41,5 @@ public class NangmanLetterDTO {
     private Integer star_cnt;
 
     @NotNull(message = "member는 null일 수 없습니다.")
-    private Member member;
-
+    private Long member_id;
 }

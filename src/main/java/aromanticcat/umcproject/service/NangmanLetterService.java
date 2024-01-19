@@ -4,9 +4,9 @@ import aromanticcat.umcproject.dto.NangmanLetterDTO;
 
 public interface NangmanLetterService {
 
-    Long register(NangmanLetterDTO nangmanLetterDTO);
+    NangmanLetterDTO register(NangmanLetterDTO nangmanLetterDTO);
 
     NangmanLetterDTO readOne(Long id);
 
-    void modify(NangmanLetterDTO nangmanLetterDTO);
+    void receivedReply(NangmanLetterDTO nangmanLetterDTO);
 }
