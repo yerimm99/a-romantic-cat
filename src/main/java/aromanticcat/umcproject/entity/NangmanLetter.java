@@ -45,4 +45,8 @@ public class NangmanLetter extends BaseEntity {
     @JoinColumn(name = "member_id")
     @ManyToOne(fetch = FetchType.LAZY)
     private Member member;
+
+    public void change(Boolean has_response){
+        this.has_response = has_response;
+    }
 }
