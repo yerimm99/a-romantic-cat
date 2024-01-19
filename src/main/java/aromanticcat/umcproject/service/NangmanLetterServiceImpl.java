@@ -9,6 +9,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -38,4 +39,27 @@ public class NangmanLetterServiceImpl implements NangmanLetterService{
         return id;
     }
 
+    @Override
+    public NangmanLetterDTO readOne(Long id){
+
+        Optional<NangmanLetter> result = nangmanLetterRepository.findById(id);
+
+        NangmanLetter nangmanLetter = result.orElseThrow();
+
+        NangmanLetterDTO nangmanLetterDTO = modelMapper.map(nangmanLetter, NangmanLetterDTO.class);
+
+        return nangmanLetterDTO;
+    }
+
+    //답장 받을 때 has_response 업데이트
+    @Override
+    public void modify(NangmanLetterDTO nangmanLetterDTO) {
+        Optional<NangmanLetter> result = nangmanLetterRepository.findById(nangmanLetterDTO.getId());
+
+        NangmanLetter nangmanLetter = result.orElseThrow();
+
+        nangmanLetter.change(nangmanLetterDTO.getHas_response());
+
+        nangmanLetterRepository.save(nangmanLetter);
+    }
 }
