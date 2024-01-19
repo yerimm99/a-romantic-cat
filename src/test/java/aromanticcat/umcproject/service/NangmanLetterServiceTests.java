@@ -41,4 +41,16 @@ public class NangmanLetterServiceTests {
 
         System.out.println("id: " + id);
     }
+
+    @Test
+    public void testModify(){
+
+        //변경에 필요한 데이터만
+        NangmanLetterDTO nangmanLetterDTO = NangmanLetterDTO.builder()
+                .id(4L)
+                .has_response(true)
+                .build();
+
+        nangmanLetterService.modify(nangmanLetterDTO);
+    }
 }
