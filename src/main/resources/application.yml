@@ -16,10 +16,13 @@
 #  org.hibernate.SQL: debug
 spring:
   datasource:
-    url: umc-dev.c7ymkkisi15g.ap-northeast-2.rds.amazonaws.com
+    url: jdbc:mysql://umc-db.clum6u48wd0b.ap-northeast-2.rds.amazonaws.com/nangman
     username: root
-    password: romanticcat
+    password: umcteame
     driver-class-name: com.mysql.cj.jdbc.Driver
+  sql:
+    init:
+      mode: never
   jpa:
     properties:
       hibernate:
@@ -30,9 +33,3 @@ spring:
         hbm2ddl:
           auto: update
         default_batch_fetch_size: 1000
-
-  servlet:
-    multipart:
-      enabled: true
-      max-file-size: 200MB
-      max-request-size: 300MB
