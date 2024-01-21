@@ -10,17 +10,29 @@ public class NangmanPostBoxConverter {
 
         return NangmanPostBoxResponseDTO.SendLetterResultDTO.builder()
                 .nangmanLetterId(nangmanLetter.getId())
-                .senderNickname(nangmanLetter.getSender_nickname())
+                .senderNickname(nangmanLetter.getSenderNickname())
                 .createdAt(nangmanLetter.getCreatedAt())
                 .build();
     }
 
     public static NangmanLetter toNangmanLetter(NangmanPostBoxRequestDTO.SendLetterDTO request){
         return NangmanLetter.builder()
-                .is_public(request.getIsPublic())
+                .isPublic(request.getIsPublic())
                 .content(request.getContent())
-                .sender_nickname(request.getSenderRandomNickname())
+                .senderNickname(request.getSenderRandomNickname())
 //                .member(request.getMember())
+                .build();
+    }
+
+    public static NangmanPostBoxResponseDTO.LetterSummaryResultDTO toLetterSummaryResultDTO(NangmanLetter nangmanLetter){
+        // 편지 내용을 40자 까지만 보이도록
+        String content = nangmanLetter.getContent();
+        String preview = content.length() <= 40 ? content: content.substring(0, 40) + "...";
+
+        return NangmanPostBoxResponseDTO.LetterSummaryResultDTO.builder()
+                .nangmanLetterId(nangmanLetter.getId())
+                .preview(preview)
+                .createdAt(nangmanLetter.getCreatedAt())
                 .build();
     }
 }
