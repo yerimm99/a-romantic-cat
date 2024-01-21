@@ -9,11 +9,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class NangmanLetterServiceImpl implements NangmanLetterService{
+public class NangmanPostBoxServiceImpl implements NangmanPostBoxService {
 
     private final NangmanLetterRepository nangmanLetterRepository;
     private final MemberRepository memberRepository;
@@ -25,6 +26,12 @@ public class NangmanLetterServiceImpl implements NangmanLetterService{
         NangmanLetter newNangmanLetter = NangmanPostBoxConverter.toNangmanLetter(request);
 
         return nangmanLetterRepository.save(newNangmanLetter);
+    }
+
+    @Override
+    @Transactional
+    public List<NangmanLetter> getLetterList(){
+        return nangmanLetterRepository.findByHasResponseFalse();
     }
 //
 //    @Override

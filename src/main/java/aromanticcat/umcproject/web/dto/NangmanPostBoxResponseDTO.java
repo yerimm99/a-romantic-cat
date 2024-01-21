@@ -21,4 +21,16 @@ public class NangmanPostBoxResponseDTO {
 
         LocalDateTime createdAt;
     }
+
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class LetterSummaryResultDTO{
+        private Long nangmanLetterId;
+
+        private String preview;
+
+        private LocalDateTime createdAt;
+    }
 }
