@@ -1,10 +1,12 @@
 package aromanticcat.umcproject.service;
 
-import aromanticcat.umcproject.dto.NangmanLetterDTO;
+import aromanticcat.umcproject.entity.NangmanLetter;
+import aromanticcat.umcproject.web.dto.NangmanLetterDTO;
+import aromanticcat.umcproject.web.dto.NangmanPostBoxRequestDTO;
 
 public interface NangmanLetterService {
 
-    NangmanLetterDTO register(NangmanLetterDTO nangmanLetterDTO);
+    NangmanLetter writeAndSendLetter(NangmanPostBoxRequestDTO.SendLetterDTO requestDTO, String randomNickname);
 
     NangmanLetterDTO readOne(Long id);
 
