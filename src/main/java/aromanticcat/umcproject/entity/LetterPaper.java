@@ -4,6 +4,7 @@ import lombok.Getter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Entity
 @Getter
@@ -19,4 +20,7 @@ public class LetterPaper extends BaseEntity {
 
     @NotNull
     private String name;
+
+    @OneToMany(mappedBy = "letterPaper")
+    private List<Letter> letters;
 }

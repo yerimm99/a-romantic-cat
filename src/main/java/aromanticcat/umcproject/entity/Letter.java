@@ -17,10 +17,9 @@ public class Letter extends BaseEntity {
     @Column(name = "nickname", length = 60)
     private String nickname;
 
-    @Column(name = "content", length = 255)
+    @Column(length = 255)
     private String content;
 
-    @Column(name = "open")
     private Boolean open;
 
     @Column(name = "login_status")
