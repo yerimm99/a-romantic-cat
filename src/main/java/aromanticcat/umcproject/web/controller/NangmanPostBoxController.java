@@ -75,4 +75,29 @@ public class NangmanPostBoxController {
 
         }
     }
+
+    @GetMapping("/letter-list/{nangmanLetterId}")
+    @ApiOperation(value = "낭만우편함 답장하기 - 편지 선택")
+    public ApiResponse<NangmanPostBoxResponseDTO.SelectedLetterResultDTO> getNangmanLetterInfo(@PathVariable Long nangmanLetterId){
+       try{
+           // 특정 편지에 대한 정보 조회
+           NangmanLetter seledtedLetter = nangmanPostBoxService.getLetterById(nangmanLetterId);
+
+           // 랜덤 닉네임 생성
+           String randomNickname = randomNicknameService.generateRandomNickname();
+
+           //응답 생성
+           NangmanPostBoxResponseDTO.SelectedLetterResultDTO selectedLetterResultDTO = NangmanPostBoxConverter.toReplyLetterResultDTO(seledtedLetter, randomNickname);
+
+           return ApiResponse.onSuccess(selectedLetterResultDTO);
+       }catch (Exception e){
+
+           // 에러 발생 시 실패 응답 반환
+           return ApiResponse.onFailure(HttpStatus.INTERNAL_SERVER_ERROR.toString(), e.getMessage(), null);
+       }
+    }
+
+//
+//    @PostMapping("/letter-list/{nangmanLetterId}")
+//    @ApiOperation(value = "낭만우편함 답장하기 - 편지 발송")
 }

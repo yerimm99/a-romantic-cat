@@ -12,4 +12,13 @@ public class NangmanPostBoxRequestDTO {
         private String senderRandomNickname;
         private Long memberId;
     }
+
+    @Getter
+    public static class ReplyLetterDTO {
+
+        private String replySenderNickname;
+        private String replyContent;
+        private Long nangmanLetterId;
+        private Long memberId;
+    }
 }

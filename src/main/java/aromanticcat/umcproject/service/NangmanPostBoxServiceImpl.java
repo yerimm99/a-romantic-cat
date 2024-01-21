@@ -23,7 +23,7 @@ public class NangmanPostBoxServiceImpl implements NangmanPostBoxService {
     @Override
     @Transactional
     public NangmanLetter writeAndSendLetter(NangmanPostBoxRequestDTO.SendLetterDTO request, String randomNickname){
-        NangmanLetter newNangmanLetter = NangmanPostBoxConverter.toNangmanLetter(request);
+        NangmanLetter newNangmanLetter = NangmanPostBoxConverter.toNangmanLetterResult(request);
 
         return nangmanLetterRepository.save(newNangmanLetter);
     }
@@ -33,7 +33,15 @@ public class NangmanPostBoxServiceImpl implements NangmanPostBoxService {
     public List<NangmanLetter> getLetterList(){
         return nangmanLetterRepository.findByHasResponseFalse();
     }
-//
+
+    @Override
+    @Transactional
+    public NangmanLetter getLetterById(Long nangmanLetterId){
+        return nangmanLetterRepository.findById(nangmanLetterId)
+                .orElseThrow(() -> new RuntimeException("편지를 찾을 수 없습니다. ID: " + nangmanLetterId));
+    }
+
+
 //    @Override
 //    public NangmanLetterDTO readOne(Long id){
 //
