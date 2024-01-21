@@ -33,4 +33,15 @@ public class NangmanPostBoxResponseDTO {
 
         private LocalDateTime createdAt;
     }
+
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class SelectedLetterResultDTO {
+        private Long nangmanLetterId;
+        private String senderNickname;
+        private String replySenderNickname;
+        private String nangmanLetterContent;
+    }
 }

@@ -11,6 +11,8 @@ public interface NangmanPostBoxService {
 
     List<NangmanLetter> getLetterList();
 
+    NangmanLetter getLetterById(Long id);
+
 //    NangmanLetterDTO readOne(Long id);
 //
 //    void receivedReply(NangmanLetterDTO nangmanLetterDTO);
