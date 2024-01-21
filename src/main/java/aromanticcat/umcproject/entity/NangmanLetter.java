@@ -18,31 +18,35 @@ public class NangmanLetter extends BaseEntity {
     private Long id;
 
     @NotNull
-    private String sender_nickname;
+    private String senderNickname;
 
     @NotNull
-    private Boolean is_public;
+    private Boolean isPublic;
 
     @NotNull
     private String content;
 
     @NotNull
     @Builder.Default
-    private Boolean has_response = false;
+    private Boolean hasResponse = false;
 
-    private Integer thumbs_up_cnt;
+    private Integer thumbsUpCnt;
 
-    private Integer heart_cnt;
+    private Integer heartCnt;
 
-    private Integer crying_cnt;
+    private Integer cryingCnt;
 
-    private Integer clover_cnt;
+    private Integer cloverCnt;
 
-    private Integer clap_cnt;
+    private Integer clapCnt;
 
-    private Integer star_cnt;
+    private Integer starCnt;
 
     @JoinColumn(name = "member_id")
     @ManyToOne(fetch = FetchType.LAZY)
     private Member member;
+
+    public void change(Boolean hasResponse){
+        this.hasResponse = hasResponse;
+    }
 }
