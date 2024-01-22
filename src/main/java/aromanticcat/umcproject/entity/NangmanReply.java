@@ -1,25 +1,26 @@
 package aromanticcat.umcproject.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
-import lombok.Getter;
+import lombok.*;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Getter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
 public class NangmanReply extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String response_sender_nickname;
+    @NotNull
+    private String replySenderNickname;
 
+    @NotNull
     private String content;
 
     @JoinColumn(name = "letter_id")
