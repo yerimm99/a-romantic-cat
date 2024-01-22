@@ -1,4 +1,4 @@
-package aromanticcat.umcproject.dto;
+package aromanticcat.umcproject.web.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

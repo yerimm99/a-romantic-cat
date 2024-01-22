@@ -1,6 +1,6 @@
 package aromanticcat.umcproject.service;
 
-import aromanticcat.umcproject.dto.NangmanLetterDTO;
+import aromanticcat.umcproject.web.dto.NangmanLetterDTO;
 import aromanticcat.umcproject.entity.NangmanLetter;
 import aromanticcat.umcproject.repository.MemberRepository;
 import aromanticcat.umcproject.repository.NangmanLetterRepository;

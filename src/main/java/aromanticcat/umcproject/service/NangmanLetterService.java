@@ -1,6 +1,6 @@
 package aromanticcat.umcproject.service;
 
-import aromanticcat.umcproject.dto.NangmanLetterDTO;
+import aromanticcat.umcproject.web.dto.NangmanLetterDTO;
 
 public interface NangmanLetterService {
 
