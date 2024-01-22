@@ -1,6 +1,7 @@
 package aromanticcat.umcproject.converter;
 
 import aromanticcat.umcproject.entity.NangmanLetter;
+import aromanticcat.umcproject.entity.NangmanReply;
 import aromanticcat.umcproject.web.dto.NangmanPostBoxRequestDTO;
 import aromanticcat.umcproject.web.dto.NangmanPostBoxResponseDTO;
 
@@ -46,6 +47,26 @@ public class NangmanPostBoxConverter {
                 .nangmanLetterContent(nangmanLetter.getContent())
                 .senderNickname(nangmanLetter.getSenderNickname())
                 .replySenderNickname(randomNickname)
+                .build();
+    }
+
+    // 낭만 리플라이 DTO -> 낭만 리플라이 엔티티
+    public static NangmanReply toNangmanReplyResult(NangmanPostBoxRequestDTO.ReplyLetterDTO request, NangmanLetter nangmanLetter){
+        return NangmanReply.builder()
+                .content(request.getReplyContent())
+                .replySenderNickname(request.getReplySenderNickname())
+                .nangmanLetter(nangmanLetter)
+//                .member(request.getMember())
+                .build();
+
+    }
+
+    public static NangmanPostBoxResponseDTO.SendReplyResultDTO toSendReplyResultDTO(NangmanReply nangmanReply){
+        return NangmanPostBoxResponseDTO.SendReplyResultDTO.builder()
+                .nangmanReplyId(nangmanReply.getId())
+                .nangmanLetterId(nangmanReply.getNangmanLetter().getId())
+                .replySenderNickname(nangmanReply.getReplySenderNickname())
+                .createdAt(nangmanReply.getCreatedAt())
                 .build();
     }
 

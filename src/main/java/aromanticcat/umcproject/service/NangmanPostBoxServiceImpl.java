@@ -2,8 +2,10 @@ package aromanticcat.umcproject.service;
 
 import aromanticcat.umcproject.converter.NangmanPostBoxConverter;
 import aromanticcat.umcproject.entity.NangmanLetter;
+import aromanticcat.umcproject.entity.NangmanReply;
 import aromanticcat.umcproject.repository.MemberRepository;
 import aromanticcat.umcproject.repository.NangmanLetterRepository;
+import aromanticcat.umcproject.repository.NangmanReplyRepository;
 import aromanticcat.umcproject.web.dto.NangmanPostBoxRequestDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,10 +21,10 @@ public class NangmanPostBoxServiceImpl implements NangmanPostBoxService {
     private final NangmanLetterRepository nangmanLetterRepository;
     private final MemberRepository memberRepository;
     private final RandomNicknameService randomNicknameService;
-
+    private final NangmanReplyRepository nangmanReplyRepository;
     @Override
     @Transactional
-    public NangmanLetter writeAndSendLetter(NangmanPostBoxRequestDTO.SendLetterDTO request, String randomNickname){
+    public NangmanLetter writeAndSendLetter(NangmanPostBoxRequestDTO.SendLetterDTO request){
         NangmanLetter newNangmanLetter = NangmanPostBoxConverter.toNangmanLetterResult(request);
 
         return nangmanLetterRepository.save(newNangmanLetter);
@@ -41,6 +43,14 @@ public class NangmanPostBoxServiceImpl implements NangmanPostBoxService {
                 .orElseThrow(() -> new RuntimeException("편지를 찾을 수 없습니다. ID: " + nangmanLetterId));
     }
 
+    @Override
+    @Transactional
+    public NangmanReply writeAndSendReply(NangmanPostBoxRequestDTO.ReplyLetterDTO request, Long nangmanLetterId){
+        NangmanLetter nangmanLetter = getLetterById(nangmanLetterId);
+        NangmanReply newNangmanReply = NangmanPostBoxConverter.toNangmanReplyResult(request, nangmanLetter);
+
+        return nangmanReplyRepository.save(newNangmanReply);
+    }
 
 //    @Override
 //    public NangmanLetterDTO readOne(Long id){

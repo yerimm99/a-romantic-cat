@@ -18,7 +18,6 @@ public class NangmanPostBoxRequestDTO {
 
         private String replySenderNickname;
         private String replyContent;
-        private Long nangmanLetterId;
         private Long memberId;
     }
 }

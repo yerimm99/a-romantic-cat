@@ -44,4 +44,19 @@ public class NangmanPostBoxResponseDTO {
         private String replySenderNickname;
         private String nangmanLetterContent;
     }
+
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class SendReplyResultDTO {
+
+        private Long nangmanLetterId;
+
+        private Long nangmanReplyId;
+
+        private String replySenderNickname;
+
+        LocalDateTime createdAt;
+    }
 }
