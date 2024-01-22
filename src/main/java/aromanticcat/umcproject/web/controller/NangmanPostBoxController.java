@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/nangman-post")
+@RequestMapping("/nangman-letterbox")
 @RequiredArgsConstructor
 public class NangmanPostBoxController {
 
@@ -43,8 +43,10 @@ public class NangmanPostBoxController {
     public ApiResponse<NangmanPostBoxResponseDTO.SendLetterResultDTO> sendLetter(@RequestBody NangmanPostBoxRequestDTO.SendLetterDTO request){
         try{
             //편지 작성 및 발송
-            String senderNickname = request.getSenderRandomNickname();
-            NangmanLetter nangmanLetter = nangmanPostBoxService.writeAndSendLetter(request, senderNickname);
+//            String senderNickname = request.getSenderRandomNickname();
+//            NangmanLetter nangmanLetter = nangmanPostBoxService.writeAndSendLetter(request, senderNickname);
+            NangmanLetter nangmanLetter = nangmanPostBoxService.writeAndSendLetter(request);
+
 
             //성공 응답 생성
             return ApiResponse.onSuccess(NangmanPostBoxConverter.toSendLetterResultDTO(nangmanLetter));
@@ -77,7 +79,7 @@ public class NangmanPostBoxController {
     }
 
     @GetMapping("/letter-list/{nangmanLetterId}")
-    @ApiOperation(value = "낭만우편함 답장하기 - 편지 선택")
+    @ApiOperation(value = "낭만우편함 답장할 편지 조회")
     public ApiResponse<NangmanPostBoxResponseDTO.SelectedLetterResultDTO> getNangmanLetterInfo(@PathVariable Long nangmanLetterId){
        try{
            // 특정 편지에 대한 정보 조회
@@ -97,7 +99,4 @@ public class NangmanPostBoxController {
        }
     }
 
-//
-//    @PostMapping("/letter-list/{nangmanLetterId}")
-//    @ApiOperation(value = "낭만우편함 답장하기 - 편지 발송")
 }
