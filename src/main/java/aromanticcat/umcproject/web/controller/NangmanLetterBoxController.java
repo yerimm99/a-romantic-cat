@@ -8,7 +8,7 @@ import aromanticcat.umcproject.service.NangmanLetterBoxService;
 import aromanticcat.umcproject.service.RandomNicknameService;
 import aromanticcat.umcproject.web.dto.nangmanLetterBox.NangmanLetterBoxRequestDTO;
 import aromanticcat.umcproject.web.dto.nangmanLetterBox.NangmanLetterBoxResponseDTO;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +25,7 @@ public class NangmanLetterBoxController {
     private final RandomNicknameService randomNicknameService;
 
     @GetMapping("/send/random-nickname")
-    @ApiOperation(value = "낭만우편함 고민 편지에 사용될 랜덤 닉네임 생성")
+    @Operation(summary = "낭만우편함 고민 편지 랜덤 닉네임 생성 API", description = "랜덤 생성된 닉네임을 조회(편지 작성하기 화면)하는 API입니다.")
     public ApiResponse<String> getRandomNickname(){
         try {
             //랜덤 닉네임 생성
@@ -40,7 +40,7 @@ public class NangmanLetterBoxController {
 
 
     @PostMapping("/send")
-    @ApiOperation(value = "낭만우편함 고민 편지 발송")
+    @Operation(summary = "낭만우편함 고민 편지 발송 API", description = "편지의 내용과 공개 여부 데이터를 넘기는 API 입니다. " )
     public ApiResponse<NangmanLetterBoxResponseDTO.WriteLetterResultDTO> sendLetter(@RequestBody NangmanLetterBoxRequestDTO.WriteLetterDTO request){
         try{
             //편지 작성 및 발송
@@ -59,7 +59,7 @@ public class NangmanLetterBoxController {
     }
 
     @GetMapping("/letter-list")
-    @ApiOperation(value = "낭만우편함 답장하기 - 편지 목록")
+    @Operation(summary = "낭만우편함 답장하기 - 편지 목록", description = "고민 편지 목록을 조회하는 API입니다. 각 편지는 40자까지 미리보기가 가능합니다.")
     public ApiResponse<List<NangmanLetterBoxResponseDTO.PreviewLetterResultDTO>> getLetterList(){
         try{
             //편지 목록 조회
@@ -80,7 +80,7 @@ public class NangmanLetterBoxController {
     }
 
     @GetMapping("/letter-list/{nangmanLetterId}")
-    @ApiOperation(value = "낭만우편함 답장할 편지 조회")
+    @Operation(summary  = "낭만우편함 답장할 편지 조회", description = "선택된 편지를 상세 조회하는 API입니다. ")
     public ApiResponse<NangmanLetterBoxResponseDTO.SelectedLetterResultDTO> getNangmanLetterInfo(@PathVariable Long nangmanLetterId){
        try{
            // 특정 편지에 대한 정보 조회
@@ -101,7 +101,7 @@ public class NangmanLetterBoxController {
     }
 
     @PostMapping("/letter-list/{nangmanLetterId}")
-    @ApiOperation(value = "낭만우편함 답장하기 - 편지 발송")
+    @Operation(summary  = "낭만우편함 답장하기 - 편지 발송")
     public ApiResponse<NangmanLetterBoxResponseDTO.WriteReplyResultDTO> sendReply(@PathVariable Long nangmanLetterId, @RequestBody NangmanLetterBoxRequestDTO.WriteReplyDTO request){
         try{
             //답장 작성 및 발송
