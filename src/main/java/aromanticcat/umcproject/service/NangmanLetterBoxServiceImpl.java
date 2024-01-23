@@ -61,6 +61,7 @@ public class NangmanLetterBoxServiceImpl implements NangmanLetterBoxService {
         //답장 작성 및 발송
         NangmanReply newNangmanReply = NangmanLetterBoxConverter.toNangmanReply(request, nangmanLetter);
 
+        //편지 답장 상태 업데이트
         nangmanLetter.setHasResponse(true);
 
         return nangmanReplyRepository.save(newNangmanReply);
@@ -77,22 +78,6 @@ public class NangmanLetterBoxServiceImpl implements NangmanLetterBoxService {
         );
     }
 
-//    //답장 받을 때 has_response 업데이트
-//    @Override
-//    public void receivedReply(NangmanLetterDTO nangmanLetterDTO) {
-//        Optional<NangmanLetter> result = nangmanLetterRepository.findById(nangmanLetterDTO.getId());
-//
-//        NangmanLetter nangmanLetter = result.orElseThrow();
-//
-//        //has_response 값 업데이트
-//        nangmanLetter.change(nangmanLetterDTO.getHas_response());
-//
-//        //is_public 값에 따라 낭만 모음집에 추가
-//        if(nangmanLetter.getIs_public()){
-//            addLetterToNangmanCollectoin(nangmanLetter);
-//        }
-//        nangmanLetterRepository.save(nangmanLetter);
-//    }
 //
 //    private void addLetterToNangmanCollectoin(NangmanLetter nangmanLetter){
 //        // 낭만 모음집에 해당 편지를 추가하는 로직을 구현
