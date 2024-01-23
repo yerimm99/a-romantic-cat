@@ -89,6 +89,37 @@ public class FriendController {
         }
     }
 
+    @GetMapping("/{member_id}/search/friend")
+    @Operation(summary = "친구 이름을 통한 검색 API", description = "query String으로 친구 이름을 주세요.")
+    @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "AUTH003", description = "access 토큰을 주세요!", content = @Content(schema = @Schema(implementation = ApiResponse.class))),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "AUTH004", description = "access 토큰 만료", content = @Content(schema = @Schema(implementation = ApiResponse.class))),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "AUTH006", description = "access 토큰 모양이 이상함", content = @Content(schema = @Schema(implementation = ApiResponse.class))),
+    })
+    @Parameters({
+            @Parameter(name = "memberId", description = "사용자의 아이디, path variable 입니다!"),
+            @Parameter(name = "friendName", description = "검색하고자 하는 친구의 이름, query string입니다!")
+    })
+    public ApiResponse<FriendResponseDTO.FriendDTO> getFriend(@PathVariable(name = "member_id") Long memberId,
+                                                              @RequestParam(value = "friendName", defaultValue = "") String friendName){
+        try{
+//            // 페이지별 친구 목록 조회
+//            Page<Friend> friendList = friendQueryService.getCloseFriendList(memberId, page);
+//
+//            // 친구 내용을 간략하게 변환
+//            List<FriendResponseDTO.FriendDTO> friendDTOList = friendList.stream()
+//                    .map(FriendConverter::toFriendDTO)
+//                    .collect(Collectors.toList());
+//
+//            // 성공 응답 생성
+//            return ApiResponse.onSuccess(friendDTOList);
+            return null;
+
+        }catch (Exception e){
+            return ApiResponse.onFailure(HttpStatus.INTERNAL_SERVER_ERROR.toString(), e.getMessage(), null);
+        }
+    }
 
 
 

@@ -7,6 +7,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
+
 public interface FriendRepository extends JpaRepository<Friend, Long> {
 
     Page<Friend> findFriendByMember(Member member, Pageable pageable);
