@@ -29,7 +29,7 @@ jobs:
           AWS_DB_PASSWORD: ${{ secrets.AWS_DB_PASSWORD }}
         run:
           echo "spring.datasource.url=${AWS_DB_URL}" >> $GITHUB_ENV
-          echo "spring.datasource.username=${AWS_DB_USERNAME}" >> $GITHUB_ENV
+          echo "spring.datasource.username=${AWS_DB_USERNAME}" >> $GITHUB_ENV정
           echo "spring.datasource.password=${AWS_DB_PASSWORD}" >> $GITHUB_ENV
 
 
