@@ -1,48 +1,46 @@
 package aromanticcat.umcproject.converter;
 
+import aromanticcat.umcproject.entity.Member;
 import aromanticcat.umcproject.entity.NangmanLetter;
 import aromanticcat.umcproject.entity.NangmanReply;
-import aromanticcat.umcproject.web.dto.NangmanPostBoxRequestDTO;
-import aromanticcat.umcproject.web.dto.NangmanPostBoxResponseDTO;
+import aromanticcat.umcproject.web.dto.nangmanLetterBox.NangmanLetterBoxRequestDTO;
+import aromanticcat.umcproject.web.dto.nangmanLetterBox.NangmanLetterBoxResponseDTO;
 
-public class NangmanPostBoxConverter {
+public class NangmanLetterBoxConverter {
 
-    //낭만 레터 엔티티 -> DTO 생성
-    public static NangmanPostBoxResponseDTO.SendLetterResultDTO toSendLetterResultDTO(NangmanLetter nangmanLetter){
+    public static NangmanLetterBoxResponseDTO.WriteLetterResultDTO toWriteLetterResultDTO(NangmanLetter nangmanLetter){
 
-        return NangmanPostBoxResponseDTO.SendLetterResultDTO.builder()
+        return NangmanLetterBoxResponseDTO.WriteLetterResultDTO.builder()
                 .nangmanLetterId(nangmanLetter.getId())
                 .senderNickname(nangmanLetter.getSenderNickname())
                 .createdAt(nangmanLetter.getCreatedAt())
                 .build();
     }
 
-    //낭만 레터 DTO -> 엔티티 생성
-    public static NangmanLetter toNangmanLetterResult(NangmanPostBoxRequestDTO.SendLetterDTO request){
+    public static NangmanLetter toNangmanLetter(NangmanLetterBoxRequestDTO.WriteLetterDTO request, Member member){
+
         return NangmanLetter.builder()
                 .isPublic(request.getIsPublic())
                 .content(request.getContent())
                 .senderNickname(request.getSenderRandomNickname())
-//                .member(request.getMember())
+                .member(member)
                 .build();
     }
 
-    //낭만 레터 엔티티 -> 프리뷰 낭만 레터 DTO 생성
-    public static NangmanPostBoxResponseDTO.LetterSummaryResultDTO toLetterSummaryResultDTO(NangmanLetter nangmanLetter){
+    public static NangmanLetterBoxResponseDTO.PreviewLetterResultDTO toPreviewLetterResultDTO(NangmanLetter nangmanLetter){
         // 편지 내용을 40자 까지만 보이도록
         String content = nangmanLetter.getContent();
         String preview = content.length() <= 40 ? content: content.substring(0, 40) + "...";
 
-        return NangmanPostBoxResponseDTO.LetterSummaryResultDTO.builder()
+        return NangmanLetterBoxResponseDTO.PreviewLetterResultDTO.builder()
                 .nangmanLetterId(nangmanLetter.getId())
                 .preview(preview)
                 .createdAt(nangmanLetter.getCreatedAt())
                 .build();
     }
 
-    //낭만 레터 엔티티 + 랜덤 닉네임 -> 낭만 리플라이 DTO 생성
-    public static NangmanPostBoxResponseDTO.SelectedLetterResultDTO toReplyLetterResultDTO(NangmanLetter nangmanLetter, String randomNickname){
-        return NangmanPostBoxResponseDTO.SelectedLetterResultDTO.builder()
+    public static NangmanLetterBoxResponseDTO.SelectedLetterResultDTO toSelectedLetterResultDTO(NangmanLetter nangmanLetter, String randomNickname){
+        return NangmanLetterBoxResponseDTO.SelectedLetterResultDTO.builder()
                 .nangmanLetterId(nangmanLetter.getId())
                 .nangmanLetterContent(nangmanLetter.getContent())
                 .senderNickname(nangmanLetter.getSenderNickname())
@@ -50,19 +48,18 @@ public class NangmanPostBoxConverter {
                 .build();
     }
 
-    // 낭만 리플라이 DTO -> 낭만 리플라이 엔티티
-    public static NangmanReply toNangmanReplyResult(NangmanPostBoxRequestDTO.ReplyLetterDTO request, NangmanLetter nangmanLetter){
+    public static NangmanReply toNangmanReply(NangmanLetterBoxRequestDTO.WriteReplyDTO request, NangmanLetter nangmanLetter, Member member){
         return NangmanReply.builder()
                 .content(request.getReplyContent())
                 .replySenderNickname(request.getReplySenderNickname())
                 .nangmanLetter(nangmanLetter)
-//                .member(request.getMember())
+                .member(member)
                 .build();
 
     }
 
-    public static NangmanPostBoxResponseDTO.SendReplyResultDTO toSendReplyResultDTO(NangmanReply nangmanReply){
-        return NangmanPostBoxResponseDTO.SendReplyResultDTO.builder()
+    public static NangmanLetterBoxResponseDTO.WriteReplyResultDTO toWriteReplyResultDTO(NangmanReply nangmanReply){
+        return NangmanLetterBoxResponseDTO.WriteReplyResultDTO.builder()
                 .nangmanReplyId(nangmanReply.getId())
                 .nangmanLetterId(nangmanReply.getNangmanLetter().getId())
                 .replySenderNickname(nangmanReply.getReplySenderNickname())
