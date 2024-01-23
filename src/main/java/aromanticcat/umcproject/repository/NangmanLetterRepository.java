@@ -9,4 +9,5 @@ public interface NangmanLetterRepository extends JpaRepository<NangmanLetter, Lo
 
     List<NangmanLetter> findByHasResponseFalse();
 
+    List<NangmanLetter> findByMemberId(Long memberId);
 }

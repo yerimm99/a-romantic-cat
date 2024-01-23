@@ -75,7 +75,7 @@ public class NangmanLetterBoxServiceImpl implements NangmanLetterBoxService {
 
     }
 
-    private boolean hasUserRepliedToday(Long memberId){
+    public boolean hasUserRepliedToday(Long memberId){
         LocalDate today = LocalDate.now();
 
         return nangmanReplyRepository.existsByMemberIdAndCreatedAtBetween(
@@ -85,9 +85,11 @@ public class NangmanLetterBoxServiceImpl implements NangmanLetterBoxService {
         );
     }
 
-//
-//    private void addLetterToNangmanCollectoin(NangmanLetter nangmanLetter){
-//        // 낭만 모음집에 해당 편지를 추가하는 로직을 구현
-//        // 추가되는 방법은 해당 모음집의 컬렉션에 편지를 추가하거나 다른 적절한 방법으로 구현
-//    }
+    @Override
+    @Transactional
+    public List<NangmanLetter> getNangmanLettersByUserId(Long userId){
+        // 사용자 ID로 해당 사용자가 작성한 편지 목록 조회
+        return nangmanLetterRepository.findByMemberId(userId);
+    }
+
 }

@@ -117,4 +117,33 @@ public class NangmanLetterBoxController {
 
         }
     }
+
+    @GetMapping("/my/nangman-letters")
+    @Operation(summary = "낭만우편함 나의 편지 목록 조회 API", description = "사용자가 작성한 낭만 편지 목록을 조회하는 API입니다.")
+    public ApiResponse<List<NangmanLetterBoxResponseDTO.PreviewLetterResultDTO>> getMyNangmanLetters() {
+        try {
+            // 현재 로그인된 사용자의 ID 또는 정보를 얻어온다고 가정
+            // SecurityContextHolder에서 현재 사용자의 정보를 가져오는 방법
+            Long userId = getCurrentUserId(); // 로그인한 사용자의 아이디를 가져오는 메서드
+
+            // 사용자가 작성한 편지 목록 조회
+            List<NangmanLetter> userLetterList = nangmanLetterBoxService.getNangmanLettersByUserId(userId);
+
+            // 편지 내용의 두 줄만 포함하도록 변환
+            List<NangmanLetterBoxResponseDTO.PreviewLetterResultDTO> previewLetterList = userLetterList.stream()
+                    .map(NangmanLetterBoxConverter::toPreviewLetterResultDTO)
+                    .collect(Collectors.toList());
+
+            // 성공 응답 생성
+            return ApiResponse.onSuccess(previewLetterList);
+        } catch (Exception e) {
+            // 에러 발생 시 실패 응답 반환
+            return ApiResponse.onFailure(HttpStatus.INTERNAL_SERVER_ERROR.toString(), e.getMessage(), null);
+        }
+    }
+
+    //스프링 시큐리티 구현되기 전이라 임시 메서드입니다.
+    private Long getCurrentUserId(){
+        return 1L;
+    }
 }

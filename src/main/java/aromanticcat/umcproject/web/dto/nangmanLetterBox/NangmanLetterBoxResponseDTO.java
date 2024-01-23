@@ -38,6 +38,18 @@ public class NangmanLetterBoxResponseDTO {
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
+    public static class PreviewReplyResultDTO {
+        private Long nangmanLetterId;
+
+        private String preview;
+
+        private LocalDateTime createdAt;
+    }
+
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
     public static class SelectedLetterResultDTO {
         private Long nangmanLetterId;
         private String senderNickname;

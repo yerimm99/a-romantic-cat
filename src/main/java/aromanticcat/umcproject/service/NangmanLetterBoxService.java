@@ -16,6 +16,8 @@ public interface NangmanLetterBoxService {
 
     NangmanReply writeAndSendReply(NangmanLetterBoxRequestDTO.WriteReplyDTO requestDTO, Long id);
 
+    List<NangmanLetter> getNangmanLettersByUserId(Long userId);
+
 //    NangmanLetterDTO readOne(Long id);
 //
 //    void receivedReply(NangmanLetterDTO nangmanLetterDTO);
