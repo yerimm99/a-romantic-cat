@@ -1,4 +1,4 @@
-package aromanticcat.umcproject.web.dto;
+package aromanticcat.umcproject.web.dto.nangmanLetterBox;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,13 +7,13 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-public class NangmanPostBoxResponseDTO {
+public class NangmanLetterBoxResponseDTO {
 
     @Getter
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class SendLetterResultDTO {
+    public static class WriteLetterResultDTO {
 
         private Long nangmanLetterId;
 
@@ -26,7 +26,7 @@ public class NangmanPostBoxResponseDTO {
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class LetterSummaryResultDTO{
+    public static class PreviewLetterResultDTO {
         private Long nangmanLetterId;
 
         private String preview;
@@ -49,7 +49,7 @@ public class NangmanPostBoxResponseDTO {
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class SendReplyResultDTO {
+    public static class WriteReplyResultDTO {
 
         private Long nangmanLetterId;
 

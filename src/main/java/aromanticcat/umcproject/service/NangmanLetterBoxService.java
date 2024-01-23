@@ -2,19 +2,19 @@ package aromanticcat.umcproject.service;
 
 import aromanticcat.umcproject.entity.NangmanLetter;
 import aromanticcat.umcproject.entity.NangmanReply;
-import aromanticcat.umcproject.web.dto.NangmanPostBoxRequestDTO;
+import aromanticcat.umcproject.web.dto.nangmanLetterBox.NangmanLetterBoxRequestDTO;
 
 import java.util.List;
 
-public interface NangmanPostBoxService {
+public interface NangmanLetterBoxService {
 
-    NangmanLetter writeAndSendLetter(NangmanPostBoxRequestDTO.SendLetterDTO requestDTO);
+    NangmanLetter writeAndSendLetter(NangmanLetterBoxRequestDTO.WriteLetterDTO requestDTO);
 
     List<NangmanLetter> getLetterList();
 
     NangmanLetter getLetterById(Long id);
 
-    NangmanReply writeAndSendReply(NangmanPostBoxRequestDTO.ReplyLetterDTO requestDTO, Long id);
+    NangmanReply writeAndSendReply(NangmanLetterBoxRequestDTO.WriteReplyDTO requestDTO, Long id);
 
 //    NangmanLetterDTO readOne(Long id);
 //

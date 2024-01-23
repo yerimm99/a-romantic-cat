@@ -1,12 +1,12 @@
 package aromanticcat.umcproject.service;
 
-import aromanticcat.umcproject.converter.NangmanPostBoxConverter;
+import aromanticcat.umcproject.converter.NangmanLetterBoxConverter;
 import aromanticcat.umcproject.entity.NangmanLetter;
 import aromanticcat.umcproject.entity.NangmanReply;
 import aromanticcat.umcproject.repository.MemberRepository;
 import aromanticcat.umcproject.repository.NangmanLetterRepository;
 import aromanticcat.umcproject.repository.NangmanReplyRepository;
-import aromanticcat.umcproject.web.dto.NangmanPostBoxRequestDTO;
+import aromanticcat.umcproject.web.dto.nangmanLetterBox.NangmanLetterBoxRequestDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +16,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class NangmanPostBoxServiceImpl implements NangmanPostBoxService {
+public class NangmanLetterBoxServiceImpl implements NangmanLetterBoxService {
 
     private final NangmanLetterRepository nangmanLetterRepository;
     private final MemberRepository memberRepository;
@@ -24,8 +24,8 @@ public class NangmanPostBoxServiceImpl implements NangmanPostBoxService {
     private final NangmanReplyRepository nangmanReplyRepository;
     @Override
     @Transactional
-    public NangmanLetter writeAndSendLetter(NangmanPostBoxRequestDTO.SendLetterDTO request){
-        NangmanLetter newNangmanLetter = NangmanPostBoxConverter.toNangmanLetterResult(request);
+    public NangmanLetter writeAndSendLetter(NangmanLetterBoxRequestDTO.WriteLetterDTO request){
+        NangmanLetter newNangmanLetter = NangmanLetterBoxConverter.toNangmanLetter(request);
 
         return nangmanLetterRepository.save(newNangmanLetter);
     }
@@ -45,9 +45,9 @@ public class NangmanPostBoxServiceImpl implements NangmanPostBoxService {
 
     @Override
     @Transactional
-    public NangmanReply writeAndSendReply(NangmanPostBoxRequestDTO.ReplyLetterDTO request, Long nangmanLetterId){
+    public NangmanReply writeAndSendReply(NangmanLetterBoxRequestDTO.WriteReplyDTO request, Long nangmanLetterId){
         NangmanLetter nangmanLetter = getLetterById(nangmanLetterId);
-        NangmanReply newNangmanReply = NangmanPostBoxConverter.toNangmanReplyResult(request, nangmanLetter);
+        NangmanReply newNangmanReply = NangmanLetterBoxConverter.toNangmanReply(request, nangmanLetter);
 
         return nangmanReplyRepository.save(newNangmanReply);
     }
