@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -33,6 +34,7 @@ public class NangmanLetterBoxServiceImpl implements NangmanLetterBoxService {
     @Override
     @Transactional
     public List<NangmanLetter> getLetterList(){
+
         return nangmanLetterRepository.findByHasResponseFalse();
     }
 
@@ -46,26 +48,32 @@ public class NangmanLetterBoxServiceImpl implements NangmanLetterBoxService {
     @Override
     @Transactional
     public NangmanReply writeAndSendReply(NangmanLetterBoxRequestDTO.WriteReplyDTO request, Long nangmanLetterId){
+        //사용자가 오늘 이미 답장을 작성했는지 확인
+        boolean hasUserRepliedToday = hasUserRepliedToday(request.getMemberId());
+
+        if (hasUserRepliedToday) {
+            throw new RuntimeException("오늘은 이미 답장을 작성했습니다.");
+        }
+
+        //특정 편지에 대한 정보 조회
         NangmanLetter nangmanLetter = getLetterById(nangmanLetterId);
+
+        //답장 작성 및 발송
         NangmanReply newNangmanReply = NangmanLetterBoxConverter.toNangmanReply(request, nangmanLetter);
 
         return nangmanReplyRepository.save(newNangmanReply);
     }
 
-//    @Override
-//    public NangmanLetterDTO readOne(Long id){
-//
-//        Optional<NangmanLetter> result = nangmanLetterRepository.findById(id);
-//
-//        NangmanLetter nangmanLetter = result.orElseThrow();
-//
-//        NangmanLetterDTO nangmanLetterDTO = modelMapper.map(nangmanLetter, NangmanLetterDTO.class);
-//
-//        return nangmanLetterDTO;
-//    }
-//
-//
-//
+    private boolean hasUserRepliedToday(Long memberId){
+        LocalDate today = LocalDate.now();
+
+        return nangmanReplyRepository.existsByMemberIdAndCreatedAtBetween(
+                memberId,
+                today.atStartOfDay(),
+                today.plusDays(1).atStartOfDay().minusSeconds(1)
+        );
+    }
+
 //    //답장 받을 때 has_response 업데이트
 //    @Override
 //    public void receivedReply(NangmanLetterDTO nangmanLetterDTO) {
