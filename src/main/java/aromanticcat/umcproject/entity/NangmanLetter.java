@@ -49,4 +49,8 @@ public class NangmanLetter extends BaseEntity {
     @OneToOne(mappedBy = "nangmanLetter", fetch = FetchType.LAZY)
     private NangmanReply nangmanReply;
 
+
+    public void setHasResponse(boolean hasResponse){
+        this.hasResponse = hasResponse;
+    }
 }

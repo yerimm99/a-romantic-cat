@@ -61,7 +61,10 @@ public class NangmanLetterBoxServiceImpl implements NangmanLetterBoxService {
         //답장 작성 및 발송
         NangmanReply newNangmanReply = NangmanLetterBoxConverter.toNangmanReply(request, nangmanLetter);
 
+        nangmanLetter.setHasResponse(true);
+
         return nangmanReplyRepository.save(newNangmanReply);
+
     }
 
     private boolean hasUserRepliedToday(Long memberId){
