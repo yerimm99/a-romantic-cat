@@ -21,6 +21,7 @@ jobs:
           distribution: 'adopt'
 
       - name: Access Secrets
+        uses: microsoft/variable-substitution@v1
         with:
           files: ./Back-end/src/main/resources/application.yml
         env:
