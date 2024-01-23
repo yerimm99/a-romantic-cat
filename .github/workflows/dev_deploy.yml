@@ -23,7 +23,7 @@ jobs:
       - name: Access Secrets
         uses: microsoft/variable-substitution@v1
         with:
-          files: ~/Back-end/src/main/resources/application.yml
+          files: /Back-end/src/main/resources/application.yml
         env:
           spring.datasource.url: ${{ secrets.AWS_DB_URL }}
           spring.datasource.username: ${{ secrets.AWS_DB_USERNAME }}
