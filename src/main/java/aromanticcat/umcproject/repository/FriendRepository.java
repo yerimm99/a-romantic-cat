@@ -9,5 +9,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface FriendRepository extends JpaRepository<Friend, Long> {
 
-    Page<Friend> findByMember(Member member, Pageable pageable);
+    Page<Friend> findFriendByMember(Member member, Pageable pageable);
+
+    Page<Friend> findFriendByMemberAndCloseFriend(Member member, Pageable pageable);
+
 }

@@ -11,7 +11,7 @@ public interface FriendQueryService {
 
     Optional<Member> findMember(Long id);
 
-    Page<Friend> getFriendList(Long MemberId, Integer page);
+    Page<Friend> getFriendList(Long memberId, Integer page);
 
-
+    Page<Friend> getCloseFriendList(Long memberId, Integer page);
 }

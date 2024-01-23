@@ -28,15 +28,28 @@ public class FriendQueryServiceImpl implements FriendQueryService {
     }
 
     @Override
-    public Page<Friend> getFriendList(Long MemberId, Integer page) {
+    public Page<Friend> getFriendList(Long memberId, Integer page) {
 
         // page는 페이지의 번호, 12는 한 페이지에 보여줄 친구의 수
         Pageable pageable = PageRequest.of(page,12);
 
-        Member member = memberRepository.findById(MemberId).get();
+        Member member = memberRepository.findById(memberId).get();
 
-        Page<Friend> friendList = friendRepository.findByMember(member, pageable);
+        Page<Friend> friendList = friendRepository.findFriendByMember(member, pageable);
 
         return friendList;
+    }
+
+    @Override
+    public Page<Friend> getCloseFriendList(Long memberId, Integer page) {
+
+        // page는 페이지의 번호, 12는 한 페이지에 보여줄 친구의 수
+        Pageable pageable = PageRequest.of(page,12);
+
+        Member member = memberRepository.findById(memberId).get();
+
+        Page<Friend> closeFriendList = friendRepository.findFriendByMemberAndCloseFriend(member, pageable);
+
+        return closeFriendList;
     }
 }
