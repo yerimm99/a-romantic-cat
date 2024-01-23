@@ -1,14 +1,14 @@
 package aromanticcat.umcproject.web.controller;
 
 import aromanticcat.umcproject.apiPayload.ApiResponse;
-import aromanticcat.umcproject.converter.NangmanPostBoxConverter;
+import aromanticcat.umcproject.converter.NangmanLetterBoxConverter;
 import aromanticcat.umcproject.entity.NangmanLetter;
 import aromanticcat.umcproject.entity.NangmanReply;
-import aromanticcat.umcproject.service.NangmanPostBoxService;
+import aromanticcat.umcproject.service.NangmanLetterBoxService;
 import aromanticcat.umcproject.service.RandomNicknameService;
-import aromanticcat.umcproject.web.dto.NangmanPostBoxRequestDTO;
-import aromanticcat.umcproject.web.dto.NangmanPostBoxResponseDTO;
-import io.swagger.annotations.ApiOperation;
+import aromanticcat.umcproject.web.dto.nangmanLetterBox.NangmanLetterBoxRequestDTO;
+import aromanticcat.umcproject.web.dto.nangmanLetterBox.NangmanLetterBoxResponseDTO;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -19,13 +19,13 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/nangman-letterbox")
 @RequiredArgsConstructor
-public class NangmanPostBoxController {
+public class NangmanLetterBoxController {
 
-    private final NangmanPostBoxService nangmanPostBoxService;
+    private final NangmanLetterBoxService nangmanLetterBoxService;
     private final RandomNicknameService randomNicknameService;
 
     @GetMapping("/send/random-nickname")
-    @ApiOperation(value = "낭만우편함 고민 편지에 사용될 랜덤 닉네임 생성")
+    @Operation(summary = "낭만우편함 고민 편지 랜덤 닉네임 생성 API", description = "랜덤 생성된 닉네임을 조회(편지 작성하기 화면)하는 API입니다.")
     public ApiResponse<String> getRandomNickname(){
         try {
             //랜덤 닉네임 생성
@@ -40,17 +40,17 @@ public class NangmanPostBoxController {
 
 
     @PostMapping("/send")
-    @ApiOperation(value = "낭만우편함 고민 편지 발송")
-    public ApiResponse<NangmanPostBoxResponseDTO.SendLetterResultDTO> sendLetter(@RequestBody NangmanPostBoxRequestDTO.SendLetterDTO request){
+    @Operation(summary = "낭만우편함 고민 편지 발송 API", description = "편지의 내용과 공개 여부 데이터를 넘기는 API 입니다. " )
+    public ApiResponse<NangmanLetterBoxResponseDTO.WriteLetterResultDTO> sendLetter(@RequestBody NangmanLetterBoxRequestDTO.WriteLetterDTO request){
         try{
             //편지 작성 및 발송
 //            String senderNickname = request.getSenderRandomNickname();
-//            NangmanLetter nangmanLetter = nangmanPostBoxService.writeAndSendLetter(request, senderNickname);
-            NangmanLetter nangmanLetter = nangmanPostBoxService.writeAndSendLetter(request);
+//            NangmanLetter nangmanLetter = nangmanLetterBoxService.writeAndSendLetter(request, senderNickname);
+            NangmanLetter nangmanLetter = nangmanLetterBoxService.writeAndSendLetter(request);
 
 
             //성공 응답 생성
-            return ApiResponse.onSuccess(NangmanPostBoxConverter.toSendLetterResultDTO(nangmanLetter));
+            return ApiResponse.onSuccess(NangmanLetterBoxConverter.toWriteLetterResultDTO(nangmanLetter));
 
         }catch (Exception e){
             //에러 발생 시 실패 응답 반환
@@ -59,15 +59,15 @@ public class NangmanPostBoxController {
     }
 
     @GetMapping("/letter-list")
-    @ApiOperation(value = "낭만우편함 답장하기 - 편지 목록")
-    public ApiResponse<List<NangmanPostBoxResponseDTO.LetterSummaryResultDTO>> getLetterList(){
+    @Operation(summary = "낭만우편함 답장하기 - 편지 목록", description = "고민 편지 목록을 조회하는 API입니다. 각 편지는 40자까지 미리보기가 가능합니다.")
+    public ApiResponse<List<NangmanLetterBoxResponseDTO.PreviewLetterResultDTO>> getLetterList(){
         try{
             //편지 목록 조회
-            List<NangmanLetter> letterList = nangmanPostBoxService.getLetterList();
+            List<NangmanLetter> letterList = nangmanLetterBoxService.getLetterList();
 
             //편지 내용의 두 줄만 포함하도록 변환
-            List<NangmanPostBoxResponseDTO.LetterSummaryResultDTO> letterSummaryDTOList = letterList.stream()
-                    .map(NangmanPostBoxConverter::toLetterSummaryResultDTO)
+            List<NangmanLetterBoxResponseDTO.PreviewLetterResultDTO> letterSummaryDTOList = letterList.stream()
+                    .map(NangmanLetterBoxConverter::toPreviewLetterResultDTO)
                     .collect(Collectors.toList());
 
             //성공 응답 생성
@@ -80,17 +80,17 @@ public class NangmanPostBoxController {
     }
 
     @GetMapping("/letter-list/{nangmanLetterId}")
-    @ApiOperation(value = "낭만우편함 답장할 편지 조회")
-    public ApiResponse<NangmanPostBoxResponseDTO.SelectedLetterResultDTO> getNangmanLetterInfo(@PathVariable Long nangmanLetterId){
+    @Operation(summary  = "낭만우편함 답장할 편지 조회", description = "선택된 편지를 상세 조회하는 API입니다. ")
+    public ApiResponse<NangmanLetterBoxResponseDTO.SelectedLetterResultDTO> getNangmanLetterInfo(@PathVariable Long nangmanLetterId){
        try{
            // 특정 편지에 대한 정보 조회
-           NangmanLetter seledtedLetter = nangmanPostBoxService.getLetterById(nangmanLetterId);
+           NangmanLetter seledtedLetter = nangmanLetterBoxService.getLetterById(nangmanLetterId);
 
            // 랜덤 닉네임 생성
            String randomNickname = randomNicknameService.generateRandomNickname();
 
            //응답 생성
-           NangmanPostBoxResponseDTO.SelectedLetterResultDTO selectedLetterResultDTO = NangmanPostBoxConverter.toReplyLetterResultDTO(seledtedLetter, randomNickname);
+           NangmanLetterBoxResponseDTO.SelectedLetterResultDTO selectedLetterResultDTO = NangmanLetterBoxConverter.toSelectedLetterResultDTO(seledtedLetter, randomNickname);
 
            return ApiResponse.onSuccess(selectedLetterResultDTO);
        }catch (Exception e){
@@ -101,14 +101,14 @@ public class NangmanPostBoxController {
     }
 
     @PostMapping("/letter-list/{nangmanLetterId}")
-    @ApiOperation(value = "낭만우편함 답장하기 - 편지 발송")
-    public ApiResponse<NangmanPostBoxResponseDTO.SendReplyResultDTO> sendReply(@PathVariable Long nangmanLetterId, @RequestBody NangmanPostBoxRequestDTO.ReplyLetterDTO request){
+    @Operation(summary  = "낭만우편함 답장하기 - 편지 발송")
+    public ApiResponse<NangmanLetterBoxResponseDTO.WriteReplyResultDTO> sendReply(@PathVariable Long nangmanLetterId, @RequestBody NangmanLetterBoxRequestDTO.WriteReplyDTO request){
         try{
             //답장 작성 및 발송
-            NangmanReply nangmanReply = nangmanPostBoxService.writeAndSendReply(request, nangmanLetterId);
+            NangmanReply nangmanReply = nangmanLetterBoxService.writeAndSendReply(request, nangmanLetterId);
 
             //성공 응답 생성
-            return ApiResponse.onSuccess(NangmanPostBoxConverter.toSendReplyResultDTO(nangmanReply));
+            return ApiResponse.onSuccess(NangmanLetterBoxConverter.toWriteReplyResultDTO(nangmanReply));
 
 
         } catch(Exception e) {
