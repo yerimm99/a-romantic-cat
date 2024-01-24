@@ -66,13 +66,13 @@ public class NangmanLetterBoxConverter {
     public static NangmanLetterBoxResponseDTO.PreviewReplyResultDTO toPreviewReplyResultDTO(NangmanReply nangmanReply) {
 
         return NangmanLetterBoxResponseDTO.PreviewReplyResultDTO.builder()
-                .noReply(false)
                 .nangmanReplyId(nangmanReply.getId())
                 .nangmanLetterId(nangmanReply.getNangmanLetter().getId())
                 .preview(getPreviewText(nangmanReply.getContent()))
                 .build();
 
     }
+
 
     private static String getPreviewText(String content){
         // 답장 내용을 40자로 제한
@@ -81,5 +81,32 @@ public class NangmanLetterBoxConverter {
     }
 
 
+    public static NangmanLetterBoxResponseDTO.PreviewBothResultDTO toPreviewBothResultDTO(NangmanLetter nangmanLetter, NangmanReply nangmanReply){
+        return NangmanLetterBoxResponseDTO.PreviewBothResultDTO.builder()
+                .nangmanLetterId(nangmanLetter.getId())
+                .nangmanReplyId(nangmanReply.getId())
+                .previewLetter(getPreviewText(nangmanLetter.getContent()))
+                .previewReply(getPreviewText(nangmanReply.getContent()))
+                .totalEmojiCount(calculateTotalEmojiCount(nangmanLetter))
+                .createAt(nangmanReply.getCreatedAt())
+                .build();
+    }
 
+    private static Integer calculateTotalEmojiCount(NangmanLetter nangmanLetter){
+        // isPublic이 false이거나 hasResponse가 false이면 이모지 수를 계산하지 않음
+        if(!nangmanLetter.getIsPublic() || !nangmanLetter.getHasResponse()) {
+            return null;
+        }
+
+        // 각 이모지 수를 합산하여 반환
+        int thumbsUpCnt = nangmanLetter.getThumbsUpCnt();
+        int heartCnt = nangmanLetter.getHeartCnt();
+        int cryingCnt = nangmanLetter.getCryingCnt();
+        int cloverCnt = nangmanLetter.getCloverCnt();
+        int clapCnt = nangmanLetter.getClapCnt();
+        int starCnt = nangmanLetter.getStarCnt();
+
+        return thumbsUpCnt + heartCnt + cryingCnt + cloverCnt + clapCnt + starCnt;
+
+    }
 }
