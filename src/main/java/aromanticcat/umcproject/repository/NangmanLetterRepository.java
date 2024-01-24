@@ -4,10 +4,13 @@ import aromanticcat.umcproject.entity.NangmanLetter;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface NangmanLetterRepository extends JpaRepository<NangmanLetter, Long> {
 
     List<NangmanLetter> findByHasResponseFalse();
 
     List<NangmanLetter> findByMemberId(Long memberId);
+
+    Optional<NangmanLetter> findByMemberIdAndId(Long memberId, Long Id);
 }

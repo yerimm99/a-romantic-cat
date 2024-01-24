@@ -41,9 +41,11 @@ public class NangmanLetterBoxResponseDTO {
     public static class PreviewReplyResultDTO {
         private Long nangmanLetterId;
 
-        private String preview;
+        private Boolean noReply;
 
-        private LocalDateTime createdAt;
+        private Long nangmanReplyId;
+
+        private String preview;
     }
 
     @Getter

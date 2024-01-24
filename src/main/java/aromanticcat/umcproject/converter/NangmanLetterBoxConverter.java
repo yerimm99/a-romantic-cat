@@ -28,13 +28,9 @@ public class NangmanLetterBoxConverter {
     }
 
     public static NangmanLetterBoxResponseDTO.PreviewLetterResultDTO toPreviewLetterResultDTO(NangmanLetter nangmanLetter){
-        // 편지 내용을 40자 까지만 보이도록
-        String content = nangmanLetter.getContent();
-        String preview = content.length() <= 40 ? content: content.substring(0, 40) + "...";
-
         return NangmanLetterBoxResponseDTO.PreviewLetterResultDTO.builder()
                 .nangmanLetterId(nangmanLetter.getId())
-                .preview(preview)
+                .preview(getPreviewText(nangmanLetter.getContent()))
                 .createdAt(nangmanLetter.getCreatedAt())
                 .build();
     }
@@ -65,6 +61,23 @@ public class NangmanLetterBoxConverter {
                 .replySenderNickname(nangmanReply.getReplySenderNickname())
                 .createdAt(nangmanReply.getCreatedAt())
                 .build();
+    }
+
+    public static NangmanLetterBoxResponseDTO.PreviewReplyResultDTO toPreviewReplyResultDTO(NangmanReply nangmanReply) {
+
+        return NangmanLetterBoxResponseDTO.PreviewReplyResultDTO.builder()
+                .noReply(false)
+                .nangmanReplyId(nangmanReply.getId())
+                .nangmanLetterId(nangmanReply.getNangmanLetter().getId())
+                .preview(getPreviewText(nangmanReply.getContent()))
+                .build();
+
+    }
+
+    private static String getPreviewText(String content){
+        // 답장 내용을 40자로 제한
+        return content.length() <= 40 ? content : content.substring(0, 40) + "...";
+
     }
 
 
