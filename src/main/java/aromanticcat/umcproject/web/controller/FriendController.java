@@ -104,17 +104,14 @@ public class FriendController {
     public ApiResponse<FriendResponseDTO.FriendDTO> getFriend(@PathVariable(name = "member_id") Long memberId,
                                                               @RequestParam(value = "friendName", defaultValue = "") String friendName){
         try{
-//            // 페이지별 친구 목록 조회
-//            Page<Friend> friendList = friendQueryService.getCloseFriendList(memberId, page);
-//
-//            // 친구 내용을 간략하게 변환
-//            List<FriendResponseDTO.FriendDTO> friendDTOList = friendList.stream()
-//                    .map(FriendConverter::toFriendDTO)
-//                    .collect(Collectors.toList());
-//
-//            // 성공 응답 생성
-//            return ApiResponse.onSuccess(friendDTOList);
-            return null;
+            // 친구 이름(닉네임)으로 친구 검색
+            Friend friend = friendQueryService.getFriend(memberId, friendName);
+
+            // 친구 내용을 간략하게 변환
+            FriendResponseDTO.FriendDTO friendDTO = FriendConverter.toFriendDTO(friend);
+
+            // 성공 응답 생성
+            return ApiResponse.onSuccess(friendDTO);
 
         }catch (Exception e){
             return ApiResponse.onFailure(HttpStatus.INTERNAL_SERVER_ERROR.toString(), e.getMessage(), null);

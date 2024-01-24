@@ -14,4 +14,6 @@ public interface FriendQueryService {
     Page<Friend> getFriendList(Long memberId, Integer page);
 
     Page<Friend> getCloseFriendList(Long memberId, Integer page);
+
+    Friend getFriend(Long memberId, String friendName);
 }

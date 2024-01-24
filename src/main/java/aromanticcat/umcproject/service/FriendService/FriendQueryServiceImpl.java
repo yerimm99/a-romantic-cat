@@ -48,8 +48,18 @@ public class FriendQueryServiceImpl implements FriendQueryService {
 
         Member member = memberRepository.findById(memberId).get();
 
-        Page<Friend> closeFriendList = friendRepository.findFriendByMemberAndCloseFriend(member, pageable);
+        Page<Friend> closeFriendList = friendRepository.findFriendByMemberAndCloseFriendIsTrue(member, pageable);
 
         return closeFriendList;
+    }
+
+    @Override
+    public Friend getFriend(Long memberId, String friendName) {
+
+        Member member = memberRepository.findById(memberId).get();
+
+        Friend friend = friendRepository.findFriendByMemberAndFriendName(member, friendName);
+
+        return friend;
     }
 }

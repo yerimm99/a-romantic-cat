@@ -13,6 +13,8 @@ public interface FriendRepository extends JpaRepository<Friend, Long> {
 
     Page<Friend> findFriendByMember(Member member, Pageable pageable);
 
-    Page<Friend> findFriendByMemberAndCloseFriend(Member member, Pageable pageable);
+    Page<Friend> findFriendByMemberAndCloseFriendIsTrue(Member member, Pageable pageable);
+
+    Friend findFriendByMemberAndFriendName(Member member, String friendName);
 
 }
