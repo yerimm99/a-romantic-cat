@@ -13,10 +13,10 @@ public class FriendConverter {
     public static FriendResponseDTO.FriendDTO toFriendDTO(Friend friend){
 
         return FriendResponseDTO.FriendDTO.builder()
-                .friend_id(friend.getId())
-                .friend_name(friend.getFriend_name())
-                .are_we_friend(friend.isAre_we_friend())
-                .are_we_close(friend.isAre_we_close())
+                .friendId(friend.getId())
+                .friendName(friend.getFriendName())
+                .isFriend(friend.isFriend())
+                .isCloseFriend(friend.isCloseFriend())
                 .build();
     }
 

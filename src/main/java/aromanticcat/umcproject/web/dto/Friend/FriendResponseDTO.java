@@ -10,9 +10,9 @@ public class FriendResponseDTO {
     @Getter
     @Builder
     public static class FriendDTO{
-        Long friend_id;
-        String friend_name;
-        boolean are_we_friend;
-        boolean are_we_close;
+        Long friendId;
+        String friendName;
+        boolean isFriend;
+        boolean isCloseFriend;
     }
 }
