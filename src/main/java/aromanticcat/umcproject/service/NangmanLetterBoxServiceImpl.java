@@ -8,12 +8,14 @@ import aromanticcat.umcproject.repository.MemberRepository;
 import aromanticcat.umcproject.repository.NangmanLetterRepository;
 import aromanticcat.umcproject.repository.NangmanReplyRepository;
 import aromanticcat.umcproject.web.dto.nangmanLetterBox.NangmanLetterBoxRequestDTO;
+import aromanticcat.umcproject.web.dto.nangmanLetterBox.NangmanLetterBoxResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -92,4 +94,39 @@ public class NangmanLetterBoxServiceImpl implements NangmanLetterBoxService {
         return nangmanLetterRepository.findByMemberId(userId);
     }
 
+    @Override
+    @Transactional
+    public NangmanLetterBoxResponseDTO.PreviewReplyResultDTO getPreviewReplyForLetter(Long userId, Long nangmanLetterId) {
+        // 특정 편지에 대한 답장 조회
+        Optional<NangmanReply> replyOptional = getReplyForLetter(userId, nangmanLetterId);
+
+        // 답장이 존재할 경우에만 프리뷰로 변환
+        return replyOptional.map(NangmanLetterBoxConverter::toPreviewReplyResultDTO)
+                .orElseGet(() -> NangmanLetterBoxResponseDTO.PreviewReplyResultDTO.builder().noReply(true).build());
+    }
+
+
+    @Override
+    @Transactional
+    public Optional<NangmanReply> getReplyForLetter(Long userId, Long nangmanLetterId){
+
+        //특정 편지 조회
+        Optional<NangmanLetter> nangmanLetterOptional = nangmanLetterRepository.findByMemberIdAndId(userId, nangmanLetterId);
+
+        if(nangmanLetterOptional.isPresent()){
+            NangmanLetter nangmanLetter = nangmanLetterOptional.get();
+
+            //특정 편지에 대한 답장이 있는지 확인
+            if (nangmanLetter.getHasResponse()) {
+                // 답장이 있는 경우 해당 답장 반환
+                return Optional.ofNullable(nangmanLetter.getNangmanReply());
+            } else {
+                // 답장이 없는 경우 메세지를 담은 Optional.empty() 반환
+                return Optional.empty();
+            }
+        } else {
+            // 특정 편지가 존재하지 않는 경우 에러 처리
+            throw new IllegalArgumentException("해당 사용자에게 권한이 없거나, 존재하지 않는 편지입니다.");
+        }
+    }
 }

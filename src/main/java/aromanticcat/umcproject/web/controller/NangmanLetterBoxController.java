@@ -12,8 +12,10 @@ import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -142,8 +144,34 @@ public class NangmanLetterBoxController {
         }
     }
 
+    @GetMapping("/my/nangman-letters/{nangmanLetterId}/preview-replies")
+    @Operation(summary = "낭만우편함 내가 쓴 편지에 대한 답장 프리뷰 조회 API", description = "특정 편지에 대한 답장 프리뷰(40자)를 조회하는 API입니다.")
+    public ApiResponse<NangmanLetterBoxResponseDTO.PreviewReplyResultDTO> getPreviewReplyForLetter(@PathVariable Long nangmanLetterId) {
+        try {
+            // 현재 로그인된 사용자의 ID 또는 정보를 얻어온다고 가정
+            // SecurityContextHolder에서 현재 사용자의 정보를 가져오는 방법
+            Long userId = getCurrentUserId(); // 로그인한 사용자의 아이디를 가져오는 메서드
+
+            // 특정 편지에 대한 답장 조회
+            Optional<NangmanReply> replyOptional = nangmanLetterBoxService.getReplyForLetter(userId, nangmanLetterId);
+
+            // 답장이 존재하는 경우에만 프리뷰로 변환
+            NangmanLetterBoxResponseDTO.PreviewReplyResultDTO previewReplyResultDTO = replyOptional.map(NangmanLetterBoxConverter::toPreviewReplyResultDTO)
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "아직 답장이 없습니다."));
+
+            // 성공 응답 생성
+            return ApiResponse.onSuccess(previewReplyResultDTO);
+
+        } catch (Exception e) {
+            // 에러 발생 시 실패 응답 반환
+            return ApiResponse.onFailure(HttpStatus.INTERNAL_SERVER_ERROR.toString(), e.getMessage(), null);
+        }
+    }
+
     //스프링 시큐리티 구현되기 전이라 임시 메서드입니다.
     private Long getCurrentUserId(){
         return 1L;
     }
+
+
 }
