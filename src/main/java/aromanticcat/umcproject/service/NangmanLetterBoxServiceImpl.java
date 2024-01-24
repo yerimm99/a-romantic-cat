@@ -16,6 +16,7 @@ import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -94,17 +95,6 @@ public class NangmanLetterBoxServiceImpl implements NangmanLetterBoxService {
         return nangmanLetterRepository.findByMemberId(userId);
     }
 
-    @Override
-    @Transactional
-    public NangmanLetterBoxResponseDTO.PreviewReplyResultDTO getPreviewReplyForLetter(Long userId, Long nangmanLetterId) {
-        // 특정 편지에 대한 답장 조회
-        Optional<NangmanReply> replyOptional = getReplyForLetter(userId, nangmanLetterId);
-
-        // 답장이 존재할 경우에만 프리뷰로 변환
-        return replyOptional.map(NangmanLetterBoxConverter::toPreviewReplyResultDTO)
-                .orElseGet(() -> NangmanLetterBoxResponseDTO.PreviewReplyResultDTO.builder().noReply(true).build());
-    }
-
 
     @Override
     @Transactional
@@ -128,5 +118,17 @@ public class NangmanLetterBoxServiceImpl implements NangmanLetterBoxService {
             // 특정 편지가 존재하지 않는 경우 에러 처리
             throw new IllegalArgumentException("해당 사용자에게 권한이 없거나, 존재하지 않는 편지입니다.");
         }
+    }
+
+    @Override
+    @Transactional
+    public  List<NangmanLetterBoxResponseDTO.PreviewBothResultDTO> getReplyListByUserId(Long userId){
+        // 사용자가 답장한 목록 조회
+        List<NangmanReply> replyList = nangmanReplyRepository.findByMemberId(userId);
+
+        // 각 답장(+ 연결된 편지)에 대해 미리보기로 생성
+        return replyList.stream()
+                .map(reply -> NangmanLetterBoxConverter.toPreviewBothResultDTO(reply.getNangmanLetter(), reply))
+                .collect(Collectors.toList());
     }
 }

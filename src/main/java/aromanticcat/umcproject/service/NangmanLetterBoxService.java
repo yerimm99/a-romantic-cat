@@ -20,11 +20,7 @@ public interface NangmanLetterBoxService {
 
     List<NangmanLetter> getNangmanLettersByUserId(Long userId);
 
-    NangmanLetterBoxResponseDTO.PreviewReplyResultDTO getPreviewReplyForLetter(Long userId, Long nangmanLetterId);
     Optional<NangmanReply> getReplyForLetter(Long userId, Long nangmanLetterId);
 
-
-//    NangmanLetterDTO readOne(Long id);
-//
-//    void receivedReply(NangmanLetterDTO nangmanLetterDTO);
+    List<NangmanLetterBoxResponseDTO.PreviewBothResultDTO> getReplyListByUserId(Long userId);
 }
