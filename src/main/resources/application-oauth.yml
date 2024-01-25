@@ -1,0 +1,11 @@
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 959567592586-7croeo7s1ddfq361oklc4dqucksmrvge.apps.googleusercontent.com
+            client-secret: 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
+            redirect-uri: "http://localhost:8080/login/oauth2/code/google"
+            authorization-grant-type: authorization_code
+            scope: email
