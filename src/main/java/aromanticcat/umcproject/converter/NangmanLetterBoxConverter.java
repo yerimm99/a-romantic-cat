@@ -8,9 +8,9 @@ import aromanticcat.umcproject.web.dto.nangmanLetterBox.NangmanLetterBoxResponse
 
 public class NangmanLetterBoxConverter {
 
-    public static NangmanLetterBoxResponseDTO.WriteLetterResultDTO toWriteLetterResultDTO(NangmanLetter nangmanLetter){
+    public static NangmanLetterBoxResponseDTO.SendLetterResultDTO toWriteLetterResultDTO(NangmanLetter nangmanLetter){
 
-        return NangmanLetterBoxResponseDTO.WriteLetterResultDTO.builder()
+        return NangmanLetterBoxResponseDTO.SendLetterResultDTO.builder()
                 .nangmanLetterId(nangmanLetter.getId())
                 .senderNickname(nangmanLetter.getSenderNickname())
                 .createdAt(nangmanLetter.getCreatedAt())
@@ -69,6 +69,7 @@ public class NangmanLetterBoxConverter {
                 .nangmanReplyId(nangmanReply.getId())
                 .nangmanLetterId(nangmanReply.getNangmanLetter().getId())
                 .preview(getPreviewText(nangmanReply.getContent()))
+                .totalEmojiCount(calculateTotalEmojiCount(nangmanReply.getNangmanLetter()))
                 .build();
 
     }
