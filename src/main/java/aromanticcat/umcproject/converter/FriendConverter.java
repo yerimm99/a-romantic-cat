@@ -14,7 +14,7 @@ public class FriendConverter {
 
         return FriendResponseDTO.FriendDTO.builder()
                 .friendId(friend.getId())
-                .friendName(friend.getFriendName())
+                .friendName(friend.getFromMemberName())
                 .isFriend(friend.isFriend())
                 .isCloseFriend(friend.isCloseFriend())
                 .build();

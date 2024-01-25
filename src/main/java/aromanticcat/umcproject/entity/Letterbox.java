@@ -15,8 +15,8 @@ public class Letterbox extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long letterbox_id;
 
-    @Column(name = "user_id", nullable = false)
-    private Long userId;
+    @Column(name = "member_id", nullable = false)
+    private Long memberId;
 
     @NotNull
     private String name;
