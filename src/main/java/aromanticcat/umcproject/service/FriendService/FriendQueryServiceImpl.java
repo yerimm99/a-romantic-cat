@@ -15,19 +15,21 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
+@Transactional(readOnly = true)
 public class FriendQueryServiceImpl implements FriendQueryService {
 
     private final MemberRepository memberRepository;
     private final FriendRepository friendRepository;
 
     @Override
+    @Transactional
     public Optional<Member> findMember(Long memberId) {
         Optional<Member> member = memberRepository.findById(memberId);
         return member;
     }
 
     @Override
+    @Transactional
     public Page<Friend> getFriendList(Long memberId, Integer page) {
 
         // page는 페이지의 번호, 12는 한 페이지에 보여줄 친구의 수
@@ -41,6 +43,7 @@ public class FriendQueryServiceImpl implements FriendQueryService {
     }
 
     @Override
+    @Transactional
     public Page<Friend> getCloseFriendList(Long memberId, Integer page) {
 
         // page는 페이지의 번호, 12는 한 페이지에 보여줄 친구의 수
@@ -54,6 +57,7 @@ public class FriendQueryServiceImpl implements FriendQueryService {
     }
 
     @Override
+    @Transactional
     public Friend getFriend(Long memberId, String friendName) {
 
         Member member = memberRepository.findById(memberId).get();

@@ -16,15 +16,17 @@ public class Friend extends BaseEntity {
     @Column(name = "friend_id")
     private Long id;
 
-    private String friendName;
-
     @JoinColumn(name = "member_id")
     @ManyToOne(fetch = FetchType.LAZY)
     private Member member;
 
-    private Long to_user_id;
+    private String toMemberName;      // 친구 요청을 받은 사용자의 이름
 
-    private Long from_user_id;
+    private Long toMemberId;    // 친구 요청을 받은 사용자의 아이디
+
+    private String fromMemberName;  // 친구 요청을 보낸 사용자의 이름
+
+    private Long fromMemberId;  // 친구 요청을 보낸 사용자의 아이디
 
     private boolean isFriend;  // 친구인지 여부
 
