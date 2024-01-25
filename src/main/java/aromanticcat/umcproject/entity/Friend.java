@@ -20,6 +20,8 @@ public class Friend extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private Member member;
 
+    private String friendName;
+
     private String toMemberName;      // 친구 요청을 받은 사용자의 이름
 
     private Long toMemberId;    // 친구 요청을 받은 사용자의 아이디
