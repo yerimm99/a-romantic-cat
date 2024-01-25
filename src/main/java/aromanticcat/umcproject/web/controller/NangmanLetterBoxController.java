@@ -46,10 +46,7 @@ public class NangmanLetterBoxController {
     public ApiResponse<NangmanLetterBoxResponseDTO.WriteLetterResultDTO> sendLetter(@RequestBody NangmanLetterBoxRequestDTO.WriteLetterDTO request){
         try{
             //편지 작성 및 발송
-//            String senderNickname = request.getSenderRandomNickname();
-//            NangmanLetter nangmanLetter = nangmanLetterBoxService.writeAndSendLetter(request, senderNickname);
-            NangmanLetter nangmanLetter = nangmanLetterBoxService.writeAndSendLetter(request);
-
+            NangmanLetter nangmanLetter = nangmanLetterBoxService.sendLetter(request);
 
             //성공 응답 생성
             return ApiResponse.onSuccess(NangmanLetterBoxConverter.toWriteLetterResultDTO(nangmanLetter));
@@ -60,12 +57,17 @@ public class NangmanLetterBoxController {
         }
     }
 
-    @GetMapping("/letter-list")
-    @Operation(summary = "낭만우편함 답장하기 - 편지 목록 조회 API", description = "고민 편지 목록을 조회하는 API입니다. 각 편지는 40자까지 미리보기가 가능합니다.")
-    public ApiResponse<List<NangmanLetterBoxResponseDTO.PreviewLetterResultDTO>> getLetterList(){
+    @GetMapping( "/letter-list")
+    @Operation(
+            summary = "낭만우편함 답장하기 - 편지 목록 조회 API",
+            description = "고민 편지 목록을 조회하는 API입니다. " +
+                    "각 편지 내용은 40자까지 제공합니다. " +
+                    "페이징을 포함합니다. query String으로 page번호를 주세요.")
+    public ApiResponse<List<NangmanLetterBoxResponseDTO.PreviewLetterResultDTO>> getLetterList(
+            @RequestParam(defaultValue = "0") int page){
         try{
-            //편지 목록 조회
-            List<NangmanLetter> letterList = nangmanLetterBoxService.getLetterList();
+            //편지 페이지의 편지 목록 조회
+            List<NangmanLetter> letterList = nangmanLetterBoxService.getLetterList(page, 9);
 
             //편지 내용의 두 줄만 포함하도록 변환
             List<NangmanLetterBoxResponseDTO.PreviewLetterResultDTO> letterSummaryDTOList = letterList.stream()
@@ -81,12 +83,13 @@ public class NangmanLetterBoxController {
         }
     }
 
-    @GetMapping("/letter-list/{nangmanLetterId}")
-    @Operation(summary  = "낭만우편함 답장하기 -> 답장할 특정 편지 선택(상세조회), 랜덤 닉네임 얻기 API", description = "선택된 편지의 상세 내용과 작성자의 랜덤 닉네임을 보여주고, 답장하는 사용자의 랜덤 닉네임을 생성해서 보여주는 API입니다. ")
+    @GetMapping( "/letter-list/info/{nangmanLetterId}")
+    @Operation(summary  = "낭만우편함 답장하기 - 선택한 편지 상세 조회, 랜덤 닉네임 제공 API",
+            description = "선택된 편지의 상세 내용과 작성자의 랜덤 닉네임을 보여주고, 답장하는 사용자의 랜덤 닉네임을 생성해서 보여주는 API입니다. ")
     public ApiResponse<NangmanLetterBoxResponseDTO.SelectedLetterResultDTO> getNangmanLetterInfo(@PathVariable Long nangmanLetterId){
        try{
            // 특정 편지에 대한 정보 조회
-           NangmanLetter seledtedLetter = nangmanLetterBoxService.getLetterById(nangmanLetterId);
+           NangmanLetter seledtedLetter = nangmanLetterBoxService.getLetter(nangmanLetterId);
 
            // 랜덤 닉네임 생성
            String randomNickname = randomNicknameService.generateRandomNickname();
@@ -107,7 +110,7 @@ public class NangmanLetterBoxController {
     public ApiResponse<NangmanLetterBoxResponseDTO.WriteReplyResultDTO> sendReply(@PathVariable Long nangmanLetterId, @RequestBody NangmanLetterBoxRequestDTO.WriteReplyDTO request){
         try{
             //답장 작성 및 발송
-            NangmanReply nangmanReply = nangmanLetterBoxService.writeAndSendReply(request, nangmanLetterId);
+            NangmanReply nangmanReply = nangmanLetterBoxService.sendReply(request, nangmanLetterId);
 
             //성공 응답 생성
             return ApiResponse.onSuccess(NangmanLetterBoxConverter.toWriteReplyResultDTO(nangmanReply));
@@ -121,15 +124,18 @@ public class NangmanLetterBoxController {
     }
 
     @GetMapping("/my/nangman-letters")
-    @Operation(summary = "낭만우편함 나의 편지 (미리보기) 목록 조회 API", description = "사용자가 작성한 낭만 편지 목록을 조회하는 API입니다.")
-    public ApiResponse<List<NangmanLetterBoxResponseDTO.PreviewLetterResultDTO>> getMyNangmanLetters() {
+    @Operation(summary = "낭만우편함 나의 편지 목록 조회 API",
+            description = "사용자가 작성한 낭만 편지 목록을 조회하는 API입니다." +
+                        "페이징을 포함합니다. query String으로 page번호를 주세요.")
+    public ApiResponse<List<NangmanLetterBoxResponseDTO.PreviewLetterResultDTO>> getMyNangmanLetters(
+            @RequestParam(defaultValue = "0") int page) {
         try {
             // 현재 로그인된 사용자의 ID 또는 정보를 얻어온다고 가정
             // SecurityContextHolder에서 현재 사용자의 정보를 가져오는 방법
             Long userId = getCurrentUserId(); // 로그인한 사용자의 아이디를 가져오는 메서드
 
             // 사용자가 작성한 편지 목록 조회
-            List<NangmanLetter> userLetterList = nangmanLetterBoxService.getNangmanLettersByUserId(userId);
+            List<NangmanLetter> userLetterList = nangmanLetterBoxService.getMyLetterList(userId, page, 9);
 
             // 편지 내용의 두 줄만 포함하도록 변환
             List<NangmanLetterBoxResponseDTO.PreviewLetterResultDTO> previewLetterList = userLetterList.stream()
@@ -144,8 +150,9 @@ public class NangmanLetterBoxController {
         }
     }
 
-    @GetMapping("/my/nangman-letters/{nangmanLetterId}/preview-replies")
-    @Operation(summary = "낭만우편함 내가 쓴 편지에 대한 답장 (미리보기) 조회 API", description = "특정 편지에 대한 답장 프리뷰(40자)를 조회하는 API입니다.")
+    @GetMapping("/my/nangman-letters/{nangmanLetterId}/preview-reply")
+    @Operation(summary = "낭만우편함 내가 쓴 편지에 받은 답장 조회 API",
+            description = "특정 편지에 대한 답장 내용을 40자까지 제공합니다.")
     public ApiResponse<NangmanLetterBoxResponseDTO.PreviewReplyResultDTO> getPreviewReplyForLetter(@PathVariable Long nangmanLetterId) {
         try {
             // 현재 로그인된 사용자의 ID 또는 정보를 얻어온다고 가정
@@ -169,14 +176,19 @@ public class NangmanLetterBoxController {
     }
 
     @GetMapping("/my/nangman-replies")
-    @Operation(summary = "낭만우편함 내가 답장한 편지 (미리보기) 목록 조회 API", description = "사용자가 답장한 낭만 편지 목록을 조회하는 API입니다.")
-    public ApiResponse<List<NangmanLetterBoxResponseDTO.PreviewBothResultDTO>> getMyNangmanReplies() {
+    @Operation(summary = "낭만우편함 내가 답장한 목록 조회 API",
+            description = "사용자가 답장한 목록을 조회하는 API입니다."+
+                        "답장 내용(40자) + 연결된 낭만 편지의 내용(40자)를 제공합니다." +
+                        "페이징을 포함합니다. query String으로 page번호를 주세요.")
+    public ApiResponse<List<NangmanLetterBoxResponseDTO.PreviewBothResultDTO>> getMyNangmanReplies(
+            @RequestParam(defaultValue = "0") int page
+    ) {
         // 현재 로그인된 사용자의 ID 또는 정보를 얻어온다고 가정
         // SecurityContextHolder에서 현재 사용자의 정보를 가져오는 방법
         Long userId = getCurrentUserId(); // 로그인한 사용자의 아이디를 가져오는 메서드
 
         // 사용자가 답장한 목록 조회
-        List<NangmanLetterBoxResponseDTO.PreviewBothResultDTO> userReplyList = nangmanLetterBoxService.getReplyListByUserId(userId);
+        List<NangmanLetterBoxResponseDTO.PreviewBothResultDTO> userReplyList = nangmanLetterBoxService.getMyReplyList(userId,  page, 9);
 
         // 성공 응답 생성
         return ApiResponse.onSuccess(userReplyList);
