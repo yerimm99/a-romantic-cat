@@ -31,6 +31,7 @@ public class SecurityConfig {
                 .httpBasic().disable() // HTTP 기본 인증을 비활성화
                 .cors().and() // CORS 활성화
                 .csrf().disable() // CSRF 보호 기능 비활성화
+                .logout().disable()
                 .sessionManagement()
                 .sessionCreationPolicy(
                         SessionCreationPolicy.STATELESS) // 세션관리 정책을 STATELESS(세션이 있으면 쓰지도 않고, 없으면 만들지도 않는다)
@@ -47,7 +48,9 @@ public class SecurityConfig {
                 .userInfoEndpoint().userService(customOAuth2UserService) // OAuth2 로그인시 사용자 정보를 가져오는 엔드포인트와 사용자 서비스를 설정
                 .and()
                 .failureHandler(oAuth2LoginFailureHandler) // OAuth2 로그인 실패시 처리할 핸들러를 지정해준다.
-                .successHandler(oAuth2LoginSuccessHandler); // OAuth2 로그인 성공시 처리할 핸들러를 지정해준다.
+                .successHandler(oAuth2LoginSuccessHandler) // OAuth2 로그인 성공시 처리할 핸들러를 지정해준다.
+                .and()
+                .logout().logoutSuccessUrl("/"); // 로그아웃 성공시 이동 url
 
         // JWT 인증 필터를 UsernamePasswordAuthenticationFilter 앞에 추가한다.
         return http
