@@ -5,6 +5,8 @@ import aromanticcat.umcproject.apiPayload.exception.handler.MemberHandler;
 import aromanticcat.umcproject.entity.Member;
 import aromanticcat.umcproject.repository.MemberRepository;
 import aromanticcat.umcproject.security.Role;
+import aromanticcat.umcproject.security.SecurityUserDto;
+import aromanticcat.umcproject.security.jwt.JwtAuthFilter;
 import java.util.Optional;
 import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -55,4 +57,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
 
+    public SecurityUserDto getUserInfo() {
+        return JwtAuthFilter.getUser();
+    }
 }
