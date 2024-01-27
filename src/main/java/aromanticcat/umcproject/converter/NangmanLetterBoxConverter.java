@@ -8,9 +8,9 @@ import aromanticcat.umcproject.web.dto.nangmanLetterBox.NangmanLetterBoxResponse
 
 public class NangmanLetterBoxConverter {
 
-    public static NangmanLetterBoxResponseDTO.WriteLetterResultDTO toWriteLetterResultDTO(NangmanLetter nangmanLetter){
+    public static NangmanLetterBoxResponseDTO.SendLetterResultDTO toWriteLetterResultDTO(NangmanLetter nangmanLetter){
 
-        return NangmanLetterBoxResponseDTO.WriteLetterResultDTO.builder()
+        return NangmanLetterBoxResponseDTO.SendLetterResultDTO.builder()
                 .nangmanLetterId(nangmanLetter.getId())
                 .senderNickname(nangmanLetter.getSenderNickname())
                 .createdAt(nangmanLetter.getCreatedAt())
@@ -69,6 +69,7 @@ public class NangmanLetterBoxConverter {
                 .nangmanReplyId(nangmanReply.getId())
                 .nangmanLetterId(nangmanReply.getNangmanLetter().getId())
                 .preview(getPreviewText(nangmanReply.getContent()))
+                .totalEmojiCount(calculateTotalEmojiCount(nangmanReply.getNangmanLetter()))
                 .build();
 
     }
@@ -98,15 +99,33 @@ public class NangmanLetterBoxConverter {
             return null;
         }
 
-        // 각 이모지 수를 합산하여 반환
-        int thumbsUpCnt = nangmanLetter.getThumbsUpCnt();
-        int heartCnt = nangmanLetter.getHeartCnt();
-        int cryingCnt = nangmanLetter.getCryingCnt();
-        int cloverCnt = nangmanLetter.getCloverCnt();
-        int clapCnt = nangmanLetter.getClapCnt();
-        int starCnt = nangmanLetter.getStarCnt();
+        Integer thumbsUpCnt = nangmanLetter.getThumbsUpCnt();
+        Integer heartCnt = nangmanLetter.getHeartCnt();
+        Integer cryingCnt = nangmanLetter.getCryingCnt();
+        Integer cloverCnt = nangmanLetter.getCloverCnt();
+        Integer clapCnt = nangmanLetter.getClapCnt();
+        Integer starCnt = nangmanLetter.getStarCnt();
+
+        // 각 이모지 수가 null인 경우 0으로 간주하여 합산
+        thumbsUpCnt = thumbsUpCnt != null ? thumbsUpCnt : 0;
+        heartCnt = heartCnt != null ? heartCnt : 0;
+        cryingCnt = cryingCnt != null ? cryingCnt : 0;
+        cloverCnt = cloverCnt != null ? cloverCnt : 0;
+        clapCnt = clapCnt != null ? clapCnt : 0;
+        starCnt = starCnt != null ? starCnt : 0;
 
         return thumbsUpCnt + heartCnt + cryingCnt + cloverCnt + clapCnt + starCnt;
 
+    }
+
+    public static NangmanLetterBoxResponseDTO.BothResultDTO toBothResultDTO(NangmanLetter nangmanLetter, NangmanReply nangmanReply){
+        return NangmanLetterBoxResponseDTO.BothResultDTO.builder()
+                .nangmanLetterId(nangmanLetter.getId())
+                .letterContent(nangmanLetter.getContent())
+                .senderNickname(nangmanLetter.getSenderNickname())
+                .nangmanReplyId(nangmanReply.getId())
+                .replyContent(nangmanReply.getContent())
+                .replySenderNickname(nangmanReply.getReplySenderNickname())
+                .build();
     }
 }

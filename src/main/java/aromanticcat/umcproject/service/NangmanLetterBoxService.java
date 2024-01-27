@@ -10,17 +10,18 @@ import java.util.Optional;
 
 public interface NangmanLetterBoxService {
 
-    NangmanLetter writeAndSendLetter(NangmanLetterBoxRequestDTO.WriteLetterDTO requestDTO);
+    NangmanLetter sendLetter(NangmanLetterBoxRequestDTO.WriteLetterDTO requestDTO);
 
-    List<NangmanLetter> getLetterList();
+    List<NangmanLetter> getLetterList(int page, int pageSize);
 
-    NangmanLetter getLetterById(Long nangmanLetterid);
+    NangmanLetter getLetter(Long nangmanLetterid);
 
-    NangmanReply writeAndSendReply(NangmanLetterBoxRequestDTO.WriteReplyDTO requestDTO, Long id);
+    NangmanReply sendReply(NangmanLetterBoxRequestDTO.WriteReplyDTO requestDTO, Long id);
 
-    List<NangmanLetter> getNangmanLettersByUserId(Long userId);
+    List<NangmanLetter> getMyLetterList(Long userId, int page, int pageSize);
 
     Optional<NangmanReply> getReplyForLetter(Long userId, Long nangmanLetterId);
 
-    List<NangmanLetterBoxResponseDTO.PreviewBothResultDTO> getReplyListByUserId(Long userId);
+    List<NangmanLetterBoxResponseDTO.PreviewBothResultDTO> getMyReplyList(Long userId, int page, int pageSize);
+
 }

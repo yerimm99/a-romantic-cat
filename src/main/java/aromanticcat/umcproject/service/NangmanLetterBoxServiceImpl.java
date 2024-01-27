@@ -10,6 +10,9 @@ import aromanticcat.umcproject.repository.NangmanReplyRepository;
 import aromanticcat.umcproject.web.dto.nangmanLetterBox.NangmanLetterBoxRequestDTO;
 import aromanticcat.umcproject.web.dto.nangmanLetterBox.NangmanLetterBoxResponseDTO;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -25,11 +28,10 @@ public class NangmanLetterBoxServiceImpl implements NangmanLetterBoxService {
 
     private final NangmanLetterRepository nangmanLetterRepository;
     private final MemberRepository memberRepository;
-    private final RandomNicknameService randomNicknameService;
     private final NangmanReplyRepository nangmanReplyRepository;
     @Override
     @Transactional
-    public NangmanLetter writeAndSendLetter(NangmanLetterBoxRequestDTO.WriteLetterDTO request){
+    public NangmanLetter sendLetter(NangmanLetterBoxRequestDTO.WriteLetterDTO request){
         //멤버 엔티티 조회
         Member member = memberRepository.findById(request.getMemberId()).orElseThrow(() -> new RuntimeException("멤버를 찾을 수 없습니다. ID: " + request.getMemberId()));
 
@@ -40,21 +42,24 @@ public class NangmanLetterBoxServiceImpl implements NangmanLetterBoxService {
 
     @Override
     @Transactional
-    public List<NangmanLetter> getLetterList(){
+    public List<NangmanLetter> getLetterList(int page, int pageSize){
+        // 페이지 번호와 페이지 크기를 이용하여 페이징된 편지 목록 조회
+        Pageable pageable = PageRequest.of(page, pageSize);
+        Page<NangmanLetter> letterPage = nangmanLetterRepository.findByHasResponseFalse(pageable);
 
-        return nangmanLetterRepository.findByHasResponseFalse();
+        return letterPage.getContent();
     }
 
     @Override
     @Transactional
-    public NangmanLetter getLetterById(Long nangmanLetterId){
+    public NangmanLetter getLetter(Long nangmanLetterId){
         return nangmanLetterRepository.findById(nangmanLetterId)
                 .orElseThrow(() -> new RuntimeException("편지를 찾을 수 없습니다. ID: " + nangmanLetterId));
     }
 
     @Override
     @Transactional
-    public NangmanReply writeAndSendReply(NangmanLetterBoxRequestDTO.WriteReplyDTO request, Long nangmanLetterId){
+    public NangmanReply sendReply(NangmanLetterBoxRequestDTO.WriteReplyDTO request, Long nangmanLetterId){
         //사용자가 오늘 이미 답장을 작성했는지 확인
         boolean hasUserRepliedToday = hasUserRepliedToday(request.getMemberId());
 
@@ -63,7 +68,7 @@ public class NangmanLetterBoxServiceImpl implements NangmanLetterBoxService {
         }
 
         //특정 편지에 대한 정보 조회
-        NangmanLetter nangmanLetter = getLetterById(nangmanLetterId);
+        NangmanLetter nangmanLetter = getLetter(nangmanLetterId);
 
         //멤버 엔티티 조회
         Member member = memberRepository.findById(request.getMemberId()).orElseThrow(() -> new RuntimeException("멤버를 찾을 수 없습니다. ID: " + request.getMemberId()));
@@ -90,9 +95,14 @@ public class NangmanLetterBoxServiceImpl implements NangmanLetterBoxService {
 
     @Override
     @Transactional
-    public List<NangmanLetter> getNangmanLettersByUserId(Long userId){
+    public List<NangmanLetter> getMyLetterList(Long userId, int page, int pageSize){
+
+        Pageable pageable = PageRequest.of(page, pageSize);
+
         // 사용자 ID로 해당 사용자가 작성한 편지 목록 조회
-        return nangmanLetterRepository.findByMemberId(userId);
+        Page<NangmanLetter> myLetterPage = nangmanLetterRepository.findByMemberId(userId, pageable);
+
+        return myLetterPage.getContent();
     }
 
 
@@ -122,12 +132,18 @@ public class NangmanLetterBoxServiceImpl implements NangmanLetterBoxService {
 
     @Override
     @Transactional
-    public  List<NangmanLetterBoxResponseDTO.PreviewBothResultDTO> getReplyListByUserId(Long userId){
+    public  List<NangmanLetterBoxResponseDTO.PreviewBothResultDTO> getMyReplyList(Long userId, int page, int pageSize){
+
+        Pageable pageable = PageRequest.of(page, pageSize);
+
         // 사용자가 답장한 목록 조회
-        List<NangmanReply> replyList = nangmanReplyRepository.findByMemberId(userId);
+        Page<NangmanReply> myReplyPage = nangmanReplyRepository.findByMemberId(userId, pageable);
+
+        // 리스트로 변환
+        List<NangmanReply> myReplyList = myReplyPage.getContent();
 
         // 각 답장(+ 연결된 편지)에 대해 미리보기로 생성
-        return replyList.stream()
+        return myReplyList.stream()
                 .map(reply -> NangmanLetterBoxConverter.toPreviewBothResultDTO(reply.getNangmanLetter(), reply))
                 .collect(Collectors.toList());
     }

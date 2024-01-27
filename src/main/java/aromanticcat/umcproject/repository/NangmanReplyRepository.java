@@ -1,17 +1,17 @@
 package aromanticcat.umcproject.repository;
 
 import aromanticcat.umcproject.entity.NangmanReply;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
 
 public interface NangmanReplyRepository extends JpaRepository<NangmanReply, Long> {
 
     boolean existsByMemberIdAndCreatedAtBetween(Long memberId, LocalDateTime start, LocalDateTime end);
 
-    Optional<NangmanReply> findByMemberIdAndNangmanLetterId(Long memberId, Long nangmanLetterId);
+    Page<NangmanReply> findByMemberId(Long memberId, Pageable pageable);
 
-    List<NangmanReply> findByMemberId(Long memberId);
+    NangmanReply findByNangmanLetter_Id(Long nangmanLetterId);
 }
