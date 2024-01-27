@@ -122,40 +122,41 @@ public class FriendController {
         }
     }
 
-//    @PostMapping("/{member_id}/friend/request")
-//    @Operation(summary = "친구 추가 API", description = "query String으로 추가하려는 친구의 우편함 번호를 알려주세요.")
-//    @ApiResponses(value = {
-//            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
-//            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "AUTH003", description = "access 토큰을 주세요!", content = @Content(schema = @Schema(implementation = ApiResponse.class))),
-//            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "AUTH004", description = "access 토큰 만료", content = @Content(schema = @Schema(implementation = ApiResponse.class))),
-//            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "AUTH006", description = "access 토큰 모양이 이상함", content = @Content(schema = @Schema(implementation = ApiResponse.class))),
-//    })
-//    @Parameters({
-//            @Parameter(name = "memberId", description = "사용자의 아이디, path variable 입니다!"),
-//            @Parameter(name = "toMemberLetterBoxId", description = "친구 추가하고자 하는 친구의 우편함 번호, query string입니다!")
-//    })
-//    public ApiResponse<FriendResponseDTO.friendshipRequestResultDTO> sendFriendRequest(@PathVariable(name = "member_id") Long memberId,
-//                                                                                       @RequestBody FriendRequestDTO.FriendshipRequestDTO request){
-//        try{
-//
-//            // 친구 요청을 보내는 사용자
-//            Member fromMember = friendCommandService.getMember(memberId);
-//            // 친구 요청을 받는 사용자
-//            Member toMember = friendCommandService.getMemberByLetterBoxId(request.getToMemberLetterBoxId());
-//
-////            Friend friend = Friend.builder()
-////                    .member(fromMember)
-////                    .fromMemberName(fromMember.getName())
-////                    .toMemberId(toMember.getId())
-////                    .toMemberName(toMember.getName())
-//
-//
-//            return null;
-//
-//        }catch (Exception e){
-//            return ApiResponse.onFailure(HttpStatus.INTERNAL_SERVER_ERROR.toString(), e.getMessage(), null);
-//        }
-//    }
+    @PostMapping("/{member_id}/friend/request")
+    @Operation(summary = "친구 추가 API", description = "query String으로 추가하려는 친구의 우편함 번호를 알려주세요.")
+    @ApiResponses(value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "AUTH003", description = "access 토큰을 주세요!", content = @Content(schema = @Schema(implementation = ApiResponse.class))),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "AUTH004", description = "access 토큰 만료", content = @Content(schema = @Schema(implementation = ApiResponse.class))),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "AUTH006", description = "access 토큰 모양이 이상함", content = @Content(schema = @Schema(implementation = ApiResponse.class))),
+    })
+    @Parameters({
+            @Parameter(name = "memberId", description = "사용자의 아이디, path variable 입니다!"),
+            @Parameter(name = "toMemberLetterBoxId", description = "친구 추가하고자 하는 친구의 우편함 번호, query string입니다!")
+    })
+    public ApiResponse<FriendResponseDTO.friendshipRequestResultDTO> sendFriendRequest(@PathVariable(name = "member_id") Long memberId,
+                                                                                       @RequestBody FriendRequestDTO.FriendshipRequestDTO request){
+        try{
+
+            // 친구 요청을 보내는 사용자
+            Member fromMember = friendCommandService.getMember(memberId);
+            // 친구 요청을 받는 사용자
+            Member toMember = friendCommandService.getMemberByLetterBoxId(request.getToMemberLetterBoxId());
+
+            // DTO의 정보를 기반으로 친구 객체 형성(toStore)
+            Friend friend = Friend.builder()
+                    .member(fromMember)
+                    .fromMemberName(fromMember.getName())
+                    .toMemberId(toMember.getId())
+                    .toMemberName(toMember.getName())
+
+
+            return null;
+
+        }catch (Exception e){
+            return ApiResponse.onFailure(HttpStatus.INTERNAL_SERVER_ERROR.toString(), e.getMessage(), null);
+        }
+    }
 
 
 

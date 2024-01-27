@@ -30,7 +30,8 @@ public class Friend extends BaseEntity {
 
     private Long fromMemberId;  // 친구 요청을 보낸 사용자의 아이디
 
-    private boolean isFriend;  // 친구인지 여부
+    @Enumerated(EnumType.STRING)
+    private FriendStatus friendStatus;  // 친구인지 여부
 
     private boolean isCloseFriend;   // 친한 친구인지 여부
 
