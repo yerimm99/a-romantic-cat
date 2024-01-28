@@ -1,6 +1,7 @@
 package aromanticcat.umcproject.repository;
 
 import aromanticcat.umcproject.entity.Friend;
+import aromanticcat.umcproject.entity.FriendStatus;
 import aromanticcat.umcproject.entity.Member;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -11,9 +12,7 @@ import java.util.List;
 
 public interface FriendRepository extends JpaRepository<Friend, Long> {
 
-    Page<Friend> findFriendByMember(Member member, Pageable pageable);
-
-    Page<Friend> findFriendByMemberAndCloseFriendIsTrue(Member member, Pageable pageable);
+    Page<Friend> findFriendByMemberAndFromIsTrueAndFriendStatus(Member member, Pageable pageable, FriendStatus status);
 
     Friend findFriendByMemberAndFriendName(Member member, String friendName);
 
