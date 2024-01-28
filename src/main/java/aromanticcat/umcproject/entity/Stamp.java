@@ -13,13 +13,16 @@ public class Stamp extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long stamp_id;
+    private Long id;
 
     @NotNull
-    private String image_url;
+    private String imageUrl;
 
     @NotNull
     private String name;
+
+    @NotNull
+    private Integer price;
 
     @OneToMany(mappedBy = "stamp")
     private List<Letter> letters;
