@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 @RequiredArgsConstructor
+@ToString
 @Table(name = "letter")
 public class Letter extends BaseEntity {
 

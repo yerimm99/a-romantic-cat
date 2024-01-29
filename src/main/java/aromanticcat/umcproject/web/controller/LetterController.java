@@ -24,4 +24,14 @@ public class LetterController {
         return ApiResponse.onSuccess(letterService.createLetter(request));
     }
 
+    @GetMapping("/{letterId}")
+    @ApiOperation(value = "편지 조회")
+    public ApiResponse<LetterResponse> getLetterById(@PathVariable Long letterId) {
+        LetterResponse response = letterService.getLetterById(letterId);
+        try {
+            return ApiResponse.onSuccess(response);
+        } catch (Exception e){
+            return ApiResponse.onFailure(HttpStatus.INTERNAL_SERVER_ERROR.toString(), e.getMessage(), null);
+        }
+    }
 }

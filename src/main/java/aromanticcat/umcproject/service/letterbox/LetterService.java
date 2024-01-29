@@ -40,4 +40,14 @@ public class LetterService {
         return savedLetter.getLetterId();
     }
 
+    public LetterResponse getLetterById(Long letterId) {
+        Letter letter = letterRepository.findByLetterId(letterId).orElse(null);
+
+        if (letter != null) {
+            System.out.println(letter.toString());
+            return letter.toResponse(letter);
+        } else {
+            return null;
+        }
+    }
 }
