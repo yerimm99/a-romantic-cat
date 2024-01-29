@@ -1,4 +1,4 @@
-package aromanticcat.umcproject.web.dto;
+package aromanticcat.umcproject.web.dto.Letterbox;
 
 import lombok.Data;
 
