@@ -1,0 +1,27 @@
+package aromanticcat.umcproject.web.controller;
+
+import aromanticcat.umcproject.apiPayload.ApiResponse;
+import aromanticcat.umcproject.service.letterbox.LetterService;
+import aromanticcat.umcproject.service.letterbox.LetterboxService;
+import aromanticcat.umcproject.web.dto.Letterbox.LetterRequest;
+import aromanticcat.umcproject.web.dto.Letterbox.LetterResponse;
+import aromanticcat.umcproject.web.dto.Letterbox.LetterboxRequest;
+import aromanticcat.umcproject.web.dto.Letterbox.LetterboxResponse;
+import io.swagger.annotations.ApiOperation;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("/letters")
+public class LetterController {
+    private final LetterService letterService;
+
+    @PostMapping("/")
+    @ApiOperation(value = "편지 생성")
+    public ApiResponse<Long> createLetter(@RequestBody LetterRequest request) {
+        return ApiResponse.onSuccess(letterService.createLetter(request));
+    }
+
+}
