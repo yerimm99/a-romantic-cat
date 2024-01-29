@@ -2,6 +2,7 @@ package aromanticcat.umcproject.service.FriendService;
 
 import aromanticcat.umcproject.entity.Friend;
 import aromanticcat.umcproject.entity.Member;
+import aromanticcat.umcproject.web.dto.Friend.FriendResponseDTO;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
@@ -9,15 +10,14 @@ import java.util.Optional;
 
 public interface FriendQueryService {
 
-    Optional<Member> findMember(Long id);
-
-    Page<Friend> getFriendList(Long memberId, Integer page);
-
-    Page<Friend> getCloseFriendList(Long memberId, Integer page);
-
-    Friend getFriend(Long memberId, String friendName);
 
     List<Friend> getFriendReceivedList(Long memberId);
 
     List<Friend> getFriendRequestedList(Long memberId);
+
+    List<FriendResponseDTO.FriendInfoDTO> findFriendList(Long memberId, Integer page);
+
+    List<FriendResponseDTO.FriendInfoDTO> findCloseFriendList(Long memberId, Integer page);
+
+    FriendResponseDTO.FriendInfoDTO getFriendbyFriendName(Long memberId, String friendName);
 }

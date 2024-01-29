@@ -1,10 +1,12 @@
 package aromanticcat.umcproject.service.FriendService;
 
+import aromanticcat.umcproject.converter.FriendConverter;
 import aromanticcat.umcproject.entity.Friend;
 import aromanticcat.umcproject.entity.FriendStatus;
 import aromanticcat.umcproject.entity.Member;
 import aromanticcat.umcproject.repository.FriendRepository;
 import aromanticcat.umcproject.repository.MemberRepository;
+import aromanticcat.umcproject.web.dto.Friend.FriendResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -12,9 +14,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -23,52 +24,6 @@ public class FriendQueryServiceImpl implements FriendQueryService {
 
     private final MemberRepository memberRepository;
     private final FriendRepository friendRepository;
-
-    @Override
-    @Transactional
-    public Optional<Member> findMember(Long memberId) {
-        Optional<Member> member = memberRepository.findById(memberId);
-        return member;
-    }
-
-    @Override
-    @Transactional
-    public Page<Friend> getFriendList(Long memberId, Integer page) {    // 주소록에 있는 친구 정보들 조회 API
-
-        // page는 페이지의 번호, 12는 한 페이지에 보여줄 친구의 수
-        Pageable pageable = PageRequest.of(page,12);
-
-        Member member = memberRepository.findById(memberId).get();
-
-        Page<Friend> friendList = friendRepository.findFriendByMemberAndFromIsTrueAndFriendStatus(member, pageable, FriendStatus.APPROVED);
-
-        return friendList;
-    }
-
-    @Override
-    @Transactional
-    public Page<Friend> getCloseFriendList(Long memberId, Integer page) {
-
-        // page는 페이지의 번호, 12는 한 페이지에 보여줄 친구의 수
-        Pageable pageable = PageRequest.of(page,12);
-
-        Member member = memberRepository.findById(memberId).get();
-
-        Page<Friend> closeFriendList = friendRepository.findFriendByMemberAndFromIsTrueAndFriendStatus(member, pageable, FriendStatus.CLOSE_FRIEND);
-
-        return closeFriendList;
-    }
-
-    @Override
-    @Transactional
-    public Friend getFriend(Long memberId, String friendName) {
-
-        Member member = memberRepository.findById(memberId).get();
-
-        Friend friend = friendRepository.findFriendByMemberAndFriendName(member, friendName);
-
-        return friend;
-    }
 
     @Override
     @Transactional
@@ -106,6 +61,60 @@ public class FriendQueryServiceImpl implements FriendQueryService {
         }
 
         return results;
+    }
+
+    @Override
+    @Transactional
+    public List<FriendResponseDTO.FriendInfoDTO> findFriendList(Long memberId, Integer page) {
+
+        // page는 페이지의 번호, 12는 한 페이지에 보여줄 친구의 수
+        Pageable pageable = PageRequest.of(page,12);
+
+        // 친구와 친한 친구를 모두 조회하기 위함
+        Set<FriendStatus> friendStatus = new HashSet<>();
+        friendStatus.add(FriendStatus.APPROVED);
+        friendStatus.add(FriendStatus.CLOSE_FRIEND);
+
+        Page<Friend> friendPage = friendRepository.findFriendByMemberIdAndFriendStatus(memberId, pageable, friendStatus);
+
+        List<Friend> friendList = friendPage.getContent();
+
+        List<FriendResponseDTO.FriendInfoDTO> friendInfoDTOList = friendList.stream()
+                .map(FriendConverter::toFriendInfoDTO)
+                .collect(Collectors.toList());
+
+        return  friendInfoDTOList;
+
+    }
+
+    @Override
+    @Transactional
+    public List<FriendResponseDTO.FriendInfoDTO> findCloseFriendList(Long memberId, Integer page) {
+
+        // page는 페이지의 번호, 12는 한 페이지에 보여줄 친구의 수
+        Pageable pageable = PageRequest.of(page,12);
+
+        Page<Friend> friendPage = friendRepository.findFriendByMemberIdAndFriendStatus(memberId, pageable, FriendStatus.CLOSE_FRIEND);
+
+        List<Friend> friendList = friendPage.getContent();
+
+        List<FriendResponseDTO.FriendInfoDTO> friendInfoDTOList = friendList.stream()
+                .map(FriendConverter::toFriendInfoDTO)
+                .collect(Collectors.toList());
+
+        return  friendInfoDTOList;
+
+    }
+
+    @Override
+    public FriendResponseDTO.FriendInfoDTO getFriendbyFriendName(Long memberId, String friendName) {
+
+        Friend friend = friendRepository.findFriendByMemberIdAndFriendName(memberId, friendName);
+
+        FriendResponseDTO.FriendInfoDTO friendInfoDTO = FriendConverter.toFriendInfoDTO(friend);
+
+        return friendInfoDTO;
+
     }
 
 }

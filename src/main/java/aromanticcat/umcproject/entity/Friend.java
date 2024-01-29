@@ -14,7 +14,6 @@ public class Friend extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "friend_id")
     private Long id;
 
     private Long counterpartId;
