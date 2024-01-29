@@ -1,5 +1,6 @@
 package aromanticcat.umcproject.entity;
 
+import lombok.Builder;
 import lombok.Getter;
 
 import javax.persistence.*;
@@ -9,6 +10,7 @@ import java.util.List;
 
 @Entity
 @Getter
+@Builder
 @Table(name = "letterbox")
 public class Letterbox extends BaseEntity {
     @Id

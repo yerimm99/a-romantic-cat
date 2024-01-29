@@ -1,5 +1,6 @@
 package aromanticcat.umcproject.entity;
 
+import lombok.Builder;
 import lombok.Getter;
 
 import javax.persistence.*;
@@ -7,6 +8,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
+@Builder
 @Table(name = "letter")
 public class Letter extends BaseEntity {
 
