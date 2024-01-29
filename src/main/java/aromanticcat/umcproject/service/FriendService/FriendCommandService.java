@@ -1,10 +1,13 @@
 package aromanticcat.umcproject.service.FriendService;
 
 import aromanticcat.umcproject.entity.Member;
+import aromanticcat.umcproject.web.dto.Friend.FriendRequestDTO;
 
 public interface FriendCommandService {
 
-    Member getMember(Long memberId);
+    void requestFriendship(FriendRequestDTO.FriendshipRequestDTO request);
 
-    Member getMemberByLetterBoxId(Long toMemberLetterBoxId);
+    void approveFriendship(Long memberId, Long friendId);
+
+    void rejectFriendship(Long memberId, Long friendId);
 }
