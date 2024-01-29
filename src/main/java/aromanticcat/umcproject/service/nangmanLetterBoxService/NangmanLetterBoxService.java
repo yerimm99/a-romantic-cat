@@ -1,12 +1,10 @@
 package aromanticcat.umcproject.service.nangmanLetterBoxService;
 
 import aromanticcat.umcproject.entity.NangmanLetter;
-import aromanticcat.umcproject.entity.NangmanReply;
 import aromanticcat.umcproject.web.dto.nangmanLetterBox.NangmanLetterBoxRequestDTO;
 import aromanticcat.umcproject.web.dto.nangmanLetterBox.NangmanLetterBoxResponseDTO;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface NangmanLetterBoxService {
 
@@ -16,11 +14,13 @@ public interface NangmanLetterBoxService {
 
     NangmanLetter getLetter(Long nangmanLetterid);
 
-    NangmanReply sendReply(NangmanLetterBoxRequestDTO.WriteReplyDTO requestDTO, Long id);
+    NangmanLetterBoxResponseDTO.SelectedLetterResultDTO getLetterInfo(Long nangmanLetterId);
 
-    List<NangmanLetter> getMyLetterList(Long userId, int page, int pageSize);
+    NangmanLetterBoxResponseDTO.WriteReplyResultDTO sendReply(NangmanLetterBoxRequestDTO.WriteReplyDTO requestDTO, Long id);
 
-    Optional<NangmanReply> getReplyForLetter(Long userId, Long nangmanLetterId);
+    List<NangmanLetterBoxResponseDTO.PreviewLetterResultDTO> getMyLetterList(Long userId, int page, int pageSize);
+
+    NangmanLetterBoxResponseDTO.PreviewReplyResultDTO getPreviewReceivedReply(Long userId, Long nangmanLetterId);
 
     List<NangmanLetterBoxResponseDTO.PreviewBothResultDTO> getMyReplyList(Long userId, int page, int pageSize);
 

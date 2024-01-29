@@ -35,12 +35,11 @@ public class NangmanLetterBoxConverter {
                 .build();
     }
 
-    public static NangmanLetterBoxResponseDTO.SelectedLetterResultDTO toSelectedLetterResultDTO(NangmanLetter nangmanLetter, String randomNickname){
+    public static NangmanLetterBoxResponseDTO.SelectedLetterResultDTO toSelectedLetterResultDTO(NangmanLetter nangmanLetter){
         return NangmanLetterBoxResponseDTO.SelectedLetterResultDTO.builder()
                 .nangmanLetterId(nangmanLetter.getId())
                 .nangmanLetterContent(nangmanLetter.getContent())
                 .senderNickname(nangmanLetter.getSenderNickname())
-                .replySenderNickname(randomNickname)
                 .build();
     }
 

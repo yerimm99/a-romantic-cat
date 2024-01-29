@@ -74,7 +74,6 @@ public class  NangmanLetterBoxResponseDTO {
         private Long nangmanLetterId;
         private String senderNickname;
         private String nangmanLetterContent;
-        private String replySenderNickname;
     }
 
     @Getter
