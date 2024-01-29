@@ -1,5 +1,6 @@
 package aromanticcat.umcproject.entity;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -13,6 +14,7 @@ import java.util.List;
 @Setter
 @RequiredArgsConstructor
 @Table(name = "stamp")
+@Builder
 public class Stamp extends BaseEntity {
 
     @Id
