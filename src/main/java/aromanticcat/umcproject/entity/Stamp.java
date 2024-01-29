@@ -14,7 +14,6 @@ import java.util.List;
 @Setter
 @RequiredArgsConstructor
 @Table(name = "stamp")
-@Builder
 public class Stamp extends BaseEntity {
 
     @Id
