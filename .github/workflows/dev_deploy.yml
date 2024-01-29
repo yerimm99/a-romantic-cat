@@ -2,7 +2,7 @@ name: UMC Dev CI/CD
 
 on:
   pull_request:
-    types: [closed]
+    types: [ closed ]
   workflow_dispatch: # (2).수동 실행도 가능하도록
 
 jobs:
@@ -59,3 +59,4 @@ jobs:
           region: ap-northeast-2
           deployment_package: deploy/deploy.zip
           wait_for_deployment: false
+
