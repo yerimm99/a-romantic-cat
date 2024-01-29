@@ -1,19 +1,17 @@
 package aromanticcat.umcproject.web.controller;
 
 import aromanticcat.umcproject.apiPayload.ApiResponse;
-import aromanticcat.umcproject.entity.Letterbox;
 import aromanticcat.umcproject.service.letterbox.LetterboxService;
-import aromanticcat.umcproject.web.dto.LetterboxRequest;
-import aromanticcat.umcproject.web.dto.LetterboxResponse;
+import aromanticcat.umcproject.web.dto.Letterbox.LetterboxRequest;
+import aromanticcat.umcproject.web.dto.Letterbox.LetterboxResponse;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/letterbox")
+@RequestMapping("/letterboxes")
 public class LetterboxController {
     private final LetterboxService letterboxService;
 

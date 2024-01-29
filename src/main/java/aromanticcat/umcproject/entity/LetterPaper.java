@@ -2,14 +2,17 @@ package aromanticcat.umcproject.entity;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
 @Getter
-@Builder
+@NoArgsConstructor
 @Table(name = "letter_paper")
 public class LetterPaper extends BaseEntity {
 
@@ -28,4 +31,12 @@ public class LetterPaper extends BaseEntity {
 
     @OneToMany(mappedBy = "letterPaper")
     private List<Letter> letters;
+
+    @Builder
+    public LetterPaper(String imageUrl, String name, Integer price) {
+        this.imageUrl = imageUrl;
+        this.name = name;
+        this.price = price;
+    }
+
 }

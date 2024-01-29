@@ -4,13 +4,11 @@ import aromanticcat.umcproject.entity.Letterbox;
 import aromanticcat.umcproject.entity.Member;
 import aromanticcat.umcproject.repository.LetterBoxRepository;
 import aromanticcat.umcproject.repository.MemberRepository;
-import aromanticcat.umcproject.web.dto.LetterboxRequest;
-import aromanticcat.umcproject.web.dto.LetterboxResponse;
+import aromanticcat.umcproject.web.dto.Letterbox.LetterboxRequest;
+import aromanticcat.umcproject.web.dto.Letterbox.LetterboxResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 @Transactional(readOnly = true)
 @RequiredArgsConstructor

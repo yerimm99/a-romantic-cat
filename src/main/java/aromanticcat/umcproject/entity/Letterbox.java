@@ -1,6 +1,6 @@
 package aromanticcat.umcproject.entity;
 
-import aromanticcat.umcproject.web.dto.LetterboxResponse;
+import aromanticcat.umcproject.web.dto.Letterbox.LetterboxResponse;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.*;
