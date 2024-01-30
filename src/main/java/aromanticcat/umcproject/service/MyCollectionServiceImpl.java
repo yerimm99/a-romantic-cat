@@ -1,9 +1,8 @@
-package aromanticcat.umcproject.service.nangmanLetterBoxService;
+package aromanticcat.umcproject.service;
 
 import aromanticcat.umcproject.converter.MyCollectionConverter;
 import aromanticcat.umcproject.entity.AcquiredItem;
 import aromanticcat.umcproject.repository.AcquiredItemRepository;
-import aromanticcat.umcproject.service.MyCollectionService;
 import aromanticcat.umcproject.web.dto.MyCollectionResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

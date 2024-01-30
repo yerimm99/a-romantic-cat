@@ -34,37 +34,8 @@ public class  NangmanLetterBoxResponseDTO {
         private LocalDateTime createdAt;
     }
 
-    @Getter
-    @Builder
-    @AllArgsConstructor
-    @NoArgsConstructor
-    public static class PreviewReplyResultDTO { // 답장 미리보기
-        private Long nangmanLetterId;
 
-        private Long nangmanReplyId;
 
-        private String preview;
-
-        private Integer totalEmojiCount;
-    }
-
-    @Getter
-    @Builder
-    @AllArgsConstructor
-    @NoArgsConstructor
-    public static class PreviewBothResultDTO{ // 편지 미리보기 + 답장 미리보기 + (공감 수)
-        private Long nangmanLetterId;
-
-        private Long nangmanReplyId;
-
-        private String previewLetter;
-
-        private String previewReply;
-
-        private Integer totalEmojiCount;
-
-        private LocalDateTime createAt;
-    }
 
     @Getter
     @Builder
@@ -81,23 +52,11 @@ public class  NangmanLetterBoxResponseDTO {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class WriteReplyResultDTO { // 답장 발송 완료 응답
-
         private Long nangmanLetterId;
         private Long nangmanReplyId;
         private String replySenderNickname;
         LocalDateTime createdAt;
     }
 
-    @Getter
-    @Builder
-    @AllArgsConstructor
-    @NoArgsConstructor
-    public static class BothResultDTO { // 편지 + 답장 상세 응답
-        private Long nangmanLetterId;
-        private String letterContent;
-        private String senderNickname;
-        private Long nangmanReplyId;
-        private String replyContent;
-        private String replySenderNickname;
-    }
+
 }

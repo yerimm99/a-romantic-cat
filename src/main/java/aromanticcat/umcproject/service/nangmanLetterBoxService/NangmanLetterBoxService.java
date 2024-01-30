@@ -18,10 +18,4 @@ public interface NangmanLetterBoxService {
 
     NangmanLetterBoxResponseDTO.WriteReplyResultDTO sendReply(NangmanLetterBoxRequestDTO.WriteReplyDTO requestDTO, Long id);
 
-    List<NangmanLetterBoxResponseDTO.PreviewLetterResultDTO> getMyLetterList(Long userId, int page, int pageSize);
-
-    NangmanLetterBoxResponseDTO.PreviewReplyResultDTO getPreviewReceivedReply(Long userId, Long nangmanLetterId);
-
-    List<NangmanLetterBoxResponseDTO.PreviewBothResultDTO> getMyReplyList(Long userId, int page, int pageSize);
-
 }

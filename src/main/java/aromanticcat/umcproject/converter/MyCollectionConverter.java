@@ -21,4 +21,5 @@ public class MyCollectionConverter{
                 .acquiredAt(stamp.getCreatedAt())
                 .build();
     }
+
 }

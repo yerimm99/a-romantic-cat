@@ -39,7 +39,8 @@ public class NangmanLetterBoxController {
 
 
     @PostMapping("/send")
-    @Operation(summary = "낭만우편함 편지 작성 - 편지 발송 API", description = "편지의 내용과 공개 여부 데이터를 넘기는 API 입니다. " )
+    @Operation(summary = "고민 편지 발송 API"
+            , description = "편지의 내용과 공개 여부 데이터를 넘기는 API 입니다. " )
     public ApiResponse<NangmanLetterBoxResponseDTO.SendLetterResultDTO> sendLetter(@RequestBody NangmanLetterBoxRequestDTO.WriteLetterDTO request){
         try{
             //편지 작성 및 발송
@@ -56,8 +57,8 @@ public class NangmanLetterBoxController {
 
     @GetMapping( "/letter-list")
     @Operation(
-            summary = "낭만우편함 답장하기 - 편지 목록 조회 API",
-            description = "고민 편지 목록을 조회하는 API입니다. " +
+            summary = "답장 기다리는 편지 목록 조회 API",
+            description = "답장을 기다리는 편지 목록을 조회하는 API입니다. " +
                     "각 편지 내용은 40자까지 제공합니다. " +
                     "페이징을 포함합니다. query String으로 page(기본값 0)와 pageSize(기본값 9)를 주세요.")
     public ApiResponse<List<NangmanLetterBoxResponseDTO.PreviewLetterResultDTO>> getLetterList(
@@ -82,8 +83,8 @@ public class NangmanLetterBoxController {
     }
 
     @GetMapping( "/letter-list/{nangmanLetterId}")
-    @Operation(summary  = "낭만우편함 선택한 편지 상세 조회 API",
-            description = "선택된 편지의 상세 정보를 조회하는 API입니다. ")
+    @Operation(summary  = "답장할 편지 상세 조회 API",
+            description = "답장할 편지의 상세 내용 + 보낸 사람 닉네임을 조회하는 API입니다. ")
     public ApiResponse<NangmanLetterBoxResponseDTO.SelectedLetterResultDTO> getNangmanLetterInfo(@PathVariable Long nangmanLetterId){
        try{
            // 특정 편지에 대한 정보 조회
@@ -98,7 +99,7 @@ public class NangmanLetterBoxController {
     }
 
     @PostMapping("/letter-list/{nangmanLetterId}")
-    @Operation(summary  = "낭만우편함 답장하기 - 답장 발송 API")
+    @Operation(summary  = "답장 발송 API")
     public ApiResponse<NangmanLetterBoxResponseDTO.WriteReplyResultDTO> sendReply(@PathVariable Long nangmanLetterId, @RequestBody NangmanLetterBoxRequestDTO.WriteReplyDTO request){
         try{
 
@@ -112,72 +113,6 @@ public class NangmanLetterBoxController {
             // 에러 발생 시 실패 응답 반환
             return ApiResponse.onFailure(HttpStatus.INTERNAL_SERVER_ERROR.toString(), e.getMessage(), null);
 
-        }
-    }
-
-    @GetMapping("/my/nangman-letters")
-    @Operation(summary = "낭만우편함 나의 편지 목록 조회 API",
-            description = "사용자가 작성한 낭만 편지 목록을 조회하는 API입니다." +
-                        "페이징을 포함합니다. query String으로 page(기본값 0)와 pageSize(기본값 6)를 주세요.")
-    public ApiResponse<List<NangmanLetterBoxResponseDTO.PreviewLetterResultDTO>> getMyNangmanLetters(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "6") int pageSize) {
-        try {
-            // 현재 로그인된 사용자의 ID 또는 정보를 얻어온다고 가정
-            // SecurityContextHolder에서 현재 사용자의 정보를 가져오는 방법
-            Long userId = getCurrentUserId(); // 로그인한 사용자의 아이디를 가져오는 메서드
-
-            // 사용자가 작성한 편지 목록 조회
-            List<NangmanLetterBoxResponseDTO.PreviewLetterResultDTO> userLetterList = nangmanLetterBoxService.getMyLetterList(userId, page, pageSize);
-
-            // 성공 응답 생성
-            return ApiResponse.onSuccess(userLetterList);
-        } catch (Exception e) {
-            // 에러 발생 시 실패 응답 반환
-            return ApiResponse.onFailure(HttpStatus.INTERNAL_SERVER_ERROR.toString(), e.getMessage(), null);
-        }
-    }
-
-    @GetMapping("/my/nangman-letters/{nangmanLetterId}/preview-reply")
-    @Operation(summary = "낭만우편함 답장 미리보기 API",
-            description = "특정 편지에 대한 답장 내용을 40자까지 제공합니다.")
-    public ApiResponse<NangmanLetterBoxResponseDTO.PreviewReplyResultDTO> previewReceivedReply(@PathVariable Long nangmanLetterId) {
-        try {
-            // 현재 로그인된 사용자의 ID 또는 정보를 얻어온다고 가정
-            Long userId = getCurrentUserId();
-
-            // 특정 편지에 대한 답장 조회
-            NangmanLetterBoxResponseDTO.PreviewReplyResultDTO previewReplyResultDTO = nangmanLetterBoxService.getPreviewReceivedReply(userId, nangmanLetterId);
-
-            // 성공 응답 생성
-            return ApiResponse.onSuccess(previewReplyResultDTO);
-
-        } catch (Exception e) {
-            // 에러 발생 시 실패 응답 반환
-            return ApiResponse.onFailure(HttpStatus.INTERNAL_SERVER_ERROR.toString(), e.getMessage(), null);
-        }
-    }
-
-    @GetMapping("/my/nangman-replies")
-    @Operation(summary = "낭만우편함 내가 답장한 목록 조회 API",
-            description = "사용자가 답장한 목록을 조회하는 API입니다."+
-                        "답장 내용(40자) + 연결된 낭만 편지의 내용(40자)를 제공합니다." +
-                        "페이징을 포함합니다. query String으로 page(기본값 0)와 pageSize(기본값 6)를 주세요.")
-    public ApiResponse<List<NangmanLetterBoxResponseDTO.PreviewBothResultDTO>> getMyNangmanReplies(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "6") int pageSize) {
-        try{
-            // 현재 로그인된 사용자의 ID 또는 정보를 얻어온다고 가정
-            // SecurityContextHolder에서 현재 사용자의 정보를 가져오는 방법
-            Long userId = getCurrentUserId(); // 로그인한 사용자의 아이디를 가져오는 메서드
-
-            // 사용자가 답장한 목록 조회
-            List<NangmanLetterBoxResponseDTO.PreviewBothResultDTO> userReplyList = nangmanLetterBoxService.getMyReplyList(userId,  page, pageSize);
-
-            // 성공 응답 생성
-            return ApiResponse.onSuccess(userReplyList);
-        }catch (Exception e){
-            return ApiResponse.onFailure(HttpStatus.INTERNAL_SERVER_ERROR.toString(), e.getMessage(), null);
         }
     }
 

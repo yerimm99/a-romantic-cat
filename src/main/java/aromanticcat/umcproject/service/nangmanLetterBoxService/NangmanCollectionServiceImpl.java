@@ -1,11 +1,11 @@
 package aromanticcat.umcproject.service.nangmanLetterBoxService;
 
-import aromanticcat.umcproject.converter.NangmanLetterBoxConverter;
+import aromanticcat.umcproject.converter.NangmanCollectionConverter;
 import aromanticcat.umcproject.entity.NangmanLetter;
 import aromanticcat.umcproject.entity.NangmanReply;
 import aromanticcat.umcproject.repository.NangmanLetterRepository;
 import aromanticcat.umcproject.repository.NangmanReplyRepository;
-import aromanticcat.umcproject.web.dto.nangmanLetterBox.NangmanLetterBoxResponseDTO;
+import aromanticcat.umcproject.web.dto.nangmanLetterBox.NangmanCollectionResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -26,7 +26,7 @@ public class NangmanCollectionServiceImpl implements NangmanCollectionService{
 
     @Override
     @Transactional
-    public List<NangmanLetterBoxResponseDTO.PreviewBothResultDTO> findCollection(int page, int pageSize){
+    public List<NangmanCollectionResponseDTO.PreviewBothResultDTO> findCollection(int page, int pageSize){
         Pageable pageable = PageRequest.of(page, pageSize);
 
         Page<NangmanLetter> letterPage = nangmanLetterRepository.findByIsPublicTrueAndHasResponseTrue(pageable);
@@ -34,17 +34,17 @@ public class NangmanCollectionServiceImpl implements NangmanCollectionService{
         List<NangmanLetter> letterList = letterPage.getContent();
 
         return letterList.stream()
-                .map(letter -> NangmanLetterBoxConverter.toPreviewBothResultDTO(letter, letter.getNangmanReply()))
+                .map(letter -> NangmanCollectionConverter.toPreviewBothResultDTO(letter))
                 .collect(Collectors.toList());
     }
 
     @Override
     @Transactional
-    public NangmanLetterBoxResponseDTO.BothResultDTO findCollectionDetails(Long nangmanLetterId) {
+    public NangmanCollectionResponseDTO.BothResultDTO findCollectionDetails(Long nangmanLetterId) {
 
         NangmanLetter nangmanLetter = nangmanLetterRepository.findByIsPublicTrueAndHasResponseTrueAndId(nangmanLetterId);
         if(nangmanLetter == null){
-            throw new RuntimeException("편지를 찾을 수 없습니다. ID: " + nangmanLetterId);
+            throw new RuntimeException("편지가 공개되지 않았거나 해당 편지를 찾을 수 없습니다. ID: " + nangmanLetterId);
         }
 
         NangmanReply nangmanReply = nangmanReplyRepository.findByNangmanLetter_Id(nangmanLetterId);
@@ -52,7 +52,7 @@ public class NangmanCollectionServiceImpl implements NangmanCollectionService{
             throw new RuntimeException("해당 편지에 대한 답장을 찾을 수 없습니다. 편지 ID: " + nangmanLetterId);
         }
 
-        return NangmanLetterBoxConverter.toBothResultDTO(nangmanLetter, nangmanReply);
+        return NangmanCollectionConverter.toBothResultDTO(nangmanLetter, nangmanReply);
     }
 
 
@@ -82,5 +82,37 @@ public class NangmanCollectionServiceImpl implements NangmanCollectionService{
                 emojiType.equals("clover") ||
                 emojiType.equals("clap") ||
                 emojiType.equals("star");
+    }
+
+
+    // 사용자 ID로 해당 사용자가 작성한 편지 목록 조회
+    @Override
+    @Transactional
+    public List<NangmanCollectionResponseDTO.PreviewBothResultDTO> getMyLetterList(Long userId, int page, int pageSize){
+
+        Pageable pageable = PageRequest.of(page, pageSize);
+
+        Page<NangmanLetter> myLetterPage = nangmanLetterRepository.findByMemberId(userId, pageable);
+        List<NangmanLetter> myLetterList = myLetterPage.getContent();
+
+        return myLetterList.stream()
+                .map(letter -> NangmanCollectionConverter.toPreviewBothResultDTO(letter))
+                .collect(Collectors.toList());
+
+    }
+
+    @Override
+    @Transactional
+    public  List<NangmanCollectionResponseDTO.PreviewBothResultDTO> getMyReplyList(Long userId, int page, int pageSize){
+
+        Pageable pageable = PageRequest.of(page, pageSize);
+
+        Page<NangmanReply> myReplyPage = nangmanReplyRepository.findByMemberId(userId, pageable);
+        List<NangmanReply> myReplyList = myReplyPage.getContent();
+
+        // 각 답장(+ 연결된 편지)에 대해 미리보기로 생성
+        return myReplyList.stream()
+                .map(reply -> NangmanCollectionConverter.toPreviewBothResultDTO(reply.getNangmanLetter()))
+                .collect(Collectors.toList());
     }
 }
