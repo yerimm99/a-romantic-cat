@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface NangmanLetterRepository extends JpaRepository<NangmanLetter, Long> {
 
-    Page<NangmanLetter> findByHasResponseFalse(Pageable pageable);
+    Page<NangmanLetter> findByHasResponseFalseAndMemberIdNot(Long memerId, Pageable pageable);
 
     Page<NangmanLetter> findByMemberId(Long memberId, Pageable pageable);
 

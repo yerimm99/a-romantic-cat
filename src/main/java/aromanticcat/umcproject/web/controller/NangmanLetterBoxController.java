@@ -3,7 +3,7 @@ package aromanticcat.umcproject.web.controller;
 import aromanticcat.umcproject.apiPayload.ApiResponse;
 import aromanticcat.umcproject.converter.NangmanLetterBoxConverter;
 import aromanticcat.umcproject.entity.NangmanLetter;
-import aromanticcat.umcproject.service.RandomNicknameService;
+import aromanticcat.umcproject.service.nangmanLetterBoxService.RandomNicknameService;
 import aromanticcat.umcproject.service.nangmanLetterBoxService.NangmanLetterBoxService;
 import aromanticcat.umcproject.web.dto.nangmanLetterBox.NangmanLetterBoxRequestDTO;
 import aromanticcat.umcproject.web.dto.nangmanLetterBox.NangmanLetterBoxResponseDTO;
@@ -43,8 +43,10 @@ public class NangmanLetterBoxController {
             , description = "편지의 내용과 공개 여부 데이터를 넘기는 API 입니다. " )
     public ApiResponse<NangmanLetterBoxResponseDTO.SendLetterResultDTO> sendLetter(@RequestBody NangmanLetterBoxRequestDTO.WriteLetterDTO request){
         try{
+            Long userId = getCurrentUserId(); // 로그인한 사용자의 아이디를 가져오는 메서드
+
             //편지 작성 및 발송
-            NangmanLetter nangmanLetter = nangmanLetterBoxService.sendLetter(request);
+            NangmanLetter nangmanLetter = nangmanLetterBoxService.sendLetter(userId, request);
 
             //성공 응답 생성
             return ApiResponse.onSuccess(NangmanLetterBoxConverter.toWriteLetterResultDTO(nangmanLetter));
@@ -57,16 +59,18 @@ public class NangmanLetterBoxController {
 
     @GetMapping( "/letter-list")
     @Operation(
-            summary = "답장 기다리는 편지 목록 조회 API",
-            description = "답장을 기다리는 편지 목록을 조회하는 API입니다. " +
-                    "각 편지 내용은 40자까지 제공합니다. " +
-                    "페이징을 포함합니다. query String으로 page(기본값 0)와 pageSize(기본값 9)를 주세요.")
+            summary = "답장 기다리는 편지 목록조회 API",
+            description = "답장을 기다리는 편지 목록(본인이 쓴 편지 제외)을 조회하는 API입니다. " +
+                            "각 편지 내용은 40자까지 제공합니다. " +
+                        "페이징을 포함합니다. query String으로 page(기본값 0)와 pageSize(기본값 9)를 주세요.")
     public ApiResponse<List<NangmanLetterBoxResponseDTO.PreviewLetterResultDTO>> getLetterList(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "9") int pageSize){
         try{
+            Long userId = getCurrentUserId(); // 로그인한 사용자의 아이디를 가져오는 메서드
+
             //편지 페이지의 편지 목록 조회
-            List<NangmanLetter> letterList = nangmanLetterBoxService.getLetterList(page, pageSize);
+            List<NangmanLetter> letterList = nangmanLetterBoxService.getLetterList(userId, page, pageSize);
 
             //편지 내용의 두 줄만 포함하도록 변환
             List<NangmanLetterBoxResponseDTO.PreviewLetterResultDTO> letterSummaryDTOList = letterList.stream()
@@ -102,8 +106,9 @@ public class NangmanLetterBoxController {
     @Operation(summary  = "답장 발송 API")
     public ApiResponse<NangmanLetterBoxResponseDTO.WriteReplyResultDTO> sendReply(@PathVariable Long nangmanLetterId, @RequestBody NangmanLetterBoxRequestDTO.WriteReplyDTO request){
         try{
+            Long userId = getCurrentUserId(); // 로그인한 사용자의 아이디를 가져오는 메서드
 
-            NangmanLetterBoxResponseDTO.WriteReplyResultDTO replyResultDTO = nangmanLetterBoxService.sendReply(request, nangmanLetterId);
+            NangmanLetterBoxResponseDTO.WriteReplyResultDTO replyResultDTO = nangmanLetterBoxService.sendReply(userId, request, nangmanLetterId);
 
             //성공 응답 생성
             return ApiResponse.onSuccess(replyResultDTO);
