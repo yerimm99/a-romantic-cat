@@ -10,7 +10,6 @@ public class NangmanLetterBoxRequestDTO {
         private Boolean isPublic;
         private String content;
         private String senderRandomNickname;
-        private Long memberId;
     }
 
     @Getter
@@ -18,6 +17,5 @@ public class NangmanLetterBoxRequestDTO {
 
         private String replySenderNickname;
         private String replyContent;
-        private Long memberId;
     }
 }
