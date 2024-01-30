@@ -3,6 +3,7 @@ package aromanticcat.umcproject.entity;
 import javax.persistence.*;
 
 import lombok.*;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 
 @Entity
 @Getter
@@ -13,7 +14,7 @@ import lombok.*;
 public class Friend extends BaseEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     private Long id;
 
     private Long counterpartId;

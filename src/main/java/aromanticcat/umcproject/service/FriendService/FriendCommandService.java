@@ -5,7 +5,7 @@ import aromanticcat.umcproject.web.dto.Friend.FriendRequestDTO;
 
 public interface FriendCommandService {
 
-    void requestFriendship(FriendRequestDTO.FriendshipRequestDTO request);
+    void requestFriendship(Long memberId,Long toMemberLetterBoxId);
 
     void approveFriendship(Long memberId, Long friendId);
 

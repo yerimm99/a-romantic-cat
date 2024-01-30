@@ -15,7 +15,6 @@ public class FriendRequestDTO {
 
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy/MM/dd", timezone = "/Asia/Seoul")
         LocalDate requestDate;
-        Long fromMemberId;
         Long toMemberLetterBoxId;
     }
 }

@@ -75,7 +75,7 @@ public class FriendController {
     @Parameters({
             @Parameter(name = "friendName", description = "검색하고자 하는 친구의 이름, query string입니다!")
     })
-    public ApiResponse<FriendResponseDTO.FriendInfoDTO> getFriendbyName(@RequestParam(value = "friendName", defaultValue = "") String friendName){
+    public ApiResponse<FriendResponseDTO.FriendInfoDTO> getFriendbyName(@RequestParam(value = "friendName") String friendName){
         try{
             // 로그인한 사용자의 아이디를 가져오는 임시 메서드
             Long memberId = getCurrentUserId();
@@ -94,14 +94,15 @@ public class FriendController {
     @PostMapping("/friend/request")
     @Operation(summary = "친구 추가 API", description = "query String으로 추가하려는 친구의 우편함 번호를 알려주세요.")
     @Parameters({
-            @Parameter(name = "memberId", description = "사용자의 아이디, path variable 입니다!"),
-            @Parameter(name = "toMemberLetterBoxId", description = "친구 추가하고자 하는 친구의 우편함 번호, query string입니다!")
+            @Parameter(name = "toMemberLetterBoxId", description = "친구 추가 하고자 하는 친구의 우편함 번호, query string입니다!")
     })
-    public ApiResponse<String> sendFriendRequest(@RequestParam(name = "member_id") Long memberId,
-                                                 @RequestBody FriendRequestDTO.FriendshipRequestDTO request){
+    public ApiResponse<String> sendFriendRequest(@RequestParam(value = "toMemberLetterBoxId") Long toMemberLetterBoxId){
         try{
+            // 로그인한 사용자의 아이디를 가져오는 임시 메서드
+            Long memberId = getCurrentUserId();
+
             // 친구 요청 보낸기
-            friendCommandService.requestFriendship(request);
+            friendCommandService.requestFriendship(memberId, toMemberLetterBoxId);
 
             // 성공 응답 생성
             return ApiResponse.onSuccess("친구 요청이 성공적으로 보내졌습니다.");

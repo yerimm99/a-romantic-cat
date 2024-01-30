@@ -23,23 +23,23 @@ public class FriendCommandServiceImpl implements FriendCommandService {
 
     @Override
     @Transactional
-    public void requestFriendship(FriendRequestDTO.FriendshipRequestDTO request) {
+    public void requestFriendship(Long memberId, Long toMemberLetterBoxId) {
 
         // 친구 요청을 보내는 사용자와 해당 사용자의 우편함 번호
-        Member fromMember = memberRepository.findById(request.getFromMemberId()).orElse(null);
-        Letterbox fromLetterBox = letterBoxRepository.findByMemberId(request.getFromMemberId());
+        Member fromMember = memberRepository.findById(memberId).orElse(null);
+        Letterbox fromLetterBox = letterBoxRepository.findByMemberId(memberId);
         Long fromLetterboxId = fromLetterBox.getLetterbox_id();
 
         // 친구 요청을 받는 사용자 (친구의 우편함으로 검색)
-        Letterbox toLetterbox = letterBoxRepository.findById(request.getToMemberLetterBoxId()).orElse(null);
-        Long toMemberId = toLetterbox.getMemberId();
-        Member toMember = memberRepository.findById(toMemberId).orElse(null);
+        Letterbox toLetterbox = letterBoxRepository.findById(toMemberLetterBoxId).orElse(null);
+        Member toMember = toLetterbox.getMember();
 
         // dto의 정보를 기반으로 새로운 친구 객체 생성1 (fromMember 기준)
         Friend newFriend1 = Friend.builder()
                 .friendName(toMember.getNickname())
-                .friendLetterboxId(request.getToMemberLetterBoxId())
+                .friendLetterboxId(toMemberLetterBoxId)
                 .member(fromMember)
+                .fromMemberId(fromMember.getId())
                 .fromMemberName(fromMember.getNickname())
                 .toMemberId(toMember.getId())
                 .toMemberName(toMember.getNickname())
@@ -52,6 +52,7 @@ public class FriendCommandServiceImpl implements FriendCommandService {
                 .friendName(fromMember.getNickname())
                 .friendLetterboxId(fromLetterboxId)
                 .member(toMember)
+                .fromMemberId(toMember.getId())
                 .fromMemberName(toMember.getNickname())
                 .toMemberId(fromMember.getId())
                 .toMemberName(fromMember.getNickname())
@@ -63,12 +64,12 @@ public class FriendCommandServiceImpl implements FriendCommandService {
         toMember.getFriends().add(newFriend1);
         fromMember.getFriends().add(newFriend2);
 
+        newFriend1.setCounterpartId(newFriend2.getCounterpartId());
+        newFriend2.setCounterpartId(newFriend1.getCounterpartId());
+
         // 각 객체의 변경 사항을 db에 반영
         friendRepository.save(newFriend1);
         friendRepository.save(newFriend2);
-
-        newFriend1.setCounterpartId(newFriend2.getId());
-        newFriend2.setCounterpartId(newFriend1.getId());
     }
 
     @Override
