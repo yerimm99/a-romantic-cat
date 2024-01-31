@@ -19,6 +19,10 @@ public class Letterbox extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long letterbox_id;
 
+    @JoinColumn(name = "member_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Member member;
+
     @NotNull
     private String name;
     @NotNull
@@ -36,10 +40,6 @@ public class Letterbox extends BaseEntity {
 
     @OneToMany(mappedBy = "letterbox")
     private List<Letter> letters;
-
-    @ManyToOne
-    @JoinColumn(name = "member_id")
-    private Member member;
 
     @Builder
     public Letterbox(String name, String color, LocalDateTime endDt, Boolean activate, Boolean sender) {

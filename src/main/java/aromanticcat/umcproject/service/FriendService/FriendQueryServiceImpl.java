@@ -107,14 +107,28 @@ public class FriendQueryServiceImpl implements FriendQueryService {
     }
 
     @Override
-    public FriendResponseDTO.FriendInfoDTO getFriendbyFriendName(Long memberId, String friendName) {
+    public List<FriendResponseDTO.FriendInfoDTO> getFriendbyFriendName(Long memberId, String friendName) {  // 중복된 이름이 있을 수 있으므로 List 반환
 
-        Friend friend = friendRepository.findFriendByMemberIdAndFriendName(memberId, friendName);
+        List<Friend> friendList = friendRepository.findFriendByMemberIdAndFriendName(memberId, friendName);
 
-        FriendResponseDTO.FriendInfoDTO friendInfoDTO = FriendConverter.toFriendInfoDTO(friend);
+        List<FriendResponseDTO.FriendInfoDTO> friendInfoDTOList = friendList.stream()
+                .map(FriendConverter::toFriendInfoDTO)
+                .collect(Collectors.toList());
 
-        return friendInfoDTO;
+        return  friendInfoDTOList;
 
+    }
+
+    @Override
+    public List<FriendResponseDTO.FriendInfoDTO> getFriendbyFriendId(Long memberId, Long friendId) {
+
+        List<Friend> friendList = friendRepository.findFriendByMemberIdAndFriendId(memberId, friendId);
+
+        List<FriendResponseDTO.FriendInfoDTO> friendInfoDTOList = friendList.stream()
+                .map(FriendConverter::toFriendInfoDTO)
+                .collect(Collectors.toList());
+
+        return  friendInfoDTOList;
     }
 
 }

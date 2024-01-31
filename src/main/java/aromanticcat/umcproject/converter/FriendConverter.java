@@ -16,7 +16,7 @@ public class FriendConverter {
 
         return FriendResponseDTO.FriendInfoDTO.builder()
                 .friendName(friend.getFriendName())
-                .friendLetterBoxId(friend.getFriendLetterboxId())
+                .friendId(friend.getFriendId())
                 .friendStatus(friend.getFriendStatus())
                 .build();
     }
@@ -25,7 +25,7 @@ public class FriendConverter {
 
         return FriendResponseDTO.WaitingFriendDTO.builder()
                 .friendName(friend.getFriendName())
-                .friendLetterBoxId(friend.getFriendLetterboxId())
+                .friendId(friend.getFriendId())
                 .build();
     }
 

@@ -71,20 +71,27 @@ public class FriendController {
     }
 
     @GetMapping("/search/friend")
-    @Operation(summary = "친구 이름을 통한 검색 API", description = "query String으로 친구 이름을 주세요.")
+    @Operation(summary = "친구 이름 또는 친구 아이디(우편번호)를 통한 검색 API", description = "query String으로 친구 정보를 주세요.")
     @Parameters({
-            @Parameter(name = "friendName", description = "검색하고자 하는 친구의 이름, query string입니다!")
+            @Parameter(name = "friend_info", description = "검색하고자 하는 친구 정보(닉네임 혹은 아이디), query string입니다!")
     })
-    public ApiResponse<FriendResponseDTO.FriendInfoDTO> getFriendbyName(@RequestParam(value = "friendName", defaultValue = "") String friendName){
+    public ApiResponse<List<FriendResponseDTO.FriendInfoDTO>> getFriendbyName(@RequestParam(value = "friend_info") String friendInfo){
         try{
             // 로그인한 사용자의 아이디를 가져오는 임시 메서드
             Long memberId = getCurrentUserId();
 
-            // 친구 이름(닉네임)으로 친구 검색
-            FriendResponseDTO.FriendInfoDTO friendInfoDTO = friendQueryService.getFriendbyFriendName(memberId, friendName);
+            List<FriendResponseDTO.FriendInfoDTO> friendInfoDTOList;  // 검색하고자 하는 친구 정보와 관련된 DTO 선언
+
+            if(friendInfo.startsWith("#")){     // 친구 아이디(우편 번호)으로 친구 검색
+                String friendIdString = friendInfo.substring(1);    // "#"을 제외한 문자열
+                Long friendId = Long.parseLong(friendIdString);     // Long 타입으로 변환
+                friendInfoDTOList = friendQueryService.getFriendbyFriendId(memberId, friendId);
+            } else {     // 친구 이름(닉네임)으로 친구 검색
+                friendInfoDTOList = friendQueryService.getFriendbyFriendName(memberId, friendInfo);
+            }
 
             // 성공 응답 생성
-            return ApiResponse.onSuccess(friendInfoDTO);
+            return ApiResponse.onSuccess(friendInfoDTOList);
 
         }catch (Exception e){
             return ApiResponse.onFailure(HttpStatus.INTERNAL_SERVER_ERROR.toString(), e.getMessage(), null);
@@ -94,14 +101,15 @@ public class FriendController {
     @PostMapping("/friend/request")
     @Operation(summary = "친구 추가 API", description = "query String으로 추가하려는 친구의 우편함 번호를 알려주세요.")
     @Parameters({
-            @Parameter(name = "memberId", description = "사용자의 아이디, path variable 입니다!"),
-            @Parameter(name = "toMemberLetterBoxId", description = "친구 추가하고자 하는 친구의 우편함 번호, query string입니다!")
+            @Parameter(name = "to_member_Id", description = "친구 추가 하고자 하는 친구 아이디(우편번호), query string입니다!")
     })
-    public ApiResponse<String> sendFriendRequest(@RequestParam(name = "member_id") Long memberId,
-                                                 @RequestBody FriendRequestDTO.FriendshipRequestDTO request){
+    public ApiResponse<String> sendFriendRequest(@RequestParam(value = "to_member_Id") Long toMemberId){
         try{
+            // 로그인한 사용자의 아이디를 가져오는 임시 메서드
+            Long memberId = getCurrentUserId();
+
             // 친구 요청 보낸기
-            friendCommandService.requestFriendship(request);
+            friendCommandService.requestFriendship(memberId, toMemberId);
 
             // 성공 응답 생성
             return ApiResponse.onSuccess("친구 요청이 성공적으로 보내졌습니다.");
@@ -113,11 +121,10 @@ public class FriendController {
 
     @GetMapping("/recieved")
     @Operation(summary = "사용자가 친구 추가 받은 요청 조회 API")
-    @Parameters({
-            @Parameter(name = "memberId", description = "사용자의 아이디, path variable 입니다!"),
-    })
-    public ApiResponse<List<FriendResponseDTO.WaitingFriendDTO>> getReceivedFriendList(@RequestParam(name = "member_id") Long memberId) {
+    public ApiResponse<List<FriendResponseDTO.WaitingFriendDTO>> getReceivedFriendList() {
         try{
+            // 로그인한 사용자의 아이디를 가져오는 임시 메서드
+            Long memberId = getCurrentUserId();
 
             // 친구 요청을 보낸 사용자들의 목록 조회
             List<Friend> friendList = friendQueryService.getFriendReceivedList(memberId);
@@ -137,11 +144,11 @@ public class FriendController {
 
     @GetMapping("/requested")
     @Operation(summary = "사용자가 친구 추가 보낸 요청 조회 API")
-    @Parameters({
-            @Parameter(name = "memberId", description = "사용자의 아이디, path variable 입니다!"),
-    })
-    public ApiResponse<List<FriendResponseDTO.WaitingFriendDTO>> getRequestedFriendList(@RequestParam(name = "member_id") Long memberId) {
+
+    public ApiResponse<List<FriendResponseDTO.WaitingFriendDTO>> getRequestedFriendList() {
         try{
+            // 로그인한 사용자의 아이디를 가져오는 임시 메서드
+            Long memberId = getCurrentUserId();
 
             // 친구 요청을 보낸 사용자들의 목록 조회
             List<Friend> friendList = friendQueryService.getFriendRequestedList(memberId);
@@ -162,12 +169,13 @@ public class FriendController {
     @PostMapping("/request/approve")
     @Operation(summary = "친구 요청 수락 API", description = "query String으로 친구 요청을 보낸 친구의 아이디를 알려주세요")
     @Parameters({
-            @Parameter(name = "memberId", description = "사용자의 아이디, path variable 입니다!"),
-            @Parameter(name = "friendId", description = "친구 추가 요청을 보낸 친구의 아이디, query string입니다!")
+            @Parameter(name = "friend_id", description = "친구 추가 요청을 보낸 친구의 아이디, query string입니다!")
     })
-    public ApiResponse<String> approveFriendRequest(@RequestParam(name = "member_id") Long memberId,
-                                                    @RequestParam Long friendId){
+    public ApiResponse<String> approveFriendRequest(@RequestParam(value = "friend_id") Long friendId){
         try{
+            // 로그인한 사용자의 아이디를 가져오는 임시 메서드
+            Long memberId = getCurrentUserId();
+
             // 친구 요청 보낸기
             friendCommandService.approveFriendship(memberId, friendId);
 
@@ -182,17 +190,39 @@ public class FriendController {
     @PostMapping("/request/reject")
     @Operation(summary = "친구 요청 거절 API", description = "query String으로 친구 요청을 보낸 친구의 아이디를 알려주세요")
     @Parameters({
-            @Parameter(name = "memberId", description = "사용자의 아이디, path variable 입니다!"),
-            @Parameter(name = "friendId", description = "친구 추가 요청을 보낸 친구의 아이디, query string입니다!")
+            @Parameter(name = "friend_id", description = "친구 추가 요청을 보낸 친구의 아이디, query string입니다!")
     })
-    public ApiResponse<String> rejectFriendRequest(@RequestParam(name = "member_id") Long memberId,
-                                                   @RequestParam Long friendId){
+    public ApiResponse<String> rejectFriendRequest(@RequestParam(value = "friend_id") Long friendId) {
         try{
+            // 로그인한 사용자의 아이디를 가져오는 임시 메서드
+            Long memberId = getCurrentUserId();
+
             // 친구 요청 보낸기
             friendCommandService.rejectFriendship(memberId, friendId);
 
             // 성공 응답 생성
             return ApiResponse.onSuccess("친구 요청이 성공적으로 거절 되었습니다.");
+
+        }catch (Exception e){
+            return ApiResponse.onFailure(HttpStatus.INTERNAL_SERVER_ERROR.toString(), e.getMessage(), null);
+        }
+    }
+
+    @PostMapping("/close-friend/register")
+    @Operation(summary = "친한 친구 등록 API", description = "query String으로 친한 친구로 등록하려는 친구 아이디를 알려주세요.")
+    @Parameters({
+            @Parameter(name = "friend_id", description = "친한 친구로 등록하려는 친구의 아이디, query string입니다!")
+    })
+    public ApiResponse<String> registerCloseFriend(@RequestParam(value = "friend_id") Long friendId){
+        try{
+            // 로그인한 사용자의 아이디를 가져오는 임시 메서드
+            Long memberId = getCurrentUserId();
+
+            // 친구 요청 보낸기
+            friendCommandService.setCloseFriend(memberId, friendId);
+
+            // 성공 응답 생성
+            return ApiResponse.onSuccess("친구를 친한 친구로 등록하는데 성공했습니다.");
 
         }catch (Exception e){
             return ApiResponse.onFailure(HttpStatus.INTERNAL_SERVER_ERROR.toString(), e.getMessage(), null);

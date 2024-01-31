@@ -3,24 +3,25 @@ package aromanticcat.umcproject.entity;
 import javax.persistence.*;
 
 import lombok.*;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 
 @Entity
 @Getter
-@Setter
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class Friend extends BaseEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue
+    private Long id;    // 친구 요청 정보에 관한 아이디
 
-    private Long counterpartId;
+    @Setter
+    private Long counterpartId;     // 상대방 측 친구 요청 정보에 관한 아이디
 
     private String friendName;
 
-    private Long friendLetterboxId;
+    private Long friendId;  // 친구 아이디
 
     @JoinColumn(name = "member_id")
     @ManyToOne(fetch = FetchType.LAZY)
@@ -40,4 +41,10 @@ public class Friend extends BaseEntity {
     private boolean isFrom;     // true이면 fromMember가 false이면 toMember가 친구 요청을 보냄
 
     private int exchange_num;   // 서로 주고 받은 편지 횟수
+
+
+    public void changeFriendStatus(FriendStatus status){
+        this.friendStatus = status;
+    }
+
 }
