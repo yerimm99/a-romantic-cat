@@ -49,8 +49,8 @@ public class NangmanLetter extends BaseEntity {
     @OneToOne(mappedBy = "nangmanLetter", fetch = FetchType.LAZY)
     private NangmanReply nangmanReply;
 
-    public void setHasResponse(boolean hasResponse){
-        this.hasResponse = hasResponse;
+    public void receivedResponse(){
+        this.hasResponse = true;
     }
 
     public void increaseEmojiCount(String emojiType){

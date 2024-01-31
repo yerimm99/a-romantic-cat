@@ -1,23 +1,21 @@
-package aromanticcat.umcproject.web.dto.nangmanLetterBox;
+package aromanticcat.umcproject.web.dto.nangmanLetterbox;
 
 import lombok.Getter;
 
-public class NangmanLetterBoxRequestDTO {
+public class NangmanLetterboxRequestDTO {
 
     @Getter
-    public static class WriteLetterDTO {
+    public static class SendLetterDTO {
 
         private Boolean isPublic;
         private String content;
         private String senderRandomNickname;
-        private Long memberId;
     }
 
     @Getter
-    public static class WriteReplyDTO {
+    public static class SendReplyDTO {
 
         private String replySenderNickname;
         private String replyContent;
-        private Long memberId;
     }
 }
