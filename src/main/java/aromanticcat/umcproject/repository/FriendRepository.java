@@ -19,5 +19,9 @@ public interface FriendRepository extends JpaRepository<Friend, Long> {
 
     Page<Friend> findFriendByMemberIdAndFriendStatus(Long memberId, Pageable pageable, FriendStatus friendStatus);
 
-    Friend findFriendByMemberIdAndFriendName(Long memberId, String friendName);
+    List<Friend> findFriendByMemberIdAndFriendName(Long memberId, String friendName);
+
+    List<Friend> findFriendByMemberIdAndFriendId(Long memberId, Long friendId);
+
+    Friend findByMemberIdAndFriendId(Long memberId, Long friendId);
 }

@@ -19,5 +19,7 @@ public interface FriendQueryService {
 
     List<FriendResponseDTO.FriendInfoDTO> findCloseFriendList(Long memberId, Integer page);
 
-    FriendResponseDTO.FriendInfoDTO getFriendbyFriendName(Long memberId, String friendName);
+    List<FriendResponseDTO.FriendInfoDTO> getFriendbyFriendName(Long memberId, String friendName);
+
+    List<FriendResponseDTO.FriendInfoDTO> getFriendbyFriendId(Long memberId, Long friendId);
 }

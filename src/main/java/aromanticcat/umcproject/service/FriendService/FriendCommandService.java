@@ -10,4 +10,6 @@ public interface FriendCommandService {
     void approveFriendship(Long memberId, Long friendId);
 
     void rejectFriendship(Long memberId, Long friendId);
+
+    void setCloseFriend(Long memberId, Long friendId);
 }
