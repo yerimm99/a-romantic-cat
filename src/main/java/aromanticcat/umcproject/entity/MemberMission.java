@@ -1,25 +1,25 @@
 package aromanticcat.umcproject.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import lombok.Getter;
+import javax.persistence.*;
+
+import lombok.*;
 
 @Entity
 @Getter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MemberMission extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private int count;
+    private Integer stepsCompleted;      // 한 미션에서 완료한 단계 수
 
-    private boolean status;
+    @Setter
+    @Enumerated(EnumType.STRING)
+    private MissionStatus missionStatus;    // 미션 완료 여부
 
     @JoinColumn(name = "member_id")
     @ManyToOne(fetch = FetchType.LAZY)
@@ -28,5 +28,9 @@ public class MemberMission extends BaseEntity {
     @JoinColumn(name = "mission_id")
     @ManyToOne(fetch = FetchType.LAZY)
     private Mission mission;
+
+    public void completeStep(){
+        stepsCompleted += 1;
+    }
 
 }

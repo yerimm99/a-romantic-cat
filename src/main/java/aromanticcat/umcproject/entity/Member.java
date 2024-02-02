@@ -42,4 +42,6 @@ public class Member extends BaseEntity {
         this.coin -= coin;
     }
 
+    public void addCoin(int coin) { this.coin += coin; }
+
 }
