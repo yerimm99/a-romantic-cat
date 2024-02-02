@@ -2,13 +2,9 @@ package aromanticcat.umcproject.entity;
 
 import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
+
+import io.swagger.models.auth.In;
 import lombok.Getter;
 
 @Entity
@@ -19,11 +15,13 @@ public class Mission extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
+    private String name;    // 미션 제목
 
-    private String content;
+    private String content;     // 미션 내용
 
-    private String reward;
+    private Integer steps;      // 미션의 총 단계
+
+    private Integer coin;       // 미션 성공 시 보상으로 받을 코인 수
 
     @OneToMany(mappedBy = "mission", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<MemberMission> memberMissions = new ArrayList<>();

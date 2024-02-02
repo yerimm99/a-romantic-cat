@@ -218,7 +218,7 @@ public class FriendController {
             // 로그인한 사용자의 아이디를 가져오는 임시 메서드
             Long memberId = getCurrentUserId();
 
-            // 친구 요청 보낸기
+            // 친구 요청 보내기
             friendCommandService.setCloseFriend(memberId, friendId);
 
             // 성공 응답 생성
