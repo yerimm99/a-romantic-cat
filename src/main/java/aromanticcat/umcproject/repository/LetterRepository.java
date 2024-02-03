@@ -9,5 +9,5 @@ import java.util.Optional;
 public interface LetterRepository extends JpaRepository<Letter, Long> {
     Optional<Letter> findByLetterId(Long id);
 
-    List<Letter> findById(Long id);
+    //List<Letter> findById(Long id);
 }

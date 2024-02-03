@@ -1,13 +1,32 @@
 package aromanticcat.umcproject.S3.config;
 
-import lombok.Value;
+import com.amazonaws.auth.AWSCredentials;
+import com.amazonaws.auth.AWSStaticCredentialsProvider;
+import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.AmazonS3ClientBuilder;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class AmazonConfig {
-    @Value("${cloud.aws.s3.bucket}")
-    private String bucket;
+    @Value("${cloud.aws.credentials.accessKey}")
+    private String accessKey;
+    @Value("${cloud.aws.credentials.secretKey}")
+    private String secretKey;
+    @Value("${cloud.aws.s3.bucketName}")
+    private String bucketName;
+    @Value("${cloud.aws.region.static}")
+    private String region;
 
-    @Value("${cloud.aws.s3.path.review}")
-    private String bucket;
+    @Bean
+    public AmazonS3Client amazonS3Client() {
+        BasicAWSCredentials basicAWSCredentials = new BasicAWSCredentials(accessKey, secretKey);
+        return (AmazonS3Client) AmazonS3ClientBuilder.standard()
+                .withRegion(region)
+                .withCredentials(new AWSStaticCredentialsProvider(basicAWSCredentials))
+                .build();
+    }
 }

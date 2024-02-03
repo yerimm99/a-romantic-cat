@@ -1,4 +1,8 @@
 package aromanticcat.umcproject.repository;
 
-public interface UuidRepository {
+import aromanticcat.umcproject.entity.Stamp;
+import aromanticcat.umcproject.entity.Uuid;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface UuidRepository extends JpaRepository<Uuid, Long> {
 }
