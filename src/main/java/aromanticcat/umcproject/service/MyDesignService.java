@@ -40,4 +40,15 @@ public class MyDesignService {
         return saveMyLetterPaper.getMPaper_id();
     }
 
+    public Long createMyStamp(MyDesignRequest myDesignRequest, MultipartFile file) throws IOException {
+        String url = s3Service.uploadFile2(file);
+        Member member = memberRepository.findById(myDesignRequest.getMember_id()).orElseThrow(() -> new IllegalArgumentException("Member not found. id=" + myDesignRequest.getMember_id()));
+        MyStamp myStamp = MyStamp.builder()
+                .name(myDesignRequest.getName())
+                .imageUrl(url)
+                .member(member)
+                .build();
+        MyStamp saveMyStamp = myStampRepository.save(myStamp);
+        return saveMyStamp.getMStamp_id();
+    }
 }

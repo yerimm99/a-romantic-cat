@@ -30,5 +30,17 @@ public class MyDesignController {
         return ApiResponse.onFailure(HttpStatus.INTERNAL_SERVER_ERROR.toString(), "file dosen't exist", null); //바꾸기
     }
 
+    @PostMapping("/stamp")
+    @ApiOperation(value = "마이디자인 우표 생성")
+    public ApiResponse<Long> createMyStamp(@RequestPart("myDesignRequest") MyDesignRequest myDesignRequest, @RequestPart(value = "img")MultipartFile file) throws IOException {
+        if (file != null) {
+            try {
+                return ApiResponse.onSuccess(myDesignService.createMyStamp(myDesignRequest, file));
+            } catch (Exception e) {
+                return ApiResponse.onFailure(HttpStatus.INTERNAL_SERVER_ERROR.toString(), "file - exist, error", null); //바꾸기
+            }
+        }
+        return ApiResponse.onFailure(HttpStatus.INTERNAL_SERVER_ERROR.toString(), "file dosen't exist", null); //바꾸기
+    }
 }
 

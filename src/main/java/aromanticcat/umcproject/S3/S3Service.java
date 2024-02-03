@@ -48,7 +48,6 @@ public class S3Service {
 
         amazonS3.putObject(bucketDir, fileName, file.getInputStream(), getObjectMetadata(file));
         return dirUrl + fileName;
-
     }
 
     private ObjectMetadata getObjectMetadata(MultipartFile file) {
