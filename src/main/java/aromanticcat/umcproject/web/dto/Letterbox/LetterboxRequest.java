@@ -3,10 +3,12 @@ package aromanticcat.umcproject.web.dto.Letterbox;
 import aromanticcat.umcproject.entity.Letterbox;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Getter
+@NoArgsConstructor
 public class LetterboxRequest {
     private String name;
     private String color;
