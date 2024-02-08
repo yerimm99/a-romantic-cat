@@ -1,14 +1,21 @@
 package aromanticcat.umcproject.service.letterbox;
 
+import aromanticcat.umcproject.entity.Letter;
 import aromanticcat.umcproject.entity.Letterbox;
 import aromanticcat.umcproject.entity.Member;
 import aromanticcat.umcproject.repository.LetterBoxRepository;
+import aromanticcat.umcproject.repository.LetterRepository;
 import aromanticcat.umcproject.repository.MemberRepository;
+import aromanticcat.umcproject.web.dto.Letterbox.LetterResponse;
 import aromanticcat.umcproject.web.dto.Letterbox.LetterboxRequest;
 import aromanticcat.umcproject.web.dto.Letterbox.LetterboxResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -16,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class LetterboxService {
     private final LetterBoxRepository letterboxRepository;
     private final MemberRepository memberRepository;
+    private final LetterRepository letterRepository;
 
     @Transactional
     public String createLetterbox(LetterboxRequest letterboxRequest) {
@@ -30,6 +38,16 @@ public class LetterboxService {
 
     public LetterboxResponse getLetterboxById(Long letterboxId) {
         Letterbox letterbox = letterboxRepository.findById(letterboxId).orElse(null);
+
+        if (letterbox != null) {
+            return letterbox.toResponse(letterbox);
+        } else {
+            return null;
+        }
+    }
+
+    public LetterboxResponse getLetterboxByMemberId(Long memberId) {
+        Letterbox letterbox = letterboxRepository.findByMemberIdAndActivate(memberId, true).orElse(null);
 
         if (letterbox != null) {
             return letterbox.toResponse(letterbox);
@@ -65,4 +83,25 @@ public class LetterboxService {
             return null;
         }
     }
+
+    public List<LetterResponse> getLetters(Long letterboxId) {
+        Letterbox letterbox = letterboxRepository.findById(letterboxId).orElse(null);
+        List<Letter> letters = letterRepository.findLettersByLetterbox(letterbox).orElse(null);
+        List<LetterResponse> responses = new ArrayList<>();
+        for (Letter letter : letters) {
+            responses.add(letter.toResponse(letter));
+        }
+        return responses;
+    }
+
+    public List<LetterboxResponse> getDeactiveLetterbox(Long memberId) {
+        List<Letterbox> letterboxes = letterboxRepository.findLetterboxsByMemberIdAndActivate(memberId, false).orElse(null);
+
+        List<LetterboxResponse> responses = new ArrayList<>();
+        for (Letterbox letterbox : letterboxes) {
+            responses.add(letterbox.toResponse(letterbox));
+        }
+        return responses;
+    }
+
 }
