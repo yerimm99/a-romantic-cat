@@ -38,6 +38,9 @@ public class Member extends BaseEntity {
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Letterbox> letterboxes = new ArrayList<>();
 
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<SlowLetter> slowLetters = new ArrayList<>();
+
     public void subtractCoin(int coin){
         this.coin -= coin;
     }
