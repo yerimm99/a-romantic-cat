@@ -43,7 +43,7 @@ public class Letter extends BaseEntity {
     private Stamp stamp;
 
     @ManyToOne
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "letterbox_id")
     private Letterbox letterbox;
 
 
