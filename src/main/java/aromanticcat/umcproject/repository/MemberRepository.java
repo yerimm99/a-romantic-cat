@@ -1,11 +1,13 @@
 package aromanticcat.umcproject.repository;
 
-import aromanticcat.umcproject.entity.Letterbox;
 import aromanticcat.umcproject.entity.Member;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.Optional;
-
 public interface MemberRepository extends JpaRepository<Member, Long> {
+    Optional<Member> findByEmail(String email);
+
+    Optional<Member> findByNickname(String nickname);
+
     Optional<Member> findById(Long id);
 }

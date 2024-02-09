@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: ${RDS_URL}
-    username: ${RDS_USERNAME}
-    password: ${RDS_PASSWORD}
+    url: ${db.url}
+    username: ${db.username}
+    password: ${db.password}
     driver-class-name: com.mysql.cj.jdbc.Driver
   sql:
     init:
@@ -17,6 +17,16 @@ spring:
         hbm2ddl:
           auto: update
         default_batch_fetch_size: 1000
+  profiles:
+    active: local
+    include: oauth, app
+  redis:
+    host: ${redis.host}
+    port: ${redis.port}
+    password: ${redis.password}
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
 
 cloud:
     aws:
