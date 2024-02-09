@@ -12,8 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
-import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
-import org.springframework.security.web.savedrequest.SavedRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -50,7 +48,7 @@ public class MyAuthenticationSuccessHandler extends SimpleUrlAuthenticationSucce
             log.info("jwtToken = {}", token.getAccessToken());
 
             // accessToken을 쿼리스트링에 담는 url을 만들어준다.
-            String targetUrl = UriComponentsBuilder.fromUriString("http://localhost:8080/loginSuccess")
+            String targetUrl = UriComponentsBuilder.fromUriString("https://dev.nangmancat.shop/")
                     //.queryParam("accessToken", token.getAccessToken())
                     .build()
                     .encode(StandardCharsets.UTF_8)
@@ -58,21 +56,23 @@ public class MyAuthenticationSuccessHandler extends SimpleUrlAuthenticationSucce
             // JWT 토큰을 Response Header에 설정
             response.addHeader("Authorization", token.getAccessToken());
             log.info("redirect 준비");
+//            사용자가 이전에 있던 페이지로 리다이렉트 시킨다.
+//            SavedRequest savedRequest = new HttpSessionRequestCache().getRequest(request, response);
+//
+//            if (savedRequest != null) {
+//                targetUrl = savedRequest.getRedirectUrl();
+//                if (targetUrl.equals("http://localhost:8080/login")) {
+//                    targetUrl = "http://localhost:8080/";
+//                }
+//            }
 
-            SavedRequest savedRequest = new HttpSessionRequestCache().getRequest(request, response);
-
-            if (savedRequest != null) {
-                targetUrl = savedRequest.getRedirectUrl();
-            }
-
-            // 사용자가 이전에 있던 페이지로 리다이렉트 시킨다.
             getRedirectStrategy().sendRedirect(request, response, targetUrl);
 
 
         } else {
 
             // 회원이 존재하지 않을경우, 서비스 제공자와 email을 쿼리스트링으로 전달하는 url을 만들어준다.
-            String targetUrl = UriComponentsBuilder.fromUriString("http://localhost:8080/signUp")
+            String targetUrl = UriComponentsBuilder.fromUriString("https://dev.nangmancat.shop/signUp")
                     .queryParam("email", (String) oAuth2User.getAttribute("email"))
                     .queryParam("provider", provider)
                     .build()
