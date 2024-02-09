@@ -29,17 +29,17 @@ spring:
       matching-strategy: ant_path_matcher
 
 cloud:
-    aws:
-      s3:
-        bucketName: ${BUCKET_NAME}
-      region:
-        static: ${REGION}
+  aws:
+    s3:
+      bucketName: ${bucket.name}
+    region:
+      static: ${region}
 
-      stack:
-        auto: false
-      credentials:
-        accessKey: ${ACCESSKEY}
-        secretKey: ${SECRETKEY}
+    stack:
+      auto: false
+    credentials:
+      accessKey: ${accesskey}
+      secretKey: ${secretkey}
 
 spring.servlet.multipart.max-file-size: 10MB
 spring.servlet.multipart.max-request-size: 10MB
