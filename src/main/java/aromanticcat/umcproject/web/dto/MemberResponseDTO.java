@@ -22,7 +22,7 @@ public class MemberResponseDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class MemberExceptionDTO {
+    public static class MemberNicknameDTO {
         String nickname;
     }
 }

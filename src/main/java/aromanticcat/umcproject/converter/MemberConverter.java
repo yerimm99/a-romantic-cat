@@ -13,9 +13,9 @@ public class MemberConverter {
                 .build();
     }
 
-    public static MemberResponseDTO.MemberExceptionDTO toMemberExceptionDTO(String nickname) {
-        return MemberResponseDTO.MemberExceptionDTO.builder()
-                .nickname(nickname)
+    public static MemberResponseDTO.MemberNicknameDTO toMemberNicknameDTO(Member member) {
+        return MemberResponseDTO.MemberNicknameDTO.builder()
+                .nickname(member.getNickname())
                 .build();
     }
 }

@@ -30,4 +30,16 @@ public class MemberController {
             return ApiResponse.onFailure(HttpStatus.INTERNAL_SERVER_ERROR.toString(), e.getMessage(), null);
         }
     }
+
+    @PostMapping("/mypage/changeNickname")
+    @Operation(summary = "닉네임 변경 API", description = "닉네임 변경 API입니다.")
+    public ApiResponse<MemberResponseDTO.MemberJoinResultDTO> changeNickName(@RequestBody String nickname) {
+        try {
+            Member user = service.changeNickName(nickname);
+
+            return ApiResponse.onSuccess(MemberConverter.toMemberDTO(user));
+        } catch (Exception e) {
+            return ApiResponse.onFailure(HttpStatus.INTERNAL_SERVER_ERROR.toString(), e.getMessage(), null);
+        }
+    }
 }

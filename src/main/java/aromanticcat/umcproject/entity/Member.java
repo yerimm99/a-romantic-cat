@@ -53,4 +53,8 @@ public class Member extends BaseEntity {
 
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<NangmanReply> nangmanReplies = new ArrayList<>();
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
 }

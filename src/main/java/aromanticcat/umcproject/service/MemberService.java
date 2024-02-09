@@ -14,6 +14,8 @@ public interface MemberService {
 
     void isNicknameUnique(String nickname);
 
-    public SecurityUserDto getUserInfo();
+    SecurityUserDto getUserInfo();
+
+    Member changeNickName(String nickname);
 
 }
