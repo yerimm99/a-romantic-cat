@@ -1,4 +1,4 @@
 spring:
   jwt:
-    secret: 684707dd0c95a54767043a8645bd5c5e1afd2ef3430c7d19d2d0e6e2ff53bc0d5a3d56252e3237403404ec45a652b3b6e0b8f4c0c130b79b3ba8b5d7920297bb
+    secret: ${token.secret}
 
