@@ -7,8 +7,8 @@ import aromanticcat.umcproject.entity.NangmanReply;
 import aromanticcat.umcproject.repository.MemberRepository;
 import aromanticcat.umcproject.repository.NangmanLetterRepository;
 import aromanticcat.umcproject.repository.NangmanReplyRepository;
-import aromanticcat.umcproject.web.dto.nangmanLetterBox.NangmanLetterBoxRequestDTO;
 import aromanticcat.umcproject.web.dto.nangmanLetterBox.NangmanLetterBoxResponseDTO;
+import aromanticcat.umcproject.web.dto.nangmanLetterBox.NangmanLetterboxRequestDTO;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -20,7 +20,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class NangmanLetterBoxServiceImpl implements NangmanLetterBoxService {
+public class NangmanLetterboxServiceImpl implements NangmanLetterboxService {
 
     private final NangmanLetterRepository nangmanLetterRepository;
     private final MemberRepository memberRepository;
@@ -29,7 +29,7 @@ public class NangmanLetterBoxServiceImpl implements NangmanLetterBoxService {
 
     @Override
     @Transactional
-    public NangmanLetter writeAndSendLetter(NangmanLetterBoxRequestDTO.WriteLetterDTO request) {
+    public NangmanLetter writeAndSendLetter(NangmanLetterboxRequestDTO.WriteLetterDTO request) {
         //멤버 엔티티 조회
         Member member = memberRepository.findById(request.getMemberId())
                 .orElseThrow(() -> new RuntimeException("멤버를 찾을 수 없습니다. ID: " + request.getMemberId()));
@@ -55,7 +55,7 @@ public class NangmanLetterBoxServiceImpl implements NangmanLetterBoxService {
 
     @Override
     @Transactional
-    public NangmanReply writeAndSendReply(NangmanLetterBoxRequestDTO.WriteReplyDTO request, Long nangmanLetterId) {
+    public NangmanReply writeAndSendReply(NangmanLetterboxRequestDTO.WriteReplyDTO request, Long nangmanLetterId) {
         //사용자가 오늘 이미 답장을 작성했는지 확인
         boolean hasUserRepliedToday = hasUserRepliedToday(request.getMemberId());
 

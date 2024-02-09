@@ -2,7 +2,7 @@ package aromanticcat.umcproject.web.dto.nangmanLetterBox;
 
 import lombok.Getter;
 
-public class NangmanLetterBoxRequestDTO {
+public class NangmanLetterboxRequestDTO {
 
     @Getter
     public static class WriteLetterDTO {

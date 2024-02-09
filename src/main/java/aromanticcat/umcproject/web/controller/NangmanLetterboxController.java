@@ -4,10 +4,10 @@ import aromanticcat.umcproject.apiPayload.ApiResponse;
 import aromanticcat.umcproject.converter.NangmanLetterBoxConverter;
 import aromanticcat.umcproject.entity.NangmanLetter;
 import aromanticcat.umcproject.entity.NangmanReply;
-import aromanticcat.umcproject.service.NangmanLetterBoxService;
+import aromanticcat.umcproject.service.NangmanLetterboxService;
 import aromanticcat.umcproject.service.RandomNicknameService;
-import aromanticcat.umcproject.web.dto.nangmanLetterBox.NangmanLetterBoxRequestDTO;
 import aromanticcat.umcproject.web.dto.nangmanLetterBox.NangmanLetterBoxResponseDTO;
+import aromanticcat.umcproject.web.dto.nangmanLetterBox.NangmanLetterboxRequestDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import java.util.List;
 import java.util.Optional;
@@ -25,9 +25,9 @@ import org.springframework.web.server.ResponseStatusException;
 @RestController
 @RequestMapping("/nangman-letterbox")
 @RequiredArgsConstructor
-public class NangmanLetterBoxController {
+public class NangmanLetterboxController {
 
-    private final NangmanLetterBoxService nangmanLetterBoxService;
+    private final NangmanLetterboxService nangmanLetterBoxService;
     private final RandomNicknameService randomNicknameService;
 
     @GetMapping("/send/random-nickname")
@@ -48,7 +48,7 @@ public class NangmanLetterBoxController {
     @PostMapping("/send")
     @Operation(summary = "낭만우편함 편지 작성 - 편지 발송 API", description = "편지의 내용과 공개 여부 데이터를 넘기는 API 입니다. ")
     public ApiResponse<NangmanLetterBoxResponseDTO.WriteLetterResultDTO> sendLetter(
-            @RequestBody NangmanLetterBoxRequestDTO.WriteLetterDTO request) {
+            @RequestBody NangmanLetterboxRequestDTO.WriteLetterDTO request) {
         try {
             //편지 작성 및 발송
 //            String senderNickname = request.getSenderRandomNickname();
@@ -111,7 +111,7 @@ public class NangmanLetterBoxController {
     @PostMapping("/letter-list/{nangmanLetterId}")
     @Operation(summary = "낭만우편함 답장하기 - 답장 발송 API")
     public ApiResponse<NangmanLetterBoxResponseDTO.WriteReplyResultDTO> sendReply(@PathVariable Long nangmanLetterId,
-                                                                                  @RequestBody NangmanLetterBoxRequestDTO.WriteReplyDTO request) {
+                                                                                  @RequestBody NangmanLetterboxRequestDTO.WriteReplyDTO request) {
         try {
             //답장 작성 및 발송
             NangmanReply nangmanReply = nangmanLetterBoxService.writeAndSendReply(request, nangmanLetterId);
