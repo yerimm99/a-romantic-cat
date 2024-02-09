@@ -1,11 +1,10 @@
 package aromanticcat.umcproject.web.dto.nangmanLetterBox;
 
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
 
 public class NangmanLetterBoxResponseDTO {
 
@@ -50,7 +49,7 @@ public class NangmanLetterBoxResponseDTO {
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class PreviewBothResultDTO{ // 편지 미리보기 + 답장 미리보기 + (공감 수)
+    public static class PreviewBothResultDTO { // 편지 미리보기 + 답장 미리보기 + (공감 수)
         private Long nangmanLetterId;
 
         private Long nangmanReplyId;

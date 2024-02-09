@@ -8,7 +8,7 @@ import aromanticcat.umcproject.web.dto.nangmanLetterBox.NangmanLetterBoxResponse
 
 public class NangmanLetterBoxConverter {
 
-    public static NangmanLetterBoxResponseDTO.WriteLetterResultDTO toWriteLetterResultDTO(NangmanLetter nangmanLetter){
+    public static NangmanLetterBoxResponseDTO.WriteLetterResultDTO toWriteLetterResultDTO(NangmanLetter nangmanLetter) {
 
         return NangmanLetterBoxResponseDTO.WriteLetterResultDTO.builder()
                 .nangmanLetterId(nangmanLetter.getId())
@@ -17,7 +17,7 @@ public class NangmanLetterBoxConverter {
                 .build();
     }
 
-    public static NangmanLetter toNangmanLetter(NangmanLetterBoxRequestDTO.WriteLetterDTO request, Member member){
+    public static NangmanLetter toNangmanLetter(NangmanLetterBoxRequestDTO.WriteLetterDTO request, Member member) {
 
         return NangmanLetter.builder()
                 .isPublic(request.getIsPublic())
@@ -27,7 +27,8 @@ public class NangmanLetterBoxConverter {
                 .build();
     }
 
-    public static NangmanLetterBoxResponseDTO.PreviewLetterResultDTO toPreviewLetterResultDTO(NangmanLetter nangmanLetter){
+    public static NangmanLetterBoxResponseDTO.PreviewLetterResultDTO toPreviewLetterResultDTO(
+            NangmanLetter nangmanLetter) {
         return NangmanLetterBoxResponseDTO.PreviewLetterResultDTO.builder()
                 .nangmanLetterId(nangmanLetter.getId())
                 .preview(getPreviewText(nangmanLetter.getContent()))
@@ -35,7 +36,8 @@ public class NangmanLetterBoxConverter {
                 .build();
     }
 
-    public static NangmanLetterBoxResponseDTO.SelectedLetterResultDTO toSelectedLetterResultDTO(NangmanLetter nangmanLetter, String randomNickname){
+    public static NangmanLetterBoxResponseDTO.SelectedLetterResultDTO toSelectedLetterResultDTO(
+            NangmanLetter nangmanLetter, String randomNickname) {
         return NangmanLetterBoxResponseDTO.SelectedLetterResultDTO.builder()
                 .nangmanLetterId(nangmanLetter.getId())
                 .nangmanLetterContent(nangmanLetter.getContent())
@@ -44,7 +46,8 @@ public class NangmanLetterBoxConverter {
                 .build();
     }
 
-    public static NangmanReply toNangmanReply(NangmanLetterBoxRequestDTO.WriteReplyDTO request, NangmanLetter nangmanLetter, Member member){
+    public static NangmanReply toNangmanReply(NangmanLetterBoxRequestDTO.WriteReplyDTO request,
+                                              NangmanLetter nangmanLetter, Member member) {
         return NangmanReply.builder()
                 .content(request.getReplyContent())
                 .replySenderNickname(request.getReplySenderNickname())
@@ -54,7 +57,7 @@ public class NangmanLetterBoxConverter {
 
     }
 
-    public static NangmanLetterBoxResponseDTO.WriteReplyResultDTO toWriteReplyResultDTO(NangmanReply nangmanReply){
+    public static NangmanLetterBoxResponseDTO.WriteReplyResultDTO toWriteReplyResultDTO(NangmanReply nangmanReply) {
         return NangmanLetterBoxResponseDTO.WriteReplyResultDTO.builder()
                 .nangmanReplyId(nangmanReply.getId())
                 .nangmanLetterId(nangmanReply.getNangmanLetter().getId())
@@ -74,14 +77,15 @@ public class NangmanLetterBoxConverter {
     }
 
 
-    private static String getPreviewText(String content){
+    private static String getPreviewText(String content) {
         // 답장 내용을 40자로 제한
         return content.length() <= 40 ? content : content.substring(0, 40) + "...";
 
     }
 
 
-    public static NangmanLetterBoxResponseDTO.PreviewBothResultDTO toPreviewBothResultDTO(NangmanLetter nangmanLetter, NangmanReply nangmanReply){
+    public static NangmanLetterBoxResponseDTO.PreviewBothResultDTO toPreviewBothResultDTO(NangmanLetter nangmanLetter,
+                                                                                          NangmanReply nangmanReply) {
         return NangmanLetterBoxResponseDTO.PreviewBothResultDTO.builder()
                 .nangmanLetterId(nangmanLetter.getId())
                 .nangmanReplyId(nangmanReply.getId())
@@ -92,9 +96,9 @@ public class NangmanLetterBoxConverter {
                 .build();
     }
 
-    private static Integer calculateTotalEmojiCount(NangmanLetter nangmanLetter){
+    private static Integer calculateTotalEmojiCount(NangmanLetter nangmanLetter) {
         // isPublic이 false이거나 hasResponse가 false이면 이모지 수를 계산하지 않음
-        if(!nangmanLetter.getIsPublic() || !nangmanLetter.getHasResponse()) {
+        if (!nangmanLetter.getIsPublic() || !nangmanLetter.getHasResponse()) {
             return null;
         }
 

@@ -9,14 +9,13 @@ import aromanticcat.umcproject.repository.NangmanLetterRepository;
 import aromanticcat.umcproject.repository.NangmanReplyRepository;
 import aromanticcat.umcproject.web.dto.nangmanLetterBox.NangmanLetterBoxRequestDTO;
 import aromanticcat.umcproject.web.dto.nangmanLetterBox.NangmanLetterBoxResponseDTO;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-
-import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import javax.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
@@ -27,11 +26,13 @@ public class NangmanLetterBoxServiceImpl implements NangmanLetterBoxService {
     private final MemberRepository memberRepository;
     private final RandomNicknameService randomNicknameService;
     private final NangmanReplyRepository nangmanReplyRepository;
+
     @Override
     @Transactional
-    public NangmanLetter writeAndSendLetter(NangmanLetterBoxRequestDTO.WriteLetterDTO request){
+    public NangmanLetter writeAndSendLetter(NangmanLetterBoxRequestDTO.WriteLetterDTO request) {
         //멤버 엔티티 조회
-        Member member = memberRepository.findById(request.getMemberId()).orElseThrow(() -> new RuntimeException("멤버를 찾을 수 없습니다. ID: " + request.getMemberId()));
+        Member member = memberRepository.findById(request.getMemberId())
+                .orElseThrow(() -> new RuntimeException("멤버를 찾을 수 없습니다. ID: " + request.getMemberId()));
 
         NangmanLetter newNangmanLetter = NangmanLetterBoxConverter.toNangmanLetter(request, member);
 
@@ -40,21 +41,21 @@ public class NangmanLetterBoxServiceImpl implements NangmanLetterBoxService {
 
     @Override
     @Transactional
-    public List<NangmanLetter> getLetterList(){
+    public List<NangmanLetter> getLetterList() {
 
         return nangmanLetterRepository.findByHasResponseFalse();
     }
 
     @Override
     @Transactional
-    public NangmanLetter getLetterById(Long nangmanLetterId){
+    public NangmanLetter getLetterById(Long nangmanLetterId) {
         return nangmanLetterRepository.findById(nangmanLetterId)
                 .orElseThrow(() -> new RuntimeException("편지를 찾을 수 없습니다. ID: " + nangmanLetterId));
     }
 
     @Override
     @Transactional
-    public NangmanReply writeAndSendReply(NangmanLetterBoxRequestDTO.WriteReplyDTO request, Long nangmanLetterId){
+    public NangmanReply writeAndSendReply(NangmanLetterBoxRequestDTO.WriteReplyDTO request, Long nangmanLetterId) {
         //사용자가 오늘 이미 답장을 작성했는지 확인
         boolean hasUserRepliedToday = hasUserRepliedToday(request.getMemberId());
 
@@ -66,7 +67,8 @@ public class NangmanLetterBoxServiceImpl implements NangmanLetterBoxService {
         NangmanLetter nangmanLetter = getLetterById(nangmanLetterId);
 
         //멤버 엔티티 조회
-        Member member = memberRepository.findById(request.getMemberId()).orElseThrow(() -> new RuntimeException("멤버를 찾을 수 없습니다. ID: " + request.getMemberId()));
+        Member member = memberRepository.findById(request.getMemberId())
+                .orElseThrow(() -> new RuntimeException("멤버를 찾을 수 없습니다. ID: " + request.getMemberId()));
 
         //답장 작성 및 발송
         NangmanReply newNangmanReply = NangmanLetterBoxConverter.toNangmanReply(request, nangmanLetter, member);
@@ -78,7 +80,7 @@ public class NangmanLetterBoxServiceImpl implements NangmanLetterBoxService {
 
     }
 
-    public boolean hasUserRepliedToday(Long memberId){
+    public boolean hasUserRepliedToday(Long memberId) {
         LocalDate today = LocalDate.now();
 
         return nangmanReplyRepository.existsByMemberIdAndCreatedAtBetween(
@@ -90,7 +92,7 @@ public class NangmanLetterBoxServiceImpl implements NangmanLetterBoxService {
 
     @Override
     @Transactional
-    public List<NangmanLetter> getNangmanLettersByUserId(Long userId){
+    public List<NangmanLetter> getNangmanLettersByUserId(Long userId) {
         // 사용자 ID로 해당 사용자가 작성한 편지 목록 조회
         return nangmanLetterRepository.findByMemberId(userId);
     }
@@ -98,12 +100,13 @@ public class NangmanLetterBoxServiceImpl implements NangmanLetterBoxService {
 
     @Override
     @Transactional
-    public Optional<NangmanReply> getReplyForLetter(Long userId, Long nangmanLetterId){
+    public Optional<NangmanReply> getReplyForLetter(Long userId, Long nangmanLetterId) {
 
         //특정 편지 조회
-        Optional<NangmanLetter> nangmanLetterOptional = nangmanLetterRepository.findByMemberIdAndId(userId, nangmanLetterId);
+        Optional<NangmanLetter> nangmanLetterOptional = nangmanLetterRepository.findByMemberIdAndId(userId,
+                nangmanLetterId);
 
-        if(nangmanLetterOptional.isPresent()){
+        if (nangmanLetterOptional.isPresent()) {
             NangmanLetter nangmanLetter = nangmanLetterOptional.get();
 
             //특정 편지에 대한 답장이 있는지 확인
@@ -122,7 +125,7 @@ public class NangmanLetterBoxServiceImpl implements NangmanLetterBoxService {
 
     @Override
     @Transactional
-    public  List<NangmanLetterBoxResponseDTO.PreviewBothResultDTO> getReplyListByUserId(Long userId){
+    public List<NangmanLetterBoxResponseDTO.PreviewBothResultDTO> getReplyListByUserId(Long userId) {
         // 사용자가 답장한 목록 조회
         List<NangmanReply> replyList = nangmanReplyRepository.findByMemberId(userId);
 
