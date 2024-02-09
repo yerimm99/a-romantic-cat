@@ -57,4 +57,14 @@ public class Member extends BaseEntity {
     public void setNickname(String nickname) {
         this.nickname = nickname;
     }
+
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Letterbox> letterboxes = new ArrayList<>();
+
+    public void subtractCoin(int coin){
+        this.coin -= coin;
+    }
+
+    public void addCoin(int coin) { this.coin += coin; }
+
 }

@@ -4,14 +4,13 @@ package aromanticcat.umcproject.web.controller;
 import aromanticcat.umcproject.apiPayload.ApiResponse;
 import aromanticcat.umcproject.converter.FriendConverter;
 import aromanticcat.umcproject.entity.Friend;
+import aromanticcat.umcproject.service.FriendService.FriendCommandService;
+import aromanticcat.umcproject.web.dto.Friend.FriendRequestDTO;
 import aromanticcat.umcproject.web.dto.Friend.FriendResponseDTO;
 import aromanticcat.umcproject.service.FriendService.FriendQueryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -26,29 +25,20 @@ import java.util.stream.Collectors;
 public class FriendController {
 
     private final FriendQueryService friendQueryService;
+    private final FriendCommandService friendCommandService;
 
-    @GetMapping("/{member_id}")
+    @GetMapping("/")
     @Operation(summary = "사용자의 주소록에 있는 친구들 조회 API", description = "페이징 포함을 포함합니다, query String으로 page 번호를 주세요.")
-    @ApiResponses(value = {
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "AUTH003", description = "access 토큰을 주세요!", content = @Content(schema = @Schema(implementation = ApiResponse.class))),
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "AUTH004", description = "access 토큰 만료", content = @Content(schema = @Schema(implementation = ApiResponse.class))),
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "AUTH006", description = "access 토큰 모양이 이상함", content = @Content(schema = @Schema(implementation = ApiResponse.class))),
-    })
     @Parameters({
-            @Parameter(name = "memberId", description = "사용자의 아이디, path variable 입니다!"),
             @Parameter(name = "page", description = "페이지 번호, 0번이 1번 페이지 입니다.")
     })
-    public ApiResponse<List<FriendResponseDTO.FriendDTO>> getFriendList(@PathVariable(name = "member_id") Long memberId,
-                                                                        @RequestParam(value = "page", defaultValue = "0") Integer page){
+    public ApiResponse<List<FriendResponseDTO.FriendInfoDTO>> getFriendList(@RequestParam(value = "page", defaultValue = "0") Integer page){
         try{
-            // 페이지별 친구 목록 조회
-            Page<Friend> friendList = friendQueryService.getFriendList(memberId, page);
+            // 로그인한 사용자의 아이디를 가져오는 임시 메서드
+            Long memberId = getCurrentUserId();
 
-            // 친구 내용을 간략하게 변환
-            List<FriendResponseDTO.FriendDTO> friendDTOList = friendList.stream()
-                    .map(FriendConverter::toFriendDTO)
-                    .collect(Collectors.toList());
+            // 요청 받은 페이지의 친구 수를 가져옴
+            List<FriendResponseDTO.FriendInfoDTO> friendDTOList = friendQueryService.findFriendList(memberId, page);
 
             // 성공 응답 생성
             return ApiResponse.onSuccess(friendDTOList);
@@ -58,28 +48,19 @@ public class FriendController {
         }
     }
 
-    @GetMapping("/{member_id}/close-friends")
+    @GetMapping("/close-friends")
     @Operation(summary = "사용자의 주소록에 있는 친한 친구들 조회 API", description = "페이징 포함을 포함합니다, query String으로 page 번호를 주세요.")
-    @ApiResponses(value = {
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "AUTH003", description = "access 토큰을 주세요!", content = @Content(schema = @Schema(implementation = ApiResponse.class))),
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "AUTH004", description = "access 토큰 만료", content = @Content(schema = @Schema(implementation = ApiResponse.class))),
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "AUTH006", description = "access 토큰 모양이 이상함", content = @Content(schema = @Schema(implementation = ApiResponse.class))),
-    })
     @Parameters({
-            @Parameter(name = "memberId", description = "사용자의 아이디, path variable 입니다!"),
             @Parameter(name = "page", description = "페이지 번호, 0번이 1번 페이지 입니다.")
     })
-    public ApiResponse<List<FriendResponseDTO.FriendDTO>> getCloseFriendList(@PathVariable(name = "member_id") Long memberId,
-                                                                            @RequestParam(value = "page", defaultValue = "0") Integer page){
-        try{
-            // 페이지별 친구 목록 조회
-            Page<Friend> friendList = friendQueryService.getCloseFriendList(memberId, page);
+    public ApiResponse<List<FriendResponseDTO.FriendInfoDTO>> getCloseFriendList(@RequestParam(value = "page", defaultValue = "0") Integer page){
 
-            // 친구 내용을 간략하게 변환
-            List<FriendResponseDTO.FriendDTO> friendDTOList = friendList.stream()
-                    .map(FriendConverter::toFriendDTO)
-                    .collect(Collectors.toList());
+        try{
+            // 로그인한 사용자의 아이디를 가져오는 임시 메서드
+            Long memberId = getCurrentUserId();
+
+            // 요청 받은 페이지의 친구 수를 가져옴
+            List<FriendResponseDTO.FriendInfoDTO> friendDTOList = friendQueryService.findCloseFriendList(memberId, page);
 
             // 성공 응답 생성
             return ApiResponse.onSuccess(friendDTOList);
@@ -89,35 +70,167 @@ public class FriendController {
         }
     }
 
-    @GetMapping("/{member_id}/search/friend")
-    @Operation(summary = "친구 이름을 통한 검색 API", description = "query String으로 친구 이름을 주세요.")
-    @ApiResponses(value = {
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "COMMON200", description = "OK, 성공"),
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "AUTH003", description = "access 토큰을 주세요!", content = @Content(schema = @Schema(implementation = ApiResponse.class))),
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "AUTH004", description = "access 토큰 만료", content = @Content(schema = @Schema(implementation = ApiResponse.class))),
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "AUTH006", description = "access 토큰 모양이 이상함", content = @Content(schema = @Schema(implementation = ApiResponse.class))),
-    })
+    @GetMapping("/search/friend")
+    @Operation(summary = "친구 이름 또는 친구 아이디(우편번호)를 통한 검색 API", description = "query String으로 친구 정보를 주세요.")
     @Parameters({
-            @Parameter(name = "memberId", description = "사용자의 아이디, path variable 입니다!"),
-            @Parameter(name = "friendName", description = "검색하고자 하는 친구의 이름, query string입니다!")
+            @Parameter(name = "friend_info", description = "검색하고자 하는 친구 정보(닉네임 혹은 아이디), query string입니다!")
     })
-    public ApiResponse<FriendResponseDTO.FriendDTO> getFriend(@PathVariable(name = "member_id") Long memberId,
-                                                              @RequestParam(value = "friendName", defaultValue = "") String friendName){
+    public ApiResponse<List<FriendResponseDTO.FriendInfoDTO>> getFriendbyName(@RequestParam(value = "friend_info") String friendInfo){
         try{
-            // 친구 이름(닉네임)으로 친구 검색
-            Friend friend = friendQueryService.getFriend(memberId, friendName);
+            // 로그인한 사용자의 아이디를 가져오는 임시 메서드
+            Long memberId = getCurrentUserId();
 
-            // 친구 내용을 간략하게 변환
-            FriendResponseDTO.FriendDTO friendDTO = FriendConverter.toFriendDTO(friend);
+            List<FriendResponseDTO.FriendInfoDTO> friendInfoDTOList;  // 검색하고자 하는 친구 정보와 관련된 DTO 선언
+
+            if(friendInfo.startsWith("#")){     // 친구 아이디(우편 번호)으로 친구 검색
+                String friendIdString = friendInfo.substring(1);    // "#"을 제외한 문자열
+                Long friendId = Long.parseLong(friendIdString);     // Long 타입으로 변환
+                friendInfoDTOList = friendQueryService.getFriendbyFriendId(memberId, friendId);
+            } else {     // 친구 이름(닉네임)으로 친구 검색
+                friendInfoDTOList = friendQueryService.getFriendbyFriendName(memberId, friendInfo);
+            }
 
             // 성공 응답 생성
-            return ApiResponse.onSuccess(friendDTO);
+            return ApiResponse.onSuccess(friendInfoDTOList);
 
         }catch (Exception e){
             return ApiResponse.onFailure(HttpStatus.INTERNAL_SERVER_ERROR.toString(), e.getMessage(), null);
         }
     }
 
+    @PostMapping("/friend/request")
+    @Operation(summary = "친구 추가 API", description = "query String으로 추가하려는 친구의 우편함 번호를 알려주세요.")
+    @Parameters({
+            @Parameter(name = "to_member_Id", description = "친구 추가 하고자 하는 친구 아이디(우편번호), query string입니다!")
+    })
+    public ApiResponse<String> sendFriendRequest(@RequestParam(value = "to_member_Id") Long toMemberId){
+        try{
+            // 로그인한 사용자의 아이디를 가져오는 임시 메서드
+            Long memberId = getCurrentUserId();
 
+            // 친구 요청 보낸기
+            friendCommandService.requestFriendship(memberId, toMemberId);
 
+            // 성공 응답 생성
+            return ApiResponse.onSuccess("친구 요청이 성공적으로 보내졌습니다.");
+
+        }catch (Exception e){
+            return ApiResponse.onFailure(HttpStatus.INTERNAL_SERVER_ERROR.toString(), e.getMessage(), null);
+        }
+    }
+
+    @GetMapping("/recieved")
+    @Operation(summary = "사용자가 친구 추가 받은 요청 조회 API")
+    public ApiResponse<List<FriendResponseDTO.WaitingFriendDTO>> getReceivedFriendList() {
+        try{
+            // 로그인한 사용자의 아이디를 가져오는 임시 메서드
+            Long memberId = getCurrentUserId();
+
+            // 친구 요청을 보낸 사용자들의 목록 조회
+            List<Friend> friendList = friendQueryService.getFriendReceivedList(memberId);
+
+            // 친구 정보를 간략하게 변환
+            List<FriendResponseDTO.WaitingFriendDTO> waitingFriendDTOS = friendList.stream()
+                    .map(FriendConverter::toWaitingFriendDTO)
+                    .collect(Collectors.toList());
+
+            // 성공 응답 생성
+            return ApiResponse.onSuccess(waitingFriendDTOS);
+
+        }catch (Exception e){
+            return ApiResponse.onFailure(HttpStatus.INTERNAL_SERVER_ERROR.toString(), e.getMessage(), null);
+        }
+    }
+
+    @GetMapping("/requested")
+    @Operation(summary = "사용자가 친구 추가 보낸 요청 조회 API")
+
+    public ApiResponse<List<FriendResponseDTO.WaitingFriendDTO>> getRequestedFriendList() {
+        try{
+            // 로그인한 사용자의 아이디를 가져오는 임시 메서드
+            Long memberId = getCurrentUserId();
+
+            // 친구 요청을 보낸 사용자들의 목록 조회
+            List<Friend> friendList = friendQueryService.getFriendRequestedList(memberId);
+
+            // 친구 정보를 간략하게 변환
+            List<FriendResponseDTO.WaitingFriendDTO> waitingFriendDTOS = friendList.stream()
+                    .map(FriendConverter::toWaitingFriendDTO)
+                    .collect(Collectors.toList());
+
+            // 성공 응답 생성
+            return ApiResponse.onSuccess(waitingFriendDTOS);
+
+        }catch (Exception e){
+            return ApiResponse.onFailure(HttpStatus.INTERNAL_SERVER_ERROR.toString(), e.getMessage(), null);
+        }
+    }
+
+    @PostMapping("/request/approve")
+    @Operation(summary = "친구 요청 수락 API", description = "query String으로 친구 요청을 보낸 친구의 아이디를 알려주세요")
+    @Parameters({
+            @Parameter(name = "friend_id", description = "친구 추가 요청을 보낸 친구의 아이디, query string입니다!")
+    })
+    public ApiResponse<String> approveFriendRequest(@RequestParam(value = "friend_id") Long friendId){
+        try{
+            // 로그인한 사용자의 아이디를 가져오는 임시 메서드
+            Long memberId = getCurrentUserId();
+
+            // 친구 요청 보낸기
+            friendCommandService.approveFriendship(memberId, friendId);
+
+            // 성공 응답 생성
+            return ApiResponse.onSuccess("친구 요청이 성공적으로 수락되었습니다.");
+
+        }catch (Exception e){
+            return ApiResponse.onFailure(HttpStatus.INTERNAL_SERVER_ERROR.toString(), e.getMessage(), null);
+        }
+    }
+
+    @PostMapping("/request/reject")
+    @Operation(summary = "친구 요청 거절 API", description = "query String으로 친구 요청을 보낸 친구의 아이디를 알려주세요")
+    @Parameters({
+            @Parameter(name = "friend_id", description = "친구 추가 요청을 보낸 친구의 아이디, query string입니다!")
+    })
+    public ApiResponse<String> rejectFriendRequest(@RequestParam(value = "friend_id") Long friendId) {
+        try{
+            // 로그인한 사용자의 아이디를 가져오는 임시 메서드
+            Long memberId = getCurrentUserId();
+
+            // 친구 요청 보낸기
+            friendCommandService.rejectFriendship(memberId, friendId);
+
+            // 성공 응답 생성
+            return ApiResponse.onSuccess("친구 요청이 성공적으로 거절 되었습니다.");
+
+        }catch (Exception e){
+            return ApiResponse.onFailure(HttpStatus.INTERNAL_SERVER_ERROR.toString(), e.getMessage(), null);
+        }
+    }
+
+    @PostMapping("/close-friend/register")
+    @Operation(summary = "친한 친구 등록 API", description = "query String으로 친한 친구로 등록하려는 친구 아이디를 알려주세요.")
+    @Parameters({
+            @Parameter(name = "friend_id", description = "친한 친구로 등록하려는 친구의 아이디, query string입니다!")
+    })
+    public ApiResponse<String> registerCloseFriend(@RequestParam(value = "friend_id") Long friendId){
+        try{
+            // 로그인한 사용자의 아이디를 가져오는 임시 메서드
+            Long memberId = getCurrentUserId();
+
+            // 친구 요청 보내기
+            friendCommandService.setCloseFriend(memberId, friendId);
+
+            // 성공 응답 생성
+            return ApiResponse.onSuccess("친구를 친한 친구로 등록하는데 성공했습니다.");
+
+        }catch (Exception e){
+            return ApiResponse.onFailure(HttpStatus.INTERNAL_SERVER_ERROR.toString(), e.getMessage(), null);
+        }
+    }
+
+    // 스프링 시큐리티 구현 전 임시 메서드
+    private Long getCurrentUserId(){
+        return 1L;
+    }
 }
