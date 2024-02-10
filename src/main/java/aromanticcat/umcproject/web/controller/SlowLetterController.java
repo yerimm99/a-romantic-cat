@@ -23,7 +23,7 @@ public class SlowLetterController {
             SlowLetter slowLetter = slowLetterService.save(memberId, request);
             return ApiResponse.onSuccess(SlowLetterResponse.from(slowLetter));
         } catch (Exception e){
-        return ApiResponse.onFailure(HttpStatus.INTERNAL_SERVER_ERROR.toString(), e.getMessage(), null);
-    }
+            return ApiResponse.onFailure(HttpStatus.INTERNAL_SERVER_ERROR.toString(), e.getMessage(), null);
+        }
     }
 }

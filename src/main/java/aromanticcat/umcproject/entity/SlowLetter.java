@@ -10,7 +10,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @RequiredArgsConstructor
 @ToString
-@Table(name = "letter")
+@Table(name = "slow_letter")
 public class SlowLetter extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

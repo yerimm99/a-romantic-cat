@@ -2,20 +2,19 @@ package aromanticcat.umcproject.web.dto;
 
 import aromanticcat.umcproject.entity.SlowLetter;
 import lombok.Getter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
-@Getter
 public record SlowLetterRequest(
-        @NotNull LocalDate date,
-        @NotNull String content,
-        @NotNull Long memberId
+        @NotNull @DateTimeFormat(pattern = "yyyy-MM-dd") String date,
+        @NotNull String content
 ) {
 
     public static SlowLetter toEntity(SlowLetterRequest request) {
         return SlowLetter.builder()
-                .date(request.date)
+                .date(LocalDate.parse(request.date))
                 .content(request.content)
                 .build();
     }
