@@ -68,10 +68,10 @@ public class LetterboxController {
         }
     }
 
-    @GetMapping("/{memberId}/deactive")
+    @GetMapping("/{memberId}/expired")
     @ApiOperation(value = "지난 우편함 조회")
-    public ApiResponse<List<LetterboxResponse>> getDeactiveLetterbox(@PathVariable Long memberId) {
-        List<LetterboxResponse> letterboxes = letterboxService.getDeactiveLetterbox(memberId);
+    public ApiResponse<List<LetterboxResponse>> getExpiredLetterbox(@PathVariable Long memberId) {
+        List<LetterboxResponse> letterboxes = letterboxService.getExpiredLetterbox(memberId);
         try {
             return ApiResponse.onSuccess(letterboxes);
         } catch (Exception e){

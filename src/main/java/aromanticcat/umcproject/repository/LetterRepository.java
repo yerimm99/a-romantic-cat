@@ -13,5 +13,5 @@ import java.util.Optional;
 public interface LetterRepository extends JpaRepository<Letter, Long> {
     Optional<Letter> findByLetterId(Long id);
 
-    Optional<List<Letter>> findLettersByLetterbox(Letterbox letterbox);
+    Optional<List<Letter>> findLettersByLetterboxAndCreatedAtBefore(Letterbox letterbox, LocalDateTime now);
 }
