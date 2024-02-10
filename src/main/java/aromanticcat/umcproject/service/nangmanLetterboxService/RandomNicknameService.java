@@ -26,8 +26,7 @@ public class RandomNicknameService {
     public String generateRandomNickname() {
         Random random = new Random();
         String adjective = ADJECTIVES[random.nextInt(ADJECTIVES.length)];
-        String animal = ANIMALS[random.nextInt(ANIMALS.length)]
-                ;
+        String animal = ANIMALS[random.nextInt(ANIMALS.length)];
         return adjective + " " + animal;
     }
 }

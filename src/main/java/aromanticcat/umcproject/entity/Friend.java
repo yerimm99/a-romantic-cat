@@ -21,7 +21,7 @@ public class Friend extends BaseEntity {
 
     private String friendName;
 
-    private Long friendId;  // 친구 아이디
+    private Long friendId;  // 친구 아이디 (우편함 번호)
 
     @JoinColumn(name = "member_id")
     @ManyToOne(fetch = FetchType.LAZY)

@@ -20,13 +20,21 @@ public class MissionQueryServiceImpl implements MissionQueryService{
 
     private final MissionRepository missionRepository;
     private final MemberMissionRepository memberMissionRepository;
+    private final MemberRepository memberRepository;
+
+    public Member getMember(String email){
+        return memberRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다. ID: " + email));
+    }
 
     @Override
     @Transactional
-    public List<MissionResponseDTO.MissionInfoDTO> findMissionList(Long memberId) {
+    public List<MissionResponseDTO.MissionInfoDTO> findMissionList(String userEmail) {
+
+        Member member = getMember(userEmail);
 
         // 사용자가 참여한 미션 목록 조회
-        List<MemberMission> memberMissionList = memberMissionRepository.findByMemberId(memberId);
+        List<MemberMission> memberMissionList = memberMissionRepository.findByMember(member);
 
         // 모든 미션 목록 조회
         List<Mission> allMissionList = missionRepository.findAll();

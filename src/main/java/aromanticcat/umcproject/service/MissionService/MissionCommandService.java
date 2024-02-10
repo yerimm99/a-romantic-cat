@@ -1,5 +1,7 @@
 package aromanticcat.umcproject.service.MissionService;
 
+import aromanticcat.umcproject.entity.Member;
+
 public interface MissionCommandService {
-    void stepCompleted(Long memberId, Long missionId);
+    void stepCompleted(String userEmail, Long missionId);
 }
