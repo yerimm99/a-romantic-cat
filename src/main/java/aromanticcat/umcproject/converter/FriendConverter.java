@@ -1,5 +1,7 @@
 package aromanticcat.umcproject.converter;
 
+import aromanticcat.umcproject.entity.FriendStatus;
+import aromanticcat.umcproject.entity.Member;
 import aromanticcat.umcproject.repository.LetterBoxRepository;
 import aromanticcat.umcproject.web.dto.Friend.FriendResponseDTO;
 import aromanticcat.umcproject.entity.Friend;
@@ -26,6 +28,21 @@ public class FriendConverter {
         return FriendResponseDTO.WaitingFriendDTO.builder()
                 .friendName(friend.getFriendName())
                 .friendId(friend.getFriendId())
+                .build();
+    }
+
+    public static Friend toFriend(Member fromMember, Member toMember, boolean isSend){
+
+        return Friend.builder()
+                .friendName(toMember.getNickname())
+                .friendId(toMember.getId())
+                .member(fromMember)
+                .fromMemberId(fromMember.getId())
+                .fromMemberName(fromMember.getNickname())
+                .toMemberId(toMember.getId())
+                .toMemberName(toMember.getNickname())
+                .friendStatus(FriendStatus.WAITING)
+                .isFrom(isSend)   // true이면 fromMember가 false이면 toMember가 친구 요청을 보냄
                 .build();
     }
 

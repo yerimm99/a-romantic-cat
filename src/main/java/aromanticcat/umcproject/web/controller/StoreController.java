@@ -79,7 +79,6 @@ public class StoreController {
         try{
             String userEmail = memberService.getUserInfo().getEmail();
 
-
             storeService.purchasedStamp(userEmail, stampId);
 
             return ApiResponse.onSuccess("우표를 성공적으로 구매하였습니다.");

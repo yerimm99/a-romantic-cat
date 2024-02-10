@@ -21,12 +21,18 @@ public class MissionCommandServiceImpl implements MissionCommandService{
     private final MemberRepository memberRepository;
     private final MissionRepository missionRepository;
 
+    public Member getMember(String email){
+        return memberRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다. ID: " + email));
+    }
+
     @Override
     @Transactional
-    public void stepCompleted(Long memberId, Long missionId) {      // 미션 안에서 step 하나를 완료
+    public void stepCompleted(String userEmail, Long missionId) {      // 미션 안에서 step 하나를 완료
 
-        Boolean isExist = memberMissionRepository.existsByMemberIdAndMissionId(memberId, missionId);
-        Member member = memberRepository.findById(memberId).orElse(null);
+        Member member = getMember(userEmail);
+
+        Boolean isExist = memberMissionRepository.existsByMemberAndMissionId(member, missionId);
         Mission mission = missionRepository.findById(missionId).orElse(null);
 
         if (!isExist) {  // 처음 시작된 미션인 경우
@@ -34,7 +40,7 @@ public class MissionCommandServiceImpl implements MissionCommandService{
             memberMissionRepository.save(newMemberMission);
         }
 
-        MemberMission memberMission = memberMissionRepository.findByMemberIdAndMissionId(memberId, missionId);
+        MemberMission memberMission = memberMissionRepository.findByMemberAndMissionId(member, missionId);
 
         if (memberMission.getMissionStatus() == MissionStatus.COMPLETED) {
             throw new RuntimeException("미션이 이미 완료되었습니다. 미션 ID: " + missionId);

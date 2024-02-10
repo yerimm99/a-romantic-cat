@@ -1,6 +1,7 @@
 package aromanticcat.umcproject.web.controller;
 
 import aromanticcat.umcproject.apiPayload.ApiResponse;
+import aromanticcat.umcproject.service.MemberService;
 import aromanticcat.umcproject.service.MissionService.MissionCommandService;
 import aromanticcat.umcproject.service.MissionService.MissionQueryService;
 import aromanticcat.umcproject.web.dto.Mission.MissionResponseDTO;
@@ -20,16 +21,16 @@ public class MissionController {
 
     private final MissionQueryService missionQueryService;
     private final MissionCommandService missionCommandService;
+    private final MemberService memberService;
 
     @GetMapping("/")
     @Operation(summary = "미션 목록 조회 API", description = "모든 미션을 조회합니다.")
     public ApiResponse<List<MissionResponseDTO.MissionInfoDTO>> getAllMissions() {
         try{
-            // 로그인한 사용자의 아이디를 가져오는 임시 메서드
-            Long memberId = getCurrentUserId();
+            String userEmail = memberService.getUserInfo().getEmail();
 
             // 모든 미션 가져오기
-            List<MissionResponseDTO.MissionInfoDTO> MissionList = missionQueryService.findMissionList(memberId);
+            List<MissionResponseDTO.MissionInfoDTO> MissionList = missionQueryService.findMissionList(userEmail);
 
             // 성공 응답 가져오기
             return ApiResponse.onSuccess(MissionList);
@@ -58,10 +59,9 @@ public class MissionController {
     @Operation(summary = "미션 한 단계 완료 API", description = "특정 미션의 한 스텝이 완료된 것을 적용합니다. 미션의 모든 단계가 완료 되었으면 보상으로 코인이 주어집니다.")
     public ApiResponse<String> MissionStepCompleted(@PathVariable Long missionId){
         try{
-            // 로그인 한 사용자의 아이디를 가져오는 임시 메서드
-            Long memberId = getCurrentUserId();
+            String userEmail = memberService.getUserInfo().getEmail();
 
-            missionCommandService.stepCompleted(memberId, missionId);
+            missionCommandService.stepCompleted(userEmail, missionId);
 
             return ApiResponse.onSuccess("미션의 한 단계 완료가 성공적으로 적용되었습니다.");
 
@@ -70,8 +70,4 @@ public class MissionController {
         }
     }
 
-    // 스프링 시큐리티 구현 전 임시 메서드
-    private Long getCurrentUserId(){
-        return 1L;
-    }
 }
