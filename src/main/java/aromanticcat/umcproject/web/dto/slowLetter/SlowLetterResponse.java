@@ -1,4 +1,4 @@
-package aromanticcat.umcproject.web.dto;
+package aromanticcat.umcproject.web.dto.slowLetter;
 
 import aromanticcat.umcproject.entity.SlowLetter;
 import lombok.Builder;

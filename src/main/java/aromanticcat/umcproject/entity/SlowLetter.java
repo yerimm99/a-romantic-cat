@@ -1,5 +1,7 @@
 package aromanticcat.umcproject.entity;
 
+import aromanticcat.umcproject.web.dto.Letterbox.LetterResponse;
+import aromanticcat.umcproject.web.dto.slowLetter.SlowLetterGetResponse;
 import lombok.*;
 
 import javax.persistence.*;

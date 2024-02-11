@@ -1,7 +1,6 @@
-package aromanticcat.umcproject.web.dto;
+package aromanticcat.umcproject.web.dto.slowLetter;
 
 import aromanticcat.umcproject.entity.SlowLetter;
-import lombok.Getter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotNull;
