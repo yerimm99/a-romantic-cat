@@ -1,4 +1,4 @@
-package aromanticcat.umcproject.web.dto;
+package aromanticcat.umcproject.web.dto.MyDesign;
 
 import aromanticcat.umcproject.entity.Member;
 import lombok.Getter;
