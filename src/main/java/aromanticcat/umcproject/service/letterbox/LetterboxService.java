@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Transactional(readOnly = true)
@@ -86,7 +87,8 @@ public class LetterboxService {
 
     public List<LetterResponse> getLetters(Long letterboxId) {
         Letterbox letterbox = letterboxRepository.findById(letterboxId).orElse(null);
-        List<Letter> letters = letterRepository.findLettersByLetterbox(letterbox).orElse(null);
+        LocalDateTime date = LocalDateTime.now().minusHours(24);
+        List<Letter> letters = letterRepository.findLettersByLetterboxAndCreatedAtBefore(letterbox, date).orElse(null);
         List<LetterResponse> responses = new ArrayList<>();
         for (Letter letter : letters) {
             responses.add(letter.toResponse(letter));
@@ -94,8 +96,9 @@ public class LetterboxService {
         return responses;
     }
 
-    public List<LetterboxResponse> getDeactiveLetterbox(Long memberId) {
-        List<Letterbox> letterboxes = letterboxRepository.findLetterboxsByMemberIdAndActivate(memberId, false).orElse(null);
+    public List<LetterboxResponse> getExpiredLetterbox(Long memberId) {
+        LocalDateTime currentTime = LocalDateTime.now();
+        List<Letterbox> letterboxes = letterboxRepository.findByMemberIdAndEndDtBefore(memberId, currentTime).orElse(null);
 
         List<LetterboxResponse> responses = new ArrayList<>();
         for (Letterbox letterbox : letterboxes) {
