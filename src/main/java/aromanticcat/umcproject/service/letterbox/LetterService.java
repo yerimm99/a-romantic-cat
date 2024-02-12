@@ -5,14 +5,11 @@ import aromanticcat.umcproject.entity.*;
 import aromanticcat.umcproject.repository.*;
 import aromanticcat.umcproject.web.dto.Letterbox.LetterRequest;
 import aromanticcat.umcproject.web.dto.Letterbox.LetterResponse;
-import aromanticcat.umcproject.web.dto.Letterbox.LetterboxRequest;
-import aromanticcat.umcproject.web.dto.Letterbox.LetterboxResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.List;
 
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -22,15 +19,20 @@ public class LetterService {
     private final StampRepository stampRepository;
     private final LetterPaperRepository letterPaperRepository;
     private final LetterBoxRepository letterboxRepository;
-
+    private final FriendRepository friendRepository;
     @Transactional
     public Long createLetter(LetterRequest request) {
         Stamp stamp = stampRepository.findById(request.getStampId()).orElse(null);
         LetterPaper letterPaper = letterPaperRepository.findById(request.getLetterPaperId()).orElse(null);
         Letterbox letterbox = letterboxRepository.findById(request.getLetterboxId()).orElse(null);
-        //여기에 로그인 + 친구 유저는 편지 교환 횟수 +1 코드
+
         if (stamp == null || letterPaper == null || letterbox == null) {
             throw new EntityNotFoundException("not found");
+        }
+
+        Friend friend = friendRepository.findByMemberAndFriendId(letterbox.getMember(), request.getSenderId());
+        if(friend != null && friend.getFriendStatus() == FriendStatus.APPROVED) {
+            int num = friend.updateExchange_num();
         }
 
         Letter letter = request.toEntity();
