@@ -47,4 +47,8 @@ public class Friend extends BaseEntity {
         this.friendStatus = status;
     }
 
+    public int updateExchange_num() {
+        this.exchange_num++;
+        return exchange_num;
+    }
 }

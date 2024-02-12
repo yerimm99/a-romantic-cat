@@ -1,10 +1,7 @@
 package aromanticcat.umcproject.web.dto.Letterbox;
 
 import aromanticcat.umcproject.entity.Letter;
-import aromanticcat.umcproject.entity.Letterbox;
 import lombok.Getter;
-
-import javax.persistence.Column;
 
 @Getter
 public class LetterRequest {
