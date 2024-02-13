@@ -6,7 +6,7 @@ import aromanticcat.umcproject.entity.Member;
 import aromanticcat.umcproject.service.MemberService;
 import aromanticcat.umcproject.web.dto.MemberResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,9 +14,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequiredArgsConstructor
 public class MemberController {
-    @Autowired
-    private MemberService service;
+
+    private final MemberService service;
 
     @PostMapping("/signUp")
     @Operation(summary = "회원가입 API", description = "회원가입 API입니다.")
@@ -31,11 +32,11 @@ public class MemberController {
         }
     }
 
-    @PostMapping("/mypage/changeNickname")
+    @PostMapping("/mypage/nickname")
     @Operation(summary = "닉네임 변경 API", description = "닉네임 변경 API입니다.")
-    public ApiResponse<MemberResponseDTO.MemberJoinResultDTO> changeNickName(@RequestBody String nickname) {
+    public ApiResponse<MemberResponseDTO.MemberJoinResultDTO> updateNickname(@RequestBody String nickname) {
         try {
-            Member user = service.changeNickName(nickname);
+            Member user = service.updateNickname(nickname);
 
             return ApiResponse.onSuccess(MemberConverter.toMemberDTO(user));
         } catch (Exception e) {
