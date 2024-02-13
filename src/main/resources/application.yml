@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: ${db.url}
-    username: ${db.username}
-    password: ${db.password}
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
   sql:
     init:
@@ -21,9 +21,9 @@ spring:
     active: local
     include: oauth, app
   redis:
-    host: ${redis.host}
-    port: ${redis.port}
-    password: ${redis.password}
+    host: ${REDIS_HOSTNAME}
+    port: ${REDIS_PORT}
+    password: ${REDIS_PASSWORD}
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
@@ -31,15 +31,15 @@ spring:
 cloud:
   aws:
     s3:
-      bucketName: ${bucket.name}
+      bucketName: ${BUCKET_NAME}
     region:
-      static: ${region}
+      static: ${REGION}
 
     stack:
       auto: false
     credentials:
-      accessKey: ${accesskey}
-      secretKey: ${secretkey}
+      accessKey: ${ACCESSKEY}
+      secretKey: ${SECRETKEY}
 
 spring.servlet.multipart.max-file-size: 10MB
 spring.servlet.multipart.max-request-size: 10MB
