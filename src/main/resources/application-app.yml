@@ -1,4 +1,4 @@
 spring:
   jwt:
-    secret: ${token.secret}
+    secret: ${TOKEN_SECRET}
 
