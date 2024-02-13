@@ -63,7 +63,7 @@ public class MemberServiceImpl implements MemberService {
 
 
     @Override
-    public Member changeNickName(String newNickname) {
+    public Member updateNickname(String newNickname) {
         // 닉네임 입력 체크
         isNicknameExist(newNickname);
         // 닉네임 중복 체크

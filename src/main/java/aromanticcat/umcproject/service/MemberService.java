@@ -16,6 +16,6 @@ public interface MemberService {
 
     SecurityUserDto getUserInfo();
 
-    Member changeNickName(String nickname);
+    Member updateNickname(String nickname);
 
 }
