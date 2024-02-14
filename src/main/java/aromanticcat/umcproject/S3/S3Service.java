@@ -20,7 +20,6 @@ public class S3Service {
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucketName;
-
     private String dir1 = "/letter-paper";
     private String dir2 = "/stamp";
     private String defaultUrl = "https://airplanning-bucket.s3.ap-northeast-2.amazonaws.com";
