@@ -1,19 +1,15 @@
 package aromanticcat.umcproject.S3;
 
-import aromanticcat.umcproject.S3.config.AmazonConfig;
-import aromanticcat.umcproject.repository.UuidRepository;
-import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.ObjectMetadata;
+import java.io.IOException;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
-import java.util.UUID;
 
 @Slf4j
 @Component
@@ -22,9 +18,8 @@ import java.util.UUID;
 public class S3Service {
     private final AmazonS3Client amazonS3;
 
-    @Value("${cloud.aws.s3.bucketName}")
+    @Value("${cloud.aws.s3.bucket}")
     private String bucketName;
-
     private String dir1 = "/letter-paper";
     private String dir2 = "/stamp";
     private String defaultUrl = "https://airplanning-bucket.s3.ap-northeast-2.amazonaws.com";
