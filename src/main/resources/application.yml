@@ -31,10 +31,9 @@ spring:
 cloud:
   aws:
     s3:
-      bucket: ${BUCKET_NAME}
+      bucket: romantic-cat-bucket
     region:
-      static: ${REGION}
-
+      static: ap-northeast-2
     stack:
       auto: false
     credentials:
