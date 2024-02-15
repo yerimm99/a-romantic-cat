@@ -73,53 +73,52 @@ public class NangmanCollectionController {
         }
     }
 
-//    @GetMapping("/my/nangman-letters")
-//    @Operation(summary = "나의 낭만모음집 내가 쓴 편지 목록 조회 API",
-//            description = "사용자가 작성한 편지 목록을 조회하는 API입니다." +
-//                        "편지(40자) + 답장(답장이 있을 경우 40자) + 공감수(공개 편지인 경우)를 반환합니다." +
-//                        "페이징을 포함합니다. query String으로 page(기본값 0)와 pageSize(기본값 6)를 주세요.")
-//    public ApiResponse<List<NangmanCollectionResponseDTO.PreviewLetterAndReplyResultDTO>> getMyNangmanLetters(
-//            @RequestParam(defaultValue = "0") int page,
-//            @RequestParam(defaultValue = "6") int pageSize) {
-//        try {
-//
-//            String userEmail = memberService.getUserInfo().getEmail();
-//
-//
-//            // 사용자가 작성한 편지 목록 조회
-//            List<NangmanCollectionResponseDTO.PreviewLetterAndReplyResultDTO> userLetterList = nangmanCollectionService.getMyLetterList(userEmail, page, pageSize);
-//
-//            // 성공 응답 생성
-//            return ApiResponse.onSuccess(userLetterList);
-//        } catch (Exception e) {
-//            // 에러 발생 시 실패 응답 반환
-//            return ApiResponse.onFailure(HttpStatus.INTERNAL_SERVER_ERROR.toString(), e.getMessage(), null);
-//        }
-//    }
-//
-//
-//    @GetMapping("/my/nangman-replies")
-//    @Operation(summary = "나의 낭만모음집 내가 답장한 편지 목록 조회 API",
-//            description = "사용자가 답장한 목록을 조회하는 API입니다."+
-//                        "연결된 낭만 편지의 내용(40자) + 답장 내용(40자) + 공감 수(공개된 편지일 경우)를 반환합니다." +
-//                        "페이징을 포함합니다. query String으로 page(기본값 0)와 pageSize(기본값 6)를 주세요.")
-//    public ApiResponse<List<NangmanCollectionResponseDTO.PreviewLetterAndReplyResultDTO>> getMyNangmanReplies(
-//            @RequestParam(defaultValue = "0") int page,
-//            @RequestParam(defaultValue = "6") int pageSize) {
-//        try{
-//
-//            String userEmail = memberService.getUserInfo().getEmail();
-//
-//
-//
-//            // 사용자가 답장한 목록 조회
-//            List<NangmanCollectionResponseDTO.PreviewLetterAndReplyResultDTO> userReplyList = nangmanCollectionService.getMyReplyList(userEmail,  page, pageSize);
-//
-//            // 성공 응답 생성
-//            return ApiResponse.onSuccess(userReplyList);
-//        }catch (Exception e){
-//            return ApiResponse.onFailure(HttpStatus.INTERNAL_SERVER_ERROR.toString(), e.getMessage(), null);
-//        }
-//    }
+    @GetMapping("/my/nangman-letters")
+    @Operation(summary = "나의 낭만모음집 내가 쓴 편지 목록 조회 API",
+            description = "사용자가 작성한 편지 목록을 조회하는 API입니다." +
+                    "편지(40자) + 답장(답장이 있을 경우 40자) + 공감수(공개 편지인 경우)를 반환합니다." +
+                    "페이징을 포함합니다. query String으로 page(기본값 0)와 pageSize(기본값 6)를 주세요.")
+    public ApiResponse<List<NangmanCollectionResponseDTO.PreviewLetterAndReplyResultDTO>> getMyNangmanLetters(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "6") int pageSize) {
+        try {
+
+            String userEmail = memberService.getUserInfo().getEmail();
+
+            // 사용자가 작성한 편지 목록 조회
+            List<NangmanCollectionResponseDTO.PreviewLetterAndReplyResultDTO> userLetterList = nangmanCollectionService.getMyLetterList(
+                    userEmail, page, pageSize);
+
+            // 성공 응답 생성
+            return ApiResponse.onSuccess(userLetterList);
+        } catch (Exception e) {
+            // 에러 발생 시 실패 응답 반환
+            return ApiResponse.onFailure(HttpStatus.INTERNAL_SERVER_ERROR.toString(), e.getMessage(), null);
+        }
+    }
+
+
+    @GetMapping("/my/nangman-replies")
+    @Operation(summary = "나의 낭만모음집 내가 답장한 편지 목록 조회 API",
+            description = "사용자가 답장한 목록을 조회하는 API입니다." +
+                    "연결된 낭만 편지의 내용(40자) + 답장 내용(40자) + 공감 수(공개된 편지일 경우)를 반환합니다." +
+                    "페이징을 포함합니다. query String으로 page(기본값 0)와 pageSize(기본값 6)를 주세요.")
+    public ApiResponse<List<NangmanCollectionResponseDTO.PreviewLetterAndReplyResultDTO>> getMyNangmanReplies(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "6") int pageSize) {
+        try {
+
+            String userEmail = memberService.getUserInfo().getEmail();
+
+            // 사용자가 답장한 목록 조회
+            List<NangmanCollectionResponseDTO.PreviewLetterAndReplyResultDTO> userReplyList = nangmanCollectionService.getMyReplyList(
+                    userEmail, page, pageSize);
+
+            // 성공 응답 생성
+            return ApiResponse.onSuccess(userReplyList);
+        } catch (Exception e) {
+            return ApiResponse.onFailure(HttpStatus.INTERNAL_SERVER_ERROR.toString(), e.getMessage(), null);
+        }
+    }
 
 }

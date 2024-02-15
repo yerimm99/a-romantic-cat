@@ -1,4 +1,4 @@
-#spring:
-#  jwt:
-#    secret: ${TOKEN_SECRET}
-#
+spring:
+  jwt:
+    secret: ${TOKEN_SECRET}
+
