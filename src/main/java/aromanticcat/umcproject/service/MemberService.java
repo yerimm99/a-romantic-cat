@@ -1,7 +1,6 @@
 package aromanticcat.umcproject.service;
 
 import aromanticcat.umcproject.entity.Member;
-import aromanticcat.umcproject.security.SecurityUserDto;
 import java.util.Optional;
 
 public interface MemberService {
@@ -14,8 +13,8 @@ public interface MemberService {
 
     void isNicknameUnique(String nickname);
 
-    SecurityUserDto getUserInfo();
+    //SecurityUserDto getUserInfo();
 
-    Member updateNickname(String nickname);
+    //Member updateNickname(String nickname);
 
 }
