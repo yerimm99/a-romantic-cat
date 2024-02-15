@@ -32,15 +32,15 @@ public class MemberController {
         }
     }
 
-//    @PostMapping("/mypage/nickname")
-//    @ApiOperation(value = "닉네임 변경 API", notes = "닉네임 변경 API입니다.")
-//    public ApiResponse<MemberResponseDTO.MemberJoinResultDTO> updateNickname(@RequestBody String nickname) {
-//        try {
-//            Member user = service.updateNickname(nickname);
-//
-//            return ApiResponse.onSuccess(MemberConverter.toMemberDTO(user));
-//        } catch (Exception e) {
-//            return ApiResponse.onFailure(HttpStatus.INTERNAL_SERVER_ERROR.toString(), e.getMessage(), null);
-//        }
-//    }
+    @PostMapping("/mypage/nickname")
+    @ApiOperation(value = "닉네임 변경 API", notes = "닉네임 변경 API입니다.")
+    public ApiResponse<MemberResponseDTO.MemberJoinResultDTO> updateNickname(@RequestBody String nickname) {
+        try {
+            Member user = service.updateNickname(nickname);
+
+            return ApiResponse.onSuccess(MemberConverter.toMemberDTO(user));
+        } catch (Exception e) {
+            return ApiResponse.onFailure(HttpStatus.INTERNAL_SERVER_ERROR.toString(), e.getMessage(), null);
+        }
+    }
 }
