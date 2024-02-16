@@ -27,6 +27,8 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public Member createUser(String email, String nickname) {
+        isNicknameExist(nickname);
+        isNicknameUnique(nickname);
 
         Member newUser = Member.builder()
                 .email(email)
@@ -60,7 +62,9 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public Member updateNickname(String newNickname) {
-
+        isNicknameExist(newNickname);
+        isNicknameUnique(newNickname);
+        
         //Security context로부터 user 정보 받아옴
         Optional<Member> memberOptional = findByEmail(getUserInfo().getEmail());
         if (memberOptional.isPresent()) {
