@@ -52,7 +52,9 @@ public class SecurityConfig {
                 .failureHandler(oAuth2LoginFailureHandler) // OAuth2 로그인 실패시 처리할 핸들러를 지정해준다.
                 .successHandler(oAuth2LoginSuccessHandler) // OAuth2 로그인 성공시 처리할 핸들러를 지정해준다.
                 .and()
-                .logout().logoutSuccessUrl("/"); // 로그아웃 성공시 이동 url
+                .logout()
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/"); // 로그아웃 성공시 이동 url
 
         // JWT 인증 필터를 UsernamePasswordAuthenticationFilter 앞에 추가한다.
         return http

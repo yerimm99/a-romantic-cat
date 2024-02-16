@@ -7,17 +7,15 @@ import aromanticcat.umcproject.security.jwt.JwtUtil;
 import aromanticcat.umcproject.security.jwt.RefreshToken;
 import aromanticcat.umcproject.security.jwt.RefreshTokenService;
 import io.swagger.annotations.ApiOperation;
+import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Optional;
 
 @Slf4j
 @RestController
@@ -28,7 +26,7 @@ public class AuthController {
     private final RefreshTokenService tokenService;
     private final JwtUtil jwtUtil;
 
-    @PostMapping("token/logout")
+    @PostMapping("/logout")
     @ApiOperation(value = "로그아웃 API", notes = " 엑세스 토큰으로 현재 Redis 정보를 삭제하는 API입니다.")
     public ApiResponse<StatusResponseDto> logout(@RequestHeader("Authorization") final String accessToken) {
 
