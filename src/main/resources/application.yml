@@ -36,8 +36,8 @@ cloud:
     stack:
       auto: false
     credentials:
-      accessKey: ${S3_ACCESS}
-      secretKey: ${S3_SECRET}
+      accessKey: ${ACCESSKEY}
+      secretKey: ${SECRETKEY}
 
 spring.servlet.multipart.max-file-size: 10MB
 spring.servlet.multipart.max-request-size: 10MB
