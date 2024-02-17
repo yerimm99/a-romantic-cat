@@ -43,24 +43,27 @@ public class SecurityConfig {
                         "/nangman-collection/{nangmanLetterId}").permitAll()
                 .antMatchers("/token/**").permitAll() // 토큰 발급을 위한 경로는 모두 허용
                 .antMatchers("/css/**", "/images/**", "/js/**", "/favicon.ico", "/h2-console/**").permitAll()
-                .anyRequest().authenticated() // 그 외의 모든 요청은 인증이 필요하다.
-                .and()
-                .oauth2Login() // OAuth2 로그인 설정시작
+                .anyRequest().authenticated(); // 그 외의 모든 요청은 인증이 필요하다.
+
+        // JWT 인증 필터를 UsernamePasswordAuthenticationFilter 앞에 추가한다.
+        http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(jwtExceptionFilter, JwtAuthFilter.class);
+
+        // OAuth2 로그인 설정시작
+        http.oauth2Login()
                 .loginPage("/login")
                 .userInfoEndpoint().userService(customOAuth2UserService) // OAuth2 로그인시 사용자 정보를 가져오는 엔드포인트와 사용자 서비스를 설정
                 .and()
                 .failureHandler(oAuth2LoginFailureHandler) // OAuth2 로그인 실패시 처리할 핸들러를 지정해준다.
-                .successHandler(oAuth2LoginSuccessHandler) // OAuth2 로그인 성공시 처리할 핸들러를 지정해준다.
-                .and()
-                .logout()
-                .logoutUrl("/logout")
-                .logoutSuccessUrl("/"); // 로그아웃 성공시 이동 url
+                .successHandler(oAuth2LoginSuccessHandler); // OAuth2 로그인 성공시 처리할 핸들러를 지정해준다.
 
-        // JWT 인증 필터를 UsernamePasswordAuthenticationFilter 앞에 추가한다.
-        return http
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(jwtExceptionFilter, JwtAuthFilter.class)
-                .build();
+        // 로그아웃 설정
+        http.logout()
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/");
+
+        return http.build();
     }
+
 
 }
