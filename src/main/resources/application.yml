@@ -34,6 +34,18 @@ spring:
             redirect-uri: "https://dev.nangmancat.shop/login/oauth2/code/google"
             authorization-grant-type: authorization_code
             scope: email
+          kakao:
+            client-id: ${KAKAO_ID}
+            redirect-uri: "https://dev.nangmancat.shop/login/oauth2/code/kakao"
+            client-authentication-method: POST
+            authorization-grant-type: authorization_code
+            scope: profile_nickname, account_email
+        provider:
+          kakao:
+            authorization_uri: https://kauth.kakao.com/oauth/authorize
+            token_uri: https://kauth.kakao.com/oauth/token
+            user-info-uri: https://kapi.kakao.com/v2/user/me
+            user_name_attribute: id
   jwt:
     secret: ${TOKEN_SECRET}
 
