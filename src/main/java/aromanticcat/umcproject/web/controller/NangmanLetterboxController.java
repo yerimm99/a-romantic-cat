@@ -7,14 +7,20 @@ import aromanticcat.umcproject.service.MemberService;
 import aromanticcat.umcproject.service.nangmanLetterboxService.NangmanLetterboxService;
 import aromanticcat.umcproject.service.nangmanLetterboxService.RandomNicknameService;
 import aromanticcat.umcproject.web.dto.nangmanLetterbox.NangmanLetterBoxResponseDTO;
+import aromanticcat.umcproject.web.dto.nangmanLetterbox.NangmanLetterBoxResponseDTO.PreviewLetterResultDTO;
 import aromanticcat.umcproject.web.dto.nangmanLetterbox.NangmanLetterboxRequestDTO;
 import io.swagger.v3.oas.annotations.Operation;
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/nangman-letterbox")
@@ -38,7 +44,6 @@ public class NangmanLetterboxController {
             return ApiResponse.onFailure(HttpStatus.INTERNAL_SERVER_ERROR.toString(), e.getMessage(), null);
         }
     }
-
 
     @PostMapping("/send")
     @Operation(summary = "고민 편지 발송 API"
@@ -66,12 +71,11 @@ public class NangmanLetterboxController {
             description = "답장을 기다리는 편지 목록(본인이 쓴 편지 제외)을 조회하는 API입니다. " +
                     "각 편지 내용은 40자까지 제공합니다. " +
                     "페이징을 포함합니다. query String으로 page(기본값 0)와 pageSize(기본값 9)를 주세요.")
-    public ApiResponse<List<NangmanLetterBoxResponseDTO.PreviewLetterResultDTO>> getLetterList(
+    public ApiResponse<List<PreviewLetterResultDTO>> getLetterList(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "9") int pageSize) {
         try {
             String userEmail = memberService.getUserInfo().getEmail();
-
 
             //편지 페이지의 편지 목록 조회
             List<NangmanLetter> letterList = nangmanLetterBoxService.getLetterList(userEmail, page, pageSize);
@@ -114,7 +118,6 @@ public class NangmanLetterboxController {
                                                                                  @RequestBody NangmanLetterboxRequestDTO.SendReplyDTO request) {
         try {
             String userEmail = memberService.getUserInfo().getEmail();
-
 
             NangmanLetterBoxResponseDTO.SendReplyResultDTO replyResultDTO = nangmanLetterBoxService.sendReply(userEmail,
                     request, nangmanLetterId);

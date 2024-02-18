@@ -27,9 +27,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public Member createUser(String email, String nickname) {
-        // 닉네임 입력 체크
         isNicknameExist(nickname);
-        // 닉네임 중복 체크
         isNicknameUnique(nickname);
 
         Member newUser = Member.builder()
@@ -64,11 +62,9 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public Member updateNickname(String newNickname) {
-        // 닉네임 입력 체크
         isNicknameExist(newNickname);
-        // 닉네임 중복 체크
         isNicknameUnique(newNickname);
-
+        
         //Security context로부터 user 정보 받아옴
         Optional<Member> memberOptional = findByEmail(getUserInfo().getEmail());
         if (memberOptional.isPresent()) {
