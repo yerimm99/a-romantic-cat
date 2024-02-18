@@ -1,9 +1,7 @@
 package aromanticcat.umcproject.service.FriendService;
 
 import aromanticcat.umcproject.converter.FriendConverter;
-import aromanticcat.umcproject.entity.Friend;
-import aromanticcat.umcproject.entity.FriendStatus;
-import aromanticcat.umcproject.entity.Member;
+import aromanticcat.umcproject.entity.*;
 import aromanticcat.umcproject.repository.FriendRepository;
 import aromanticcat.umcproject.repository.MemberRepository;
 import aromanticcat.umcproject.web.dto.Friend.FriendResponseDTO;
@@ -11,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -70,33 +69,47 @@ public class FriendQueryServiceImpl implements FriendQueryService {
 
     @Override
     @Transactional
-    public List<FriendResponseDTO.FriendInfoDTO> findFriendList(String userEmail, Integer page) {
+    public List<FriendResponseDTO.FriendInfoDTO> findFriendList(String userEmail, Integer page, String sort) {
 
         Member member = getMember(userEmail);
-
-        // page는 페이지의 번호, 12는 한 페이지에 보여줄 친구의 수
-        Pageable pageable = PageRequest.of(page,12);
 
         // 친구와 친한 친구를 모두 조회하기 위함
         Set<FriendStatus> friendStatus = new HashSet<>();
         friendStatus.add(FriendStatus.APPROVED);
         friendStatus.add(FriendStatus.CLOSE_FRIEND);
 
-        Page<Friend> friendPage = friendRepository.findFriendByMemberAndFriendStatus(member, pageable, friendStatus);
+        switch (sort){
+            case "alphabetical":    // 가나다순
+                Pageable pageableByAlphabet = PageRequest.of(page, 12, Sort.by("friendName").ascending());
+                return SortFriend(pageableByAlphabet, member, friendStatus);
+            case "mailbox_id":      // 우편번호순
+                Pageable pageableByMailbox = PageRequest.of(page, 12, Sort.by("friendId").ascending());
+                return SortFriend(pageableByMailbox, member, friendStatus);
+            case "recent":      // 최근 친구 순
+                Pageable pageableByRecent = PageRequest.of(page, 12, Sort.by("createdAt").ascending())
+                return SortFriend(pageableByRecent, member, friendStatus);
+            case "long_time":   // 오랜 친구 순
+                Pageable pageableByLongTime = PageRequest.of(page, 12, Sort.by("createdAt").ascending())
+                return SortFriend(pageableByLongTime, member, friendStatus);
+            default:
+                throw new IllegalArgumentException("유효하지 않은 정렬 방식입니다: " + sort);
+        }
+    }
 
-        List<Friend> friendList = friendPage.getContent();
+    private List<FriendResponseDTO.FriendInfoDTO> SortFriend(Pageable pageable, Member member, Set<FriendStatus> friendStatus) {
 
-        List<FriendResponseDTO.FriendInfoDTO> friendInfoDTOList = friendList.stream()
+        Page<Friend> sortedFriendPage = friendRepository.findFriendByMemberAndFriendStatus(member, friendStatus, pageable);
+        List<Friend> sortedFriendList = sortedFriendPage.getContent();
+
+        return sortedFriendList.stream()
                 .map(FriendConverter::toFriendInfoDTO)
                 .collect(Collectors.toList());
-
-        return  friendInfoDTOList;
-
     }
+
 
     @Override
     @Transactional
-    public List<FriendResponseDTO.FriendInfoDTO> findCloseFriendList(String userEmail, Integer page) {
+    public List<FriendResponseDTO.FriendInfoDTO> findCloseFriendList(String userEmail, Integer page, String sort) {
 
         Member member = getMember(userEmail);
 
