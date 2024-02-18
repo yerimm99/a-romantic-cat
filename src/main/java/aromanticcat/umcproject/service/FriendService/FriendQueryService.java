@@ -10,7 +10,6 @@ import java.util.Optional;
 
 public interface FriendQueryService {
 
-
     List<Friend> getFriendReceivedList(String userEmail);
 
     List<Friend> getFriendRequestedList(String userEmail);
