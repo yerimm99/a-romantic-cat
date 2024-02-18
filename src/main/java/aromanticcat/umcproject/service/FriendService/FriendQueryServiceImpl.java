@@ -86,26 +86,15 @@ public class FriendQueryServiceImpl implements FriendQueryService {
                 Pageable pageableByMailbox = PageRequest.of(page, 12, Sort.by("friendId").ascending());
                 return SortFriend(pageableByMailbox, member, friendStatus);
             case "recent":      // 최근 친구 순
-                Pageable pageableByRecent = PageRequest.of(page, 12, Sort.by("createdAt").ascending())
+                Pageable pageableByRecent = PageRequest.of(page, 12, Sort.by("createdAt").ascending());
                 return SortFriend(pageableByRecent, member, friendStatus);
             case "long_time":   // 오랜 친구 순
-                Pageable pageableByLongTime = PageRequest.of(page, 12, Sort.by("createdAt").ascending())
+                Pageable pageableByLongTime = PageRequest.of(page, 12, Sort.by("createdAt").descending());
                 return SortFriend(pageableByLongTime, member, friendStatus);
             default:
                 throw new IllegalArgumentException("유효하지 않은 정렬 방식입니다: " + sort);
         }
     }
-
-    private List<FriendResponseDTO.FriendInfoDTO> SortFriend(Pageable pageable, Member member, Set<FriendStatus> friendStatus) {
-
-        Page<Friend> sortedFriendPage = friendRepository.findFriendByMemberAndFriendStatus(member, friendStatus, pageable);
-        List<Friend> sortedFriendList = sortedFriendPage.getContent();
-
-        return sortedFriendList.stream()
-                .map(FriendConverter::toFriendInfoDTO)
-                .collect(Collectors.toList());
-    }
-
 
     @Override
     @Transactional
@@ -113,18 +102,26 @@ public class FriendQueryServiceImpl implements FriendQueryService {
 
         Member member = getMember(userEmail);
 
-        // page는 페이지의 번호, 12는 한 페이지에 보여줄 친구의 수
-        Pageable pageable = PageRequest.of(page,12);
+        // 친한 친구를 모두 조회하기 위함
+        Set<FriendStatus> friendStatus = new HashSet<>();
+        friendStatus.add(FriendStatus.CLOSE_FRIEND);
 
-        Page<Friend> friendPage = friendRepository.findFriendByMemberAndFriendStatus(member, pageable, FriendStatus.CLOSE_FRIEND);
-
-        List<Friend> friendList = friendPage.getContent();
-
-        List<FriendResponseDTO.FriendInfoDTO> friendInfoDTOList = friendList.stream()
-                .map(FriendConverter::toFriendInfoDTO)
-                .collect(Collectors.toList());
-
-        return  friendInfoDTOList;
+        switch (sort){
+            case "alphabetical":    // 가나다순
+                Pageable pageableByAlphabet = PageRequest.of(page, 12, Sort.by("friendName").ascending());
+                return SortFriend(pageableByAlphabet, member, friendStatus);
+            case "mailbox_id":      // 우편번호순
+                Pageable pageableByMailbox = PageRequest.of(page, 12, Sort.by("friendId").ascending());
+                return SortFriend(pageableByMailbox, member, friendStatus);
+            case "recent":      // 최근 친구 순
+                Pageable pageableByRecent = PageRequest.of(page, 12, Sort.by("createdAt").ascending());
+                return SortFriend(pageableByRecent, member, friendStatus);
+            case "long_time":   // 오랜 친구 순
+                Pageable pageableByLongTime = PageRequest.of(page, 12, Sort.by("createdAt").descending());
+                return SortFriend(pageableByLongTime, member, friendStatus);
+            default:
+                throw new IllegalArgumentException("유효하지 않은 정렬 방식입니다: " + sort);
+        }
 
     }
 
@@ -155,6 +152,16 @@ public class FriendQueryServiceImpl implements FriendQueryService {
                 .collect(Collectors.toList());
 
         return  friendInfoDTOList;
+    }
+
+    private List<FriendResponseDTO.FriendInfoDTO> SortFriend(Pageable pageable, Member member, Set<FriendStatus> friendStatus) {
+
+        Page<Friend> sortedFriendPage = friendRepository.findFriendByMemberAndFriendStatus(member, friendStatus, pageable);
+        List<Friend> sortedFriendList = sortedFriendPage.getContent();
+
+        return sortedFriendList.stream()
+                .map(FriendConverter::toFriendInfoDTO)
+                .collect(Collectors.toList());
     }
 
 }

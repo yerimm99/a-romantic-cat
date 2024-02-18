@@ -40,7 +40,9 @@ public class SecurityConfig {
                 .antMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-resources/**").permitAll()
                 .antMatchers("/", "/login", "/signUp", "/nangman-collection/",
                         "/nangman-collection/{nangmanLetterId}/like",
-                        "/nangman-collection/{nangmanLetterId}").permitAll()
+                        "/nangman-collection/{nangmanLetterId}",
+                        "/address-book/,", "/address-book/close-friends",
+                        "/store/letter-papers").permitAll()
                 .antMatchers("/token/**").permitAll() // 토큰 발급을 위한 경로는 모두 허용
                 .antMatchers("/css/**", "/images/**", "/js/**", "/favicon.ico", "/h2-console/**").permitAll()
                 .anyRequest().authenticated() // 그 외의 모든 요청은 인증이 필요하다.
