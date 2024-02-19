@@ -9,8 +9,11 @@ import aromanticcat.umcproject.repository.MemberMissionRepository;
 import aromanticcat.umcproject.repository.MemberRepository;
 import aromanticcat.umcproject.repository.MissionRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -49,6 +52,24 @@ public class MissionCommandServiceImpl implements MissionCommandService{
             if (memberMission.getStepsCompleted() == mission.getSteps()) {    // 미션의 모든 스텝 완료 시
                 memberMission.setMissionStatus(MissionStatus.COMPLETED);
                 member.addCoin(mission.getCoin());
+            }
+        }
+    }
+
+    @Override
+    @Transactional
+    @Scheduled(cron = "0 0 0 * * *") // 매일 자정에 실행되도록 설정
+    public void resetDailyMissions() {
+
+        List<MemberMission> memberMissions = memberMissionRepository.findAll();
+
+        for (MemberMission memberMission : memberMissions) {
+            Mission mission = memberMission.getMission();
+            if (mission.isEveryday()) {
+                memberMission.resetStep();
+                memberMission.setMissionStatus(MissionStatus.NOT_STARTED);
+                // MemberMission 엔티티를 저장하여 변경 사항을 데이터베이스에 반영
+                memberMissionRepository.save(memberMission);
             }
         }
     }

@@ -253,4 +253,24 @@ public class FriendController {
         }
     }
 
+    @PostMapping("/close-friend/delete")
+    @ApiOperation(value = "친한 친구 해제 API", notes = "query String으로 친한 친구를 해제하려는 친구 아이디를 알려주세요.")
+    @Parameters({
+            @Parameter(name = "friend_id", description = "친한 친구를 해제하려는 친구의 아이디, query string입니다!")
+    })
+    public ApiResponse<String> deleteCloseFriend(@RequestParam(value = "friend_id") Long friendId) {
+        try {
+            String userEmail = memberService.getUserInfo().getEmail();
+
+            // 친한 친구 해제하기
+            friendCommandService.deleteCloseFriend(userEmail, friendId);
+
+            // 성공 응답 생성
+            return ApiResponse.onSuccess("친한 친구를 해제하는데 성공했습니다.");
+
+        } catch (Exception e) {
+            return ApiResponse.onFailure(HttpStatus.INTERNAL_SERVER_ERROR.toString(), e.getMessage(), null);
+        }
+    }
+
 }

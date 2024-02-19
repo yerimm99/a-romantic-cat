@@ -19,7 +19,7 @@ public class MemberMission extends BaseEntity {
 
     @Setter
     @Enumerated(EnumType.STRING)
-    private MissionStatus missionStatus;    // 미션 완료 여부
+    private MissionStatus missionStatus = MissionStatus.NOT_STARTED;    // 미션 완료 여부
 
     @JoinColumn(name = "member_id")
     @ManyToOne(fetch = FetchType.LAZY)
@@ -32,5 +32,7 @@ public class MemberMission extends BaseEntity {
     public void completeStep(){
         stepsCompleted += 1;
     }
+
+    public void resetStep(){ stepsCompleted = 0; }
 
 }
