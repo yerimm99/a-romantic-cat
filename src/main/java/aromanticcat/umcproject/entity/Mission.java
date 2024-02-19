@@ -23,6 +23,8 @@ public class Mission extends BaseEntity {
 
     private Integer coin;       // 미션 성공 시 보상으로 받을 코인 수
 
+    private boolean everyday;
+
     @OneToMany(mappedBy = "mission", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<MemberMission> memberMissions = new ArrayList<>();
 }
