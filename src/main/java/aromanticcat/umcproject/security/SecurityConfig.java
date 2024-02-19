@@ -38,7 +38,7 @@ public class SecurityConfig {
                 .and()
                 .authorizeRequests() // 요청에 대한 인증 설정
                 .antMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-resources/**").permitAll()
-                .antMatchers("/", "/login", "/Signup/**", "/nangman-collection/",
+                .antMatchers("/", "/login", "/signUp/**", "/nangman-collection/",
                         "/nangman-collection/{nangmanLetterId}/like",
                         "/nangman-collection/{nangmanLetterId}").permitAll()
                 .antMatchers("/token/**").permitAll() // 토큰 발급을 위한 경로는 모두 허용
