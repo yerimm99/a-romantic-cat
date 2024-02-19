@@ -91,4 +91,16 @@ public class FriendCommandServiceImpl implements FriendCommandService {
         friend.changeFriendStatus(FriendStatus.CLOSE_FRIEND);
 
     }
+
+    @Override
+    @Transactional
+    public void deleteCloseFriend(String userEmail, Long friendId) {
+
+        Member member = getMember(userEmail);
+
+        Friend friend = friendRepository.findByMemberAndFriendId(member, friendId);
+
+        friend.changeFriendStatus(FriendStatus.APPROVED);
+
+    }
 }

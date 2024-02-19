@@ -12,4 +12,6 @@ public interface FriendCommandService {
     void rejectFriendship(String userEmail, Long friendId);
 
     void setCloseFriend(String userEmail, Long friendId);
+
+    void deleteCloseFriend(String userEmail, Long friendId);
 }

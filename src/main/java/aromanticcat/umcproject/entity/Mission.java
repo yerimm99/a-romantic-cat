@@ -5,10 +5,13 @@ import java.util.List;
 import javax.persistence.*;
 
 import io.swagger.models.auth.In;
-import lombok.Getter;
+import lombok.*;
 
 @Entity
 @Getter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Mission extends BaseEntity {
 
     @Id
