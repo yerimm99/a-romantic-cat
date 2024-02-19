@@ -49,7 +49,7 @@ public class MyAuthenticationSuccessHandler extends SimpleUrlAuthenticationSucce
 
             // accessToken을 쿼리스트링에 담는 url을 만들어준다.
             String targetUrl = UriComponentsBuilder.fromUriString("https://dev.nangmancat.shop/")
-                    //.queryParam("accessToken", token.getAccessToken())
+                    .queryParam("accessToken", token.getAccessToken())
                     .build()
                     .encode(StandardCharsets.UTF_8)
                     .toUriString();
