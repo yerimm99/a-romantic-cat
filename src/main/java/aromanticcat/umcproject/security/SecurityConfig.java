@@ -38,15 +38,14 @@ public class SecurityConfig {
                 .and()
                 .authorizeRequests() // 요청에 대한 인증 설정
                 .antMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-resources/**").permitAll()
-                .antMatchers("/", "/login/**", "/signUp", "/nangman-collection/",
+                .antMatchers("/", "/login", "/signUp", "/nangman-collection/",
                         "/nangman-collection/{nangmanLetterId}/like",
                         "/nangman-collection/{nangmanLetterId}").permitAll()
-                .antMatchers("/token/**", "/oauth2/**").permitAll() // 토큰 발급을 위한 경로는 모두 허용
+                .antMatchers("/token/**").permitAll() // 토큰 발급을 위한 경로는 모두 허용
                 .antMatchers("/css/**", "/images/**", "/js/**", "/favicon.ico", "/h2-console/**").permitAll()
                 .anyRequest().authenticated() // 그 외의 모든 요청은 인증이 필요하다.
                 .and()
                 .oauth2Login() // OAuth2 로그인 설정시작
-                .loginPage("https://dev.nangmancat.shop/login")
                 .userInfoEndpoint().userService(customOAuth2UserService) // OAuth2 로그인시 사용자 정보를 가져오는 엔드포인트와 사용자 서비스를 설정
                 .and()
                 .failureHandler(oAuth2LoginFailureHandler) // OAuth2 로그인 실패시 처리할 핸들러를 지정해준다.
