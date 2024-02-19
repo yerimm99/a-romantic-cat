@@ -3,12 +3,15 @@ package aromanticcat.umcproject.web.controller;
 
 import aromanticcat.umcproject.apiPayload.ApiResponse;
 import aromanticcat.umcproject.converter.FriendConverter;
+import aromanticcat.umcproject.converter.MemberConverter;
 import aromanticcat.umcproject.entity.Friend;
+import aromanticcat.umcproject.entity.Member;
 import aromanticcat.umcproject.service.FriendService.FriendCommandService;
 import aromanticcat.umcproject.service.FriendService.FriendQueryService;
 import aromanticcat.umcproject.service.MemberService;
 import aromanticcat.umcproject.web.dto.Friend.FriendResponseDTO;
 import aromanticcat.umcproject.web.dto.Friend.FriendResponseDTO.WaitingFriendDTO;
+import aromanticcat.umcproject.web.dto.Member.MemberRequestDTO;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
@@ -76,11 +79,11 @@ public class FriendController {
     }
 
     @GetMapping("/search/friend")
-    @ApiOperation(value = "친구 이름 또는 친구 아이디(우편번호)를 통한 검색 API", notes = "query String으로 친구 정보를 주세요.")
+    @ApiOperation(value = "주소록에서 친구 이름 또는 친구 아이디(우편번호)를 통한 친구 검색 API", notes = "query String으로 친구 정보를 주세요.")
     @Parameters({
             @Parameter(name = "friend_info", description = "검색하고자 하는 친구 정보(닉네임 혹은 아이디), query string입니다!")
     })
-    public ApiResponse<List<FriendResponseDTO.FriendInfoDTO>> getFriendbyName(
+    public ApiResponse<List<FriendResponseDTO.FriendInfoDTO>> getFriendbyInfo(
             @RequestParam(value = "friend_info") String friendInfo) {
         try {
             String userEmail = memberService.getUserInfo().getEmail();
@@ -97,6 +100,28 @@ public class FriendController {
 
             // 성공 응답 생성
             return ApiResponse.onSuccess(friendInfoDTOList);
+
+        } catch (Exception e) {
+            return ApiResponse.onFailure(HttpStatus.INTERNAL_SERVER_ERROR.toString(), e.getMessage(), null);
+        }
+    }
+
+    @GetMapping("/search/member")
+    @ApiOperation(value = "친구 추가에서 사용자 아이디(우편번호)를 통한 사용자 검색 API", notes = "query String으로 사용자 정보를 주세요. (예시: #11)")
+    @Parameters({
+            @Parameter(name = "member_info", description = "검색하고자 하는 멤버 정보(아이디), query string입니다!")
+    })
+    public ApiResponse<MemberRequestDTO.searchMemberDTO> getMemberbyId(@RequestParam(value = "member_info") String memberInfo) {
+        try {
+
+            String memberIdString = memberInfo.substring(1);
+            Long memberId = Long.parseLong(memberIdString);     // 친구 추가하려는 사용자 아이디
+            Member member = memberService.findByMemberId(memberId);
+
+            MemberRequestDTO.searchMemberDTO memberDTO = MemberConverter.toSearchMemberDTO(member);
+
+            // 성공 응답 생성
+            return ApiResponse.onSuccess(memberDTO);
 
         } catch (Exception e) {
             return ApiResponse.onFailure(HttpStatus.INTERNAL_SERVER_ERROR.toString(), e.getMessage(), null);

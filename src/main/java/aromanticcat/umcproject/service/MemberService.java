@@ -2,6 +2,8 @@ package aromanticcat.umcproject.service;
 
 import aromanticcat.umcproject.entity.Member;
 import aromanticcat.umcproject.security.SecurityUserDto;
+import aromanticcat.umcproject.web.dto.Member.MemberRequestDTO;
+
 import java.util.Optional;
 
 public interface MemberService {
@@ -18,4 +20,5 @@ public interface MemberService {
 
     Member updateNickname(String nickname);
 
+    Member findByMemberId(Long memberId);
 }
