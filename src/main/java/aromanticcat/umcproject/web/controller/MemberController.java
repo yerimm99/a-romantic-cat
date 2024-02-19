@@ -19,7 +19,7 @@ public class MemberController {
 
     private final MemberService service;
 
-    @PostMapping("/signUp")
+    @PostMapping("/Signup")
     @ApiOperation(value = "회원가입 API", notes = "회원가입 API입니다.")
     public ApiResponse<MemberResponseDTO.MemberJoinResultDTO> signup(@RequestBody String nickname,
                                                                      @RequestParam String email) {
