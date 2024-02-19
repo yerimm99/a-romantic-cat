@@ -18,6 +18,7 @@ public class MissionResponseDTO {
         Long missionId;        // 미션 아이디
         String name;    // 미션 이름
         Integer steps;      // 미션의 총 단계 수
+        boolean everyday;
         Integer stepsCompleted;     // 한 미션에서 사용자가 완료한 미션의 수
         MissionStatus missionStatus;    // 미션 완료 여부
 

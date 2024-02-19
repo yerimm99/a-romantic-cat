@@ -24,6 +24,7 @@ public class MissionConverter {
                 .missionId(mission.getId())
                 .name(mission.getName())
                 .steps(mission.getSteps())
+                .everyday(mission.isEveryday())
                 .stepsCompleted(currentStepsCompleted)
                 .missionStatus(currentMissionStatus)
                 .build();
