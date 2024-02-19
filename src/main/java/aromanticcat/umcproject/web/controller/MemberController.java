@@ -4,7 +4,7 @@ import aromanticcat.umcproject.apiPayload.ApiResponse;
 import aromanticcat.umcproject.converter.MemberConverter;
 import aromanticcat.umcproject.entity.Member;
 import aromanticcat.umcproject.service.MemberService;
-import aromanticcat.umcproject.web.dto.MemberResponseDTO;
+import aromanticcat.umcproject.web.dto.Member.MemberResponseDTO;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

@@ -78,4 +78,10 @@ public class MemberServiceImpl implements MemberService {
             throw new MemberHandler(ErrorStatus.MEMBER_NOT_FOUND);
         }
     }
+
+    @Override
+    public Member findByMemberId(Long memberId) {
+        Member member = repository.findById(memberId).orElse(null);
+        return member;
+    }
 }
