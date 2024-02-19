@@ -53,6 +53,7 @@ public class SlowLetterController {
     }
 
     @GetMapping("/{memberId}/{month}")
+    @ApiOperation(value = "느린 우편함 작성일 조회")
     public ApiResponse<List<SlowLetterCalResponse>> findDataByMonthAndMemberId(@PathVariable Long memberId, @PathVariable int month) {
         List<SlowLetterCalResponse> days = slowLetterService.getWriteSlowLetters(memberId, month);
         try {
