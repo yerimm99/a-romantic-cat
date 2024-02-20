@@ -12,6 +12,7 @@ import aromanticcat.umcproject.service.MemberService;
 import aromanticcat.umcproject.web.dto.Friend.FriendResponseDTO;
 import aromanticcat.umcproject.web.dto.Friend.FriendResponseDTO.WaitingFriendDTO;
 import aromanticcat.umcproject.web.dto.Member.MemberRequestDTO;
+import aromanticcat.umcproject.web.dto.Member.MemberResponseDTO;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
