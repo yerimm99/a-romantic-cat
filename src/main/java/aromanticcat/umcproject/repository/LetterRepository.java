@@ -14,4 +14,6 @@ public interface LetterRepository extends JpaRepository<Letter, Long> {
     Optional<Letter> findByLetterId(Long id);
 
     Optional<List<Letter>> findLettersByLetterboxAndCreatedAtBefore(Letterbox letterbox, LocalDateTime now);
+
+    Optional<List<Letter>> findLettersByLetterboxAndCreatedAtBeforeAndOpen(Letterbox letterbox, LocalDateTime now, Boolean open);
 }
