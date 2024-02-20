@@ -24,5 +24,4 @@ public interface MemberService {
 
     Member findByMemberId(Long memberId);
 
-    List<MemberResponseDTO.MemberInfoDTO> findMemberList(String userEmail);
 }
