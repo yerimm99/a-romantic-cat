@@ -57,6 +57,17 @@ public class LetterboxController {
         }
     }
 
+    @GetMapping("/{letterboxId}/list/open")
+    @ApiOperation(value = "우편함 open 편지 조회")
+    public ApiResponse<List<LetterResponse>> getOpenLetters(@PathVariable Long letterboxId) {
+        List<LetterResponse> letters = letterboxService.getOpenLetters(letterboxId);
+        try {
+            return ApiResponse.onSuccess(letters);
+        } catch (Exception e){
+            return ApiResponse.onFailure(HttpStatus.INTERNAL_SERVER_ERROR.toString(), e.getMessage(), null);
+        }
+    }
+
     @GetMapping("/{memberId}/open")
     @ApiOperation(value = "유저 open 우편함 조회")
     public ApiResponse<LetterboxResponse> getMemberLetterbox(@PathVariable Long memberId) {

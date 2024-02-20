@@ -95,6 +95,17 @@ public class LetterboxService {
         return responses;
     }
 
+    public List<LetterResponse> getOpenLetters(Long letterboxId) {
+        Letterbox letterbox = letterboxRepository.findById(letterboxId).orElse(null);
+        LocalDateTime date = LocalDateTime.now().minusHours(24);
+        List<Letter> letters = letterRepository.findLettersByLetterboxAndCreatedAtBeforeAndOpen(letterbox, date, true).orElse(null);
+        List<LetterResponse> responses = new ArrayList<>();
+        for (Letter letter : letters) {
+            responses.add(letter.toResponse(letter));
+        }
+        return responses;
+    }
+
     public List<LetterboxResponse> getExpiredLetterbox(Long memberId) {
         LocalDateTime currentTime = LocalDateTime.now();
         List<Letterbox> letterboxes = letterboxRepository.findByMemberIdAndEndDtBefore(memberId, currentTime).orElse(null);
