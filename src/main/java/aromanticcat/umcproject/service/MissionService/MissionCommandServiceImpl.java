@@ -56,22 +56,22 @@ public class MissionCommandServiceImpl implements MissionCommandService{
         }
     }
 
-//    @Override
-//    @Transactional
-//    @Scheduled(cron = "0 0 0 * * *") // 매일 자정에 실행되도록 설정
-//    public void resetDailyMissions() {
-//
-//        List<MemberMission> memberMissions = memberMissionRepository.findAll();
-//
-//        for (MemberMission memberMission : memberMissions) {
-//            Mission mission = memberMission.getMission();
-//            if (mission.isEveryday()) {
-//                memberMission.resetStep();
-//                memberMission.setMissionStatus(MissionStatus.NOT_STARTED);
-//                // MemberMission 엔티티를 저장하여 변경 사항을 데이터베이스에 반영
-//                memberMissionRepository.save(memberMission);
-//            }
-//        }
-//    }
+    @Override
+    @Transactional
+    @Scheduled(cron = "0 0 0 * * *") // 매일 자정에 실행되도록 설정
+    public void resetDailyMissions() {
+
+        List<MemberMission> memberMissions = memberMissionRepository.findAll();
+
+        for (MemberMission memberMission : memberMissions) {
+            Mission mission = memberMission.getMission();
+            if (mission.isEveryday()) {
+                memberMission.resetStep();
+                memberMission.setMissionStatus(MissionStatus.NOT_STARTED);
+                // MemberMission 엔티티를 저장하여 변경 사항을 데이터베이스에 반영
+                memberMissionRepository.save(memberMission);
+            }
+        }
+    }
 
 }

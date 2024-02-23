@@ -1,5 +1,6 @@
 package aromanticcat.umcproject.converter;
 
+import aromanticcat.umcproject.entity.FriendStatus;
 import aromanticcat.umcproject.entity.Member;
 import aromanticcat.umcproject.web.dto.Member.MemberRequestDTO;
 import aromanticcat.umcproject.web.dto.Member.MemberResponseDTO;
@@ -24,6 +25,7 @@ public class MemberConverter {
         return MemberRequestDTO.searchMemberDTO.builder()
                 .memberId(member.getId())
                 .nickname(member.getNickname())
+                .friendStatus(FriendStatus.NOT_FRIEND)
                 .build();
     }
 }

@@ -82,7 +82,9 @@ public class NangmanCollectionController {
             @RequestParam(defaultValue = "6") int pageSize) {
         try {
 
-            String userEmail = memberService.getUserInfo().getEmail();
+//            String userEmail = memberService.getUserInfo().getEmail();
+            String userEmail = "testFront@gmail.com";   // 로그인 구현 전 임시 이메일
+
 
             // 사용자가 작성한 편지 목록 조회
             Page<NangmanCollectionResponseDTO.PreviewLetterAndReplyResultDTO> userLetterPage = nangmanCollectionService.getMyLetterPage(
@@ -107,7 +109,8 @@ public class NangmanCollectionController {
             @RequestParam(defaultValue = "6") int pageSize) {
         try {
 
-            String userEmail = memberService.getUserInfo().getEmail();
+//            String userEmail = memberService.getUserInfo().getEmail();
+            String userEmail = "testFront@gmail.com";   // 로그인 구현 전 임시 이메일
 
             // 사용자가 답장한 목록 조회
             Page<NangmanCollectionResponseDTO.PreviewLetterAndReplyResultDTO> userReplyPage = nangmanCollectionService.getMyReplyPage(

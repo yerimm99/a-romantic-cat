@@ -51,4 +51,6 @@ public class Friend extends BaseEntity {
         this.exchange_num++;
         return exchange_num;
     }
+
+    public void changeIsFrom(Boolean isFrom){ this.isFrom = isFrom; }
 }

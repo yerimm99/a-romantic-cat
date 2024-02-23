@@ -44,7 +44,8 @@ public class NangmanLetterboxController {
     public ApiResponse<NangmanLetterBoxResponseDTO.SendLetterResultDTO> sendLetter(
             @RequestBody NangmanLetterboxRequestDTO.SendLetterDTO request) {
         try {
-            String userEmail = memberService.getUserInfo().getEmail();
+//            String userEmail = memberService.getUserInfo().getEmail();
+            String userEmail = "testFront@gmail.com";   // 로그인 구현 전 임시 이메일
 
             //편지 작성 및 발송
             NangmanLetter nangmanLetter = nangmanLetterBoxService.sendLetter(userEmail, request);
@@ -68,7 +69,8 @@ public class NangmanLetterboxController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "9") int pageSize) {
         try {
-            String userEmail = memberService.getUserInfo().getEmail();
+//            String userEmail = memberService.getUserInfo().getEmail();
+            String userEmail = "testFront@gmail.com";   // 로그인 구현 전 임시 이메일
 
             //편지 페이지의 편지 목록 조회
             Page<NangmanLetter> letterList = nangmanLetterBoxService.getLetterPage(userEmail, page, pageSize);
@@ -108,7 +110,8 @@ public class NangmanLetterboxController {
     public ApiResponse<NangmanLetterBoxResponseDTO.SendReplyResultDTO> sendReply(@PathVariable Long nangmanLetterId,
                                                                                  @RequestBody NangmanLetterboxRequestDTO.SendReplyDTO request) {
         try {
-            String userEmail = memberService.getUserInfo().getEmail();
+//            String userEmail = memberService.getUserInfo().getEmail();
+            String userEmail = "testFront@gmail.com";   // 로그인 구현 전 임시 이메일
 
             NangmanLetterBoxResponseDTO.SendReplyResultDTO replyResultDTO = nangmanLetterBoxService.sendReply(userEmail,
                     request, nangmanLetterId);

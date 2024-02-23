@@ -23,7 +23,8 @@ public class StoreController {
     @ApiOperation(value = "사용자 코인 조회 API")
     public ApiResponse<Integer> getUserCoin(){
         try {
-            String userEmail = memberService.getUserInfo().getEmail();
+//            String userEmail = memberService.getUserInfo().getEmail();
+            String userEmail = "testFront@gmail.com";   // 로그인 구현 전 임시 이메일
 
             Integer userCoin = storeService.findUserCoin(userEmail);
 
@@ -43,7 +44,8 @@ public class StoreController {
             @RequestParam(defaultValue = "16") int pageSize,
             @RequestParam(defaultValue = "latest") String sort) {
         try {
-            String userEmail = memberService.getUserInfo().getEmail();
+//            String userEmail = memberService.getUserInfo().getEmail();
+            String userEmail = "testFront@gmail.com";   // 로그인 구현 전 임시 이메일
 
             Page<StoreResponseDTO.LetterPaperResultDTO> letterPaperPage = storeService.findLetterPaperList(userEmail, page, pageSize, sort);
 
@@ -64,7 +66,8 @@ public class StoreController {
             @RequestParam(defaultValue = "15") int pageSize,
             @RequestParam(defaultValue = "latest") String sort) {
         try {
-            String userEmail = memberService.getUserInfo().getEmail();
+//            String userEmail = memberService.getUserInfo().getEmail();
+            String userEmail = "testFront@gmail.com";   // 로그인 구현 전 임시 이메일
 
             Page<StoreResponseDTO.StampResultDTO> stampPage = storeService.findStampList(userEmail, page, pageSize, sort);
 
@@ -78,7 +81,8 @@ public class StoreController {
     @ApiOperation(value = "편지지 구매 API")
     public ApiResponse<String> purchasedLetterPaper(@PathVariable Long letterPaperId) {
         try {
-            String userEmail = memberService.getUserInfo().getEmail();
+//            String userEmail = memberService.getUserInfo().getEmail();
+            String userEmail = "testFront@gmail.com";   // 로그인 구현 전 임시 이메일
 
             storeService.purchasedLetterPaper(userEmail, letterPaperId);
 
@@ -94,7 +98,8 @@ public class StoreController {
     @ApiOperation(value = "우표 구매 API")
     public ApiResponse<String> purchasedStamp(@PathVariable Long stampId) {
         try {
-            String userEmail = memberService.getUserInfo().getEmail();
+//            String userEmail = memberService.getUserInfo().getEmail();
+            String userEmail = "testFront@gmail.com";   // 로그인 구현 전 임시 이메일
 
             storeService.purchasedStamp(userEmail, stampId);
 

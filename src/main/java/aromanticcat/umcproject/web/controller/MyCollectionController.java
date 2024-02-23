@@ -31,7 +31,8 @@ public class MyCollectionController {
             @RequestParam(defaultValue = "12") int pageSize,
             @RequestParam(defaultValue = "false") boolean onlyMyDesign) {
         try {
-            String userEmail = memberService.getUserInfo().getEmail();
+//            String userEmail = memberService.getUserInfo().getEmail();
+            String userEmail = "testFront@gmail.com";   // 로그인 구현 전 임시 이메일
 
             Page<MyCollectionResponseDTO.AcquiredLetterPaperResultDTO> letterPaperPage = myCollectionService.findLetterPaperList(
                     userEmail, page, pageSize, onlyMyDesign);
@@ -51,7 +52,8 @@ public class MyCollectionController {
             @RequestParam(defaultValue = "12") int pageSize,
             @RequestParam(defaultValue = "false") boolean onlyMyDesign) {
         try {
-            String userEmail = memberService.getUserInfo().getEmail();
+//            String userEmail = memberService.getUserInfo().getEmail();
+            String userEmail = "testFront@gmail.com";   // 로그인 구현 전 임시 이메일
 
             Page<MyCollectionResponseDTO.AcquiredStampResultDTO> stampPage = myCollectionService.findStampList(
                     userEmail, page, pageSize, onlyMyDesign);
