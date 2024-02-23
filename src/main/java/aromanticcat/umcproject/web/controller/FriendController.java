@@ -42,7 +42,8 @@ public class FriendController {
             @RequestParam(value = "page", defaultValue = "0") Integer page,
             @RequestParam(defaultValue = "alphabetical") String sort) {
         try {
-            String userEmail = memberService.getUserInfo().getEmail();
+//            String userEmail = memberService.getUserInfo().getEmail();
+            String userEmail = "testFront@gmail.com";
 
             // 요청 받은 페이지의 친구 수를 가져옴
             List<FriendResponseDTO.FriendInfoDTO> friendDTOList = friendQueryService.findFriendList(userEmail, page, sort);
@@ -66,7 +67,8 @@ public class FriendController {
             @RequestParam(defaultValue = "alphabetical") String sort) {
 
         try {
-            String userEmail = memberService.getUserInfo().getEmail();
+//            String userEmail = memberService.getUserInfo().getEmail();
+            String userEmail = "testFront@gmail.com";   // 테스트용
 
             // 요청 받은 페이지의 친구 수를 가져옴
             List<FriendResponseDTO.FriendInfoDTO> friendDTOList = friendQueryService.findCloseFriendList(userEmail, page, sort);
@@ -87,7 +89,8 @@ public class FriendController {
     public ApiResponse<List<FriendResponseDTO.FriendInfoDTO>> getFriendbyInfo(
             @RequestParam(value = "friend_info") String friendInfo) {
         try {
-            String userEmail = memberService.getUserInfo().getEmail();
+//            String userEmail = memberService.getUserInfo().getEmail();
+            String userEmail = "testFront@gmail.com";
 
             List<FriendResponseDTO.FriendInfoDTO> friendInfoDTOList;  // 검색하고자 하는 친구 정보와 관련된 DTO 선언
 
@@ -114,10 +117,12 @@ public class FriendController {
     })
     public ApiResponse<MemberRequestDTO.searchMemberDTO> getMemberbyId(@RequestParam(value = "member_info") String memberInfo) {
         try {
+//            String userEmail = memberService.getUserInfo().getEmail();
+            String userEmail = "testFront@gmail.com";
 
             String memberIdString = memberInfo.substring(1);
-            Long memberId = Long.parseLong(memberIdString);     // 친구 추가하려는 사용자 아이디
-            Member member = memberService.findByMemberId(memberId);
+            Long findMemberId = Long.parseLong(memberIdString);     // 친구 추가하려는 사용자 아이디
+            Member member = memberService.findByMemberId(findMemberId, userEmail);
 
             MemberRequestDTO.searchMemberDTO memberDTO = MemberConverter.toSearchMemberDTO(member);
 
@@ -136,7 +141,8 @@ public class FriendController {
     })
     public ApiResponse<String> sendFriendRequest(@RequestParam(value = "to_member_Id") Long toMemberId) {
         try {
-            String userEmail = memberService.getUserInfo().getEmail();
+//            String userEmail = memberService.getUserInfo().getEmail();
+            String userEmail = "testFront@gmail.com";
 
             // 친구 요청 보낸기
             friendCommandService.requestFriendship(userEmail, toMemberId);
@@ -153,7 +159,8 @@ public class FriendController {
     @ApiOperation(value = "사용자가 친구 추가 받은 요청 조회 API")
     public ApiResponse<List<FriendResponseDTO.WaitingFriendDTO>> getReceivedFriendList() {
         try {
-            String userEmail = memberService.getUserInfo().getEmail();
+//            String userEmail = memberService.getUserInfo().getEmail();
+            String userEmail = "testFront@gmail.com";
 
             // 친구 요청을 보낸 사용자들의 목록 조회
             List<Friend> friendList = friendQueryService.getFriendReceivedList(userEmail);
@@ -176,7 +183,8 @@ public class FriendController {
 
     public ApiResponse<List<FriendResponseDTO.WaitingFriendDTO>> getRequestedFriendList() {
         try {
-            String userEmail = memberService.getUserInfo().getEmail();
+//            String userEmail = memberService.getUserInfo().getEmail();
+            String userEmail = "testFront@gmail.com";
 
             // 친구 요청을 보낸 사용자들의 목록 조회
             List<Friend> friendList = friendQueryService.getFriendRequestedList(userEmail);
@@ -201,7 +209,8 @@ public class FriendController {
     })
     public ApiResponse<String> approveFriendRequest(@RequestParam(value = "friend_id") Long friendId) {
         try {
-            String userEmail = memberService.getUserInfo().getEmail();
+//            String userEmail = memberService.getUserInfo().getEmail();
+            String userEmail = "testFront@gmail.com";
 
             // 친구 요청 수락하기
             friendCommandService.approveFriendship(userEmail, friendId);
@@ -221,7 +230,8 @@ public class FriendController {
     })
     public ApiResponse<String> rejectFriendRequest(@RequestParam(value = "friend_id") Long friendId) {
         try {
-            String userEmail = memberService.getUserInfo().getEmail();
+//            String userEmail = memberService.getUserInfo().getEmail();
+            String userEmail = "testFront@gmail.com";
 
             // 친구 요청 거절하기
             friendCommandService.rejectFriendship(userEmail, friendId);
@@ -241,7 +251,8 @@ public class FriendController {
     })
     public ApiResponse<String> registerCloseFriend(@RequestParam(value = "friend_id") Long friendId) {
         try {
-            String userEmail = memberService.getUserInfo().getEmail();
+//            String userEmail = memberService.getUserInfo().getEmail();
+            String userEmail = "testFront@gmail.com";
 
             // 친한 친구로 등록하기
             friendCommandService.setCloseFriend(userEmail, friendId);
@@ -261,7 +272,8 @@ public class FriendController {
     })
     public ApiResponse<String> deleteCloseFriend(@RequestParam(value = "friend_id") Long friendId) {
         try {
-            String userEmail = memberService.getUserInfo().getEmail();
+//            String userEmail = memberService.getUserInfo().getEmail();
+            String userEmail = "testFront@gmail.com";
 
             // 친한 친구 해제하기
             friendCommandService.deleteCloseFriend(userEmail, friendId);

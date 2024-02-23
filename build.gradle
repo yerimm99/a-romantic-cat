@@ -36,19 +36,19 @@ dependencies {
     // model mapper
     implementation 'org.modelmapper:modelmapper:3.1.0'
 
-    // security
-    implementation 'org.springframework.boot:spring-boot-starter-security'
-
-    // jwt
-    implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.2'
-    runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.2'
-    runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.2'
-
-    // Oauth2
-    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
-
-    // Redis
-    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+//     security
+//    implementation 'org.springframework.boot:spring-boot-starter-security'
+//
+//    // jwt
+//    implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.2'
+//    runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.2'
+//    runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.2'
+//
+//    // Oauth2
+//    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+//
+//    // Redis
+//    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
     //s3
     implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'

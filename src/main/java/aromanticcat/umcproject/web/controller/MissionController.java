@@ -29,7 +29,8 @@ public class MissionController {
     @Operation(summary = "미션 목록 조회 API", description = "모든 미션을 조회합니다.")
     public ApiResponse<List<MissionInfoDTO>> getAllMissions() {
         try {
-            String userEmail = memberService.getUserInfo().getEmail();
+//            String userEmail = memberService.getUserInfo().getEmail();
+            String userEmail = "testFront@gmail.com";
 
             // 모든 미션 가져오기
             List<MissionResponseDTO.MissionInfoDTO> MissionList = missionQueryService.findMissionList(userEmail);
@@ -61,7 +62,8 @@ public class MissionController {
     @Operation(summary = "미션 한 단계 완료 API", description = "특정 미션의 한 스텝이 완료된 것을 적용합니다. 미션의 모든 단계가 완료 되었으면 보상으로 코인이 주어집니다.")
     public ApiResponse<String> MissionStepCompleted(@PathVariable Long missionId) {
         try {
-            String userEmail = memberService.getUserInfo().getEmail();
+//            String userEmail = memberService.getUserInfo().getEmail();
+            String userEmail = "testFront@gmail.com";
 
             missionCommandService.stepCompleted(userEmail, missionId);
 

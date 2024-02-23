@@ -1,6 +1,6 @@
 package aromanticcat.umcproject.entity;
 
-import aromanticcat.umcproject.security.Role;
+//import aromanticcat.umcproject.security.Role;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -39,8 +39,8 @@ public class Member extends BaseEntity {
 
     private int coin;
 
-    @Enumerated(EnumType.STRING)
-    private Role userRole;
+//    @Enumerated(EnumType.STRING)
+//    private Role userRole;
 
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<MemberMission> memberMissions = new ArrayList<>();
