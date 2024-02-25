@@ -1,20 +1,20 @@
 package aromanticcat.umcproject.web.controller;
 
 import aromanticcat.umcproject.apiPayload.ApiResponse;
+import aromanticcat.umcproject.entity.Member;
+import aromanticcat.umcproject.jwt.SecurityUtil;
+import aromanticcat.umcproject.repository.MemberRepository;
 import aromanticcat.umcproject.service.MemberService;
 import aromanticcat.umcproject.service.MissionService.MissionCommandService;
 import aromanticcat.umcproject.service.MissionService.MissionQueryService;
 import aromanticcat.umcproject.web.dto.Mission.MissionResponseDTO;
 import aromanticcat.umcproject.web.dto.Mission.MissionResponseDTO.MissionInfoDTO;
 import io.swagger.v3.oas.annotations.Operation;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/missions")
@@ -24,13 +24,15 @@ public class MissionController {
     private final MissionQueryService missionQueryService;
     private final MissionCommandService missionCommandService;
     private final MemberService memberService;
+    private final MemberRepository memberRepository;
 
     @GetMapping("/")
     @Operation(summary = "미션 목록 조회 API", description = "모든 미션을 조회합니다.")
     public ApiResponse<List<MissionInfoDTO>> getAllMissions() {
         try {
-//            String userEmail = memberService.getUserInfo().getEmail();
-            String userEmail = "testFront@gmail.com";
+
+            Member member = validateStatus();
+            String userEmail = member.getUsername();
 
             // 모든 미션 가져오기
             List<MissionResponseDTO.MissionInfoDTO> MissionList = missionQueryService.findMissionList(userEmail);
@@ -62,8 +64,8 @@ public class MissionController {
     @Operation(summary = "미션 한 단계 완료 API", description = "특정 미션의 한 스텝이 완료된 것을 적용합니다. 미션의 모든 단계가 완료 되었으면 보상으로 코인이 주어집니다.")
     public ApiResponse<String> MissionStepCompleted(@PathVariable Long missionId) {
         try {
-//            String userEmail = memberService.getUserInfo().getEmail();
-            String userEmail = "testFront@gmail.com";
+            Member member = validateStatus();
+            String userEmail = member.getUsername();
 
             missionCommandService.stepCompleted(userEmail, missionId);
 
@@ -72,6 +74,11 @@ public class MissionController {
         } catch (Exception e) {
             return ApiResponse.onFailure(HttpStatus.INTERNAL_SERVER_ERROR.toString(), e.getMessage(), null);
         }
+    }
+
+    private Member validateStatus(){
+        return memberRepository.findByEmail(SecurityUtil.getLoginUserEmail())
+                .orElseThrow(() -> new IllegalArgumentException("인증된 사용자가 아님"));
     }
 
 }

@@ -1,6 +1,9 @@
 package aromanticcat.umcproject.web.controller;
 
 import aromanticcat.umcproject.apiPayload.ApiResponse;
+import aromanticcat.umcproject.entity.Member;
+import aromanticcat.umcproject.jwt.SecurityUtil;
+import aromanticcat.umcproject.repository.MemberRepository;
 import aromanticcat.umcproject.service.MemberService;
 import aromanticcat.umcproject.service.storeService.StoreService;
 import aromanticcat.umcproject.web.dto.store.StoreResponseDTO;
@@ -18,13 +21,14 @@ public class StoreController {
 
     private final StoreService storeService;
     private final MemberService memberService;
+    private final MemberRepository memberRepository;
 
     @GetMapping("/user-coin")
     @ApiOperation(value = "사용자 코인 조회 API")
     public ApiResponse<Integer> getUserCoin(){
         try {
-//            String userEmail = memberService.getUserInfo().getEmail();
-            String userEmail = "testFront@gmail.com";   // 로그인 구현 전 임시 이메일
+            Member member = validateStatus();
+            String userEmail = member.getUsername();
 
             Integer userCoin = storeService.findUserCoin(userEmail);
 
@@ -44,8 +48,8 @@ public class StoreController {
             @RequestParam(defaultValue = "16") int pageSize,
             @RequestParam(defaultValue = "latest") String sort) {
         try {
-//            String userEmail = memberService.getUserInfo().getEmail();
-            String userEmail = "testFront@gmail.com";   // 로그인 구현 전 임시 이메일
+            Member member = validateStatus();
+            String userEmail = member.getUsername();
 
             Page<StoreResponseDTO.LetterPaperResultDTO> letterPaperPage = storeService.findLetterPaperList(userEmail, page, pageSize, sort);
 
@@ -66,8 +70,8 @@ public class StoreController {
             @RequestParam(defaultValue = "15") int pageSize,
             @RequestParam(defaultValue = "latest") String sort) {
         try {
-//            String userEmail = memberService.getUserInfo().getEmail();
-            String userEmail = "testFront@gmail.com";   // 로그인 구현 전 임시 이메일
+            Member member = validateStatus();
+            String userEmail = member.getUsername();
 
             Page<StoreResponseDTO.StampResultDTO> stampPage = storeService.findStampList(userEmail, page, pageSize, sort);
 
@@ -81,8 +85,8 @@ public class StoreController {
     @ApiOperation(value = "편지지 구매 API")
     public ApiResponse<String> purchasedLetterPaper(@PathVariable Long letterPaperId) {
         try {
-//            String userEmail = memberService.getUserInfo().getEmail();
-            String userEmail = "testFront@gmail.com";   // 로그인 구현 전 임시 이메일
+            Member member = validateStatus();
+            String userEmail = member.getUsername();
 
             storeService.purchasedLetterPaper(userEmail, letterPaperId);
 
@@ -98,8 +102,8 @@ public class StoreController {
     @ApiOperation(value = "우표 구매 API")
     public ApiResponse<String> purchasedStamp(@PathVariable Long stampId) {
         try {
-//            String userEmail = memberService.getUserInfo().getEmail();
-            String userEmail = "testFront@gmail.com";   // 로그인 구현 전 임시 이메일
+            Member member = validateStatus();
+            String userEmail = member.getUsername();
 
             storeService.purchasedStamp(userEmail, stampId);
 
@@ -135,6 +139,11 @@ public class StoreController {
             }
         }
         return ApiResponse.onFailure(HttpStatus.INTERNAL_SERVER_ERROR.toString(), "file dosen't exist", null); //바꾸기
+    }
+
+    private Member validateStatus(){
+        return memberRepository.findByEmail(SecurityUtil.getLoginUserEmail())
+                .orElseThrow(() -> new IllegalArgumentException("인증된 사용자가 아님"));
     }
 
 }

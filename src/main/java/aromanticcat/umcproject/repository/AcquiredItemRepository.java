@@ -11,7 +11,11 @@ public interface AcquiredItemRepository extends JpaRepository<AcquiredItem, Long
 
     List<AcquiredItem> findByMemberEmail(String email);
     Page<AcquiredItem> findByMemberEmailAndLetterPaperIdIsNotNull(String email, Pageable pageable);
+    Page<AcquiredItem> findByMemberIdAndLetterPaperIdIsNotNull(Long id, Pageable pageable);
+
     Page<AcquiredItem> findByMemberEmailAndStampIdIsNotNull(String email, Pageable pageable);
+
+    Page<AcquiredItem> findByMemberIdAndStampIdIsNotNull(Long id, Pageable pageable);
 
 
     boolean existsByMemberEmailAndLetterPaperId(String email, Long letterPaperId);

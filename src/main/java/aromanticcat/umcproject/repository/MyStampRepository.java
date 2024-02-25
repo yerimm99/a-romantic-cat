@@ -1,7 +1,6 @@
 package aromanticcat.umcproject.repository;
 
 import aromanticcat.umcproject.entity.Member;
-import aromanticcat.umcproject.entity.MyLetterPaper;
 import aromanticcat.umcproject.entity.MyStamp;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,7 +11,9 @@ import java.util.Optional;
 
 public interface MyStampRepository extends JpaRepository<MyStamp, Long> {
 
-    Page<MyStamp> findByMemberEmail(String email, Pageable pageable);
+//    Page<MyStamp> findByMemberEmail(String email, Pageable pageable);
+    Page<MyStamp> findByMemberId(Long id, Pageable pageable);
+
 
     Optional<List<MyStamp>> findMyStampsByMember(Member member);
 }

@@ -2,6 +2,9 @@ package aromanticcat.umcproject.web.controller;
 
 
 import aromanticcat.umcproject.apiPayload.ApiResponse;
+import aromanticcat.umcproject.entity.Member;
+import aromanticcat.umcproject.jwt.SecurityUtil;
+import aromanticcat.umcproject.repository.MemberRepository;
 import aromanticcat.umcproject.service.MemberService;
 import aromanticcat.umcproject.service.nangmanLetterboxService.NangmanCollectionService;
 import aromanticcat.umcproject.web.dto.nangmanLetterbox.NangmanCollectionResponseDTO;
@@ -18,6 +21,7 @@ public class NangmanCollectionController {
 
     private final NangmanCollectionService nangmanCollectionService;
     private final MemberService memberService;
+    private final MemberRepository memberRepository;
 
 
     @GetMapping("/")
@@ -82,8 +86,8 @@ public class NangmanCollectionController {
             @RequestParam(defaultValue = "6") int pageSize) {
         try {
 
-//            String userEmail = memberService.getUserInfo().getEmail();
-            String userEmail = "testFront@gmail.com";   // 로그인 구현 전 임시 이메일
+            Member member = validateStatus();
+            String userEmail = member.getUsername();
 
 
             // 사용자가 작성한 편지 목록 조회
@@ -109,8 +113,8 @@ public class NangmanCollectionController {
             @RequestParam(defaultValue = "6") int pageSize) {
         try {
 
-//            String userEmail = memberService.getUserInfo().getEmail();
-            String userEmail = "testFront@gmail.com";   // 로그인 구현 전 임시 이메일
+            Member member = validateStatus();
+            String userEmail = member.getUsername();
 
             // 사용자가 답장한 목록 조회
             Page<NangmanCollectionResponseDTO.PreviewLetterAndReplyResultDTO> userReplyPage = nangmanCollectionService.getMyReplyPage(
@@ -121,6 +125,11 @@ public class NangmanCollectionController {
         } catch (Exception e) {
             return ApiResponse.onFailure(HttpStatus.INTERNAL_SERVER_ERROR.toString(), e.getMessage(), null);
         }
+    }
+
+    private Member validateStatus(){
+        return memberRepository.findByEmail(SecurityUtil.getLoginUserEmail())
+                .orElseThrow(() -> new IllegalArgumentException("인증된 사용자가 아님"));
     }
 
 }
