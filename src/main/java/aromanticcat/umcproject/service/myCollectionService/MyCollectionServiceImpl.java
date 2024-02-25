@@ -2,9 +2,12 @@ package aromanticcat.umcproject.service.myCollectionService;
 
 import aromanticcat.umcproject.converter.MyCollectionConverter;
 import aromanticcat.umcproject.entity.AcquiredItem;
+import aromanticcat.umcproject.entity.Member;
 import aromanticcat.umcproject.entity.MyLetterPaper;
 import aromanticcat.umcproject.entity.MyStamp;
+import aromanticcat.umcproject.jwt.SecurityUtil;
 import aromanticcat.umcproject.repository.AcquiredItemRepository;
+import aromanticcat.umcproject.repository.MemberRepository;
 import aromanticcat.umcproject.repository.MyLetterPaperRepository;
 import aromanticcat.umcproject.repository.MyStampRepository;
 import aromanticcat.umcproject.web.dto.MyCollectionResponseDTO;
@@ -28,15 +31,18 @@ public class MyCollectionServiceImpl implements MyCollectionService {
     private final AcquiredItemRepository acquiredItemRepository;
     private final MyLetterPaperRepository myLetterPaperRepository;
     private final MyStampRepository myStampRepository;
+    private final MemberRepository memberRepository;
 
     @Override
     @Transactional
-    public Page<MyCollectionResponseDTO.AcquiredLetterPaperResultDTO> findLetterPaperList(String email, int page, int pageSize, boolean onlyMyDesign) {
+    public Page<MyCollectionResponseDTO.AcquiredLetterPaperResultDTO> findLetterPaperList(int page, int pageSize, boolean onlyMyDesign) {
+        Member member = validateStatus();
+
         Pageable pageable = PageRequest.of(page, pageSize);
         List<MyCollectionResponseDTO.AcquiredLetterPaperResultDTO> responseDTOs;
 
         if(onlyMyDesign) {
-            Page<MyLetterPaper> myLetterPaperPage = myLetterPaperRepository.findByMemberEmail(email, pageable);
+            Page<MyLetterPaper> myLetterPaperPage = myLetterPaperRepository.findByMemberId(member.getId(), pageable);
 
             List<MyCollectionResponseDTO.AcquiredLetterPaperResultDTO> myLetterPaperDTOs = myLetterPaperPage.getContent().stream()
                     .map(myLetterPaper -> MyCollectionConverter.toMyLetterPaperResultDTO(myLetterPaper))
@@ -45,11 +51,11 @@ public class MyCollectionServiceImpl implements MyCollectionService {
             return new PageImpl<>(myLetterPaperDTOs, pageable, myLetterPaperPage.getTotalElements());
         } else {
             // 사용자가 구매한 편지지 목록 조회
-            Page<AcquiredItem> acquiredLetterPaperPage = acquiredItemRepository.findByMemberEmailAndLetterPaperIdIsNotNull(email, pageable);
+            Page<AcquiredItem> acquiredLetterPaperPage = acquiredItemRepository.findByMemberIdAndLetterPaperIdIsNotNull(member.getId(), pageable);
             List<AcquiredItem> acquiredLetterPaperList = acquiredLetterPaperPage.getContent();
 
             // 마이 디자인 편지지 목록 조회
-            Page<MyLetterPaper> myLetterPaperPage = myLetterPaperRepository.findByMemberEmail(email, pageable);
+            Page<MyLetterPaper> myLetterPaperPage = myLetterPaperRepository.findByMemberId(member.getId(), pageable);
             List<MyLetterPaper> myLetterPaperList = myLetterPaperPage.getContent();
 
             // MyLetterPaper와 AcquredItem에서 가져온 편지지 목록 병합
@@ -72,14 +78,21 @@ public class MyCollectionServiceImpl implements MyCollectionService {
 
     }
 
+    private Member validateStatus(){
+        return memberRepository.findByEmail(SecurityUtil.getLoginUserEmail())
+                .orElseThrow(() -> new IllegalArgumentException("인증된 사용자가 아님"));
+    }
+
     @Override
     @Transactional
-    public Page<MyCollectionResponseDTO.AcquiredStampResultDTO> findStampList(String email, int page, int pageSize, boolean onlyMyDesign) {
+    public Page<MyCollectionResponseDTO.AcquiredStampResultDTO> findStampList(int page, int pageSize, boolean onlyMyDesign) {
+        Member member = validateStatus();
+
         Pageable pageable = PageRequest.of(page, pageSize);
         List<MyCollectionResponseDTO.AcquiredStampResultDTO> responseDTOs;
 
         if(onlyMyDesign){
-            Page<MyStamp> myStampPage = myStampRepository.findByMemberEmail(email, pageable);
+            Page<MyStamp> myStampPage = myStampRepository.findByMemberId(member.getId(), pageable);
 
             List<MyCollectionResponseDTO.AcquiredStampResultDTO> myStampDTOs = myStampPage.getContent().stream()
                     .map(myStamp -> MyCollectionConverter.toMyStampResultDTO(myStamp))
@@ -89,11 +102,11 @@ public class MyCollectionServiceImpl implements MyCollectionService {
 
     }else{
             // 사용자가 구매한 우표 목록 조회
-            Page<AcquiredItem> acquiredStampPage = acquiredItemRepository.findByMemberEmailAndStampIdIsNotNull(email, pageable);
+            Page<AcquiredItem> acquiredStampPage = acquiredItemRepository.findByMemberIdAndStampIdIsNotNull(member.getId(), pageable);
             List<AcquiredItem> acquiredStampList = acquiredStampPage.getContent();
 
             // 마이 디자인 우표 목록 조회
-            Page<MyStamp> myStampPage = myStampRepository.findByMemberEmail(email, pageable);
+            Page<MyStamp> myStampPage = myStampRepository.findByMemberId(member.getId(), pageable);
             List<MyStamp> myStampList = myStampPage.getContent();
 
             // MyStamp와 AcquredItem에서 가져온 우표 목록 병합

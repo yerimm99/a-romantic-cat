@@ -2,7 +2,10 @@ package aromanticcat.umcproject.web.controller;
 
 import aromanticcat.umcproject.apiPayload.ApiResponse;
 import aromanticcat.umcproject.converter.NangmanLetterBoxConverter;
+import aromanticcat.umcproject.entity.Member;
 import aromanticcat.umcproject.entity.NangmanLetter;
+import aromanticcat.umcproject.jwt.SecurityUtil;
+import aromanticcat.umcproject.repository.MemberRepository;
 import aromanticcat.umcproject.service.MemberService;
 import aromanticcat.umcproject.service.nangmanLetterboxService.NangmanLetterboxService;
 import aromanticcat.umcproject.service.nangmanLetterboxService.RandomNicknameService;
@@ -23,6 +26,7 @@ public class NangmanLetterboxController {
     private final NangmanLetterboxService nangmanLetterBoxService;
     private final RandomNicknameService randomNicknameService;
     private final MemberService memberService;
+    private final MemberRepository memberRepository;
 
     @GetMapping("/random-nickname")
     @Operation(summary = "랜덤 닉네임 생성 API", description = "랜덤 생성된 닉네임을 반환하는 API입니다.")
@@ -44,8 +48,9 @@ public class NangmanLetterboxController {
     public ApiResponse<NangmanLetterBoxResponseDTO.SendLetterResultDTO> sendLetter(
             @RequestBody NangmanLetterboxRequestDTO.SendLetterDTO request) {
         try {
-//            String userEmail = memberService.getUserInfo().getEmail();
-            String userEmail = "testFront@gmail.com";   // 로그인 구현 전 임시 이메일
+
+            Member member = validateStatus();
+            String userEmail = member.getUsername();
 
             //편지 작성 및 발송
             NangmanLetter nangmanLetter = nangmanLetterBoxService.sendLetter(userEmail, request);
@@ -69,8 +74,9 @@ public class NangmanLetterboxController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "9") int pageSize) {
         try {
-//            String userEmail = memberService.getUserInfo().getEmail();
-            String userEmail = "testFront@gmail.com";   // 로그인 구현 전 임시 이메일
+
+            Member member = validateStatus();
+            String userEmail = member.getUsername();
 
             //편지 페이지의 편지 목록 조회
             Page<NangmanLetter> letterList = nangmanLetterBoxService.getLetterPage(userEmail, page, pageSize);
@@ -110,8 +116,9 @@ public class NangmanLetterboxController {
     public ApiResponse<NangmanLetterBoxResponseDTO.SendReplyResultDTO> sendReply(@PathVariable Long nangmanLetterId,
                                                                                  @RequestBody NangmanLetterboxRequestDTO.SendReplyDTO request) {
         try {
-//            String userEmail = memberService.getUserInfo().getEmail();
-            String userEmail = "testFront@gmail.com";   // 로그인 구현 전 임시 이메일
+
+            Member member = validateStatus();
+            String userEmail = member.getUsername();
 
             NangmanLetterBoxResponseDTO.SendReplyResultDTO replyResultDTO = nangmanLetterBoxService.sendReply(userEmail,
                     request, nangmanLetterId);
@@ -127,5 +134,9 @@ public class NangmanLetterboxController {
         }
     }
 
+    private Member validateStatus(){
+        return memberRepository.findByEmail(SecurityUtil.getLoginUserEmail())
+                .orElseThrow(() -> new IllegalArgumentException("인증된 사용자가 아님"));
+    }
 
 }
