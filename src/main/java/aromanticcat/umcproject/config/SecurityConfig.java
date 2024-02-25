@@ -23,7 +23,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .formLogin().disable() // 시큘티에서 지원하는 페이지 뜨지 않도록. rest api로 개발 할 것이기 떄문
                 .httpBasic().disable()
-                .cors().disable() // 프론트와 백엔드 협업 시 필요함. 나중에 disable() 제거하기
+                .cors()// 프론트와 백엔드 협업 시 필요함. 나중에 disable() 제거하기
+                .and()
                 .csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) //세션 말고 jwt 사용할거니까 stateless.
                 .and()
